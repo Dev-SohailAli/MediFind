@@ -9,6 +9,7 @@
 | [Security, privacy and compliance](security-privacy-compliance.md) | Controls and Fiji validation checklist |
 | [Architecture decision](architecture.md) | Target system boundaries and vendor-selection constraints |
 | [Pilot operations](pilot-operations.md) | Onboarding, support, analytics, risk and release readiness |
+| [Business and commercial model](business-and-commercial.md) | Ownership, pilot pricing and future subscription direction |
 | [Decision log](decisions.md) | Decisions that govern future implementation |
 
 ## Change policy

@@ -29,6 +29,8 @@ Least privilege applies. Pharmacy staff may access only requests sent to their p
 4. When a prescription arrives, authorised staff receive a secure email link, authenticate, inspect it in-app, then approve, decline, or request buyer contact according to their professional process.
 5. Staff approve/decline a reservation, specify collection instructions and expiry, and keep status current.
 
+Pharmacies refresh public availability and price at least once per business day and aim to respond to prescription/review requests within one pharmacy business day. An approved reservation defaults to 24 hours, but pharmacy staff choose the actual expiry.
+
 ## Admin journey
 
 1. Admin reviews submitted pharmacy identity/licensing information, documents decision and enables or rejects public visibility.
