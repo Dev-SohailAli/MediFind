@@ -21,7 +21,7 @@ This roadmap identifies the documentation that must be completed or approved bef
 
 | Deliverable | Owner | Completion standard |
 | --- | --- | --- |
-| Final initial design specification | Documentation agent + product owner | Confirm design tokens, component states, navigation/error/offline details and first implementation screen scope; high-fidelity branding may remain deferred. |
+| Final initial design specification | Claude Design + product owner | Use `CLAUDE-DESIGN.md` and the Claude Design agent brief to produce and approve the complete low-fidelity MVP proposal: token application, component/state inventory, navigation, safety/accessibility/localisation treatment and first implementation screen scope. High-fidelity branding may remain deferred. |
 | Implementation-grade API/data specification | Documentation agent + product owner | Define endpoint list, request/response field schemas, exact enums/state transitions, authorization matrix, Firestore collections/indexes and migration/version rules for the first task scope. |
 | Cloud foundation implementation specification | Documentation agent + product owner | Assign final project/resource names; pin exact IAM custom/predefined permissions, OpenAPI JWT scheme, Authentication/API App Check handling, Fiji SMS breaker, quotas/max instances, persistent rate-limit schema, search indexes, maintenance schedule, ClamAV image/signature updater, OpenTofu state bootstrap and OIDC/Workload Identity conditions/commands from the approved free-first blueprint. No production resource is created yet. |
 | Test foundation specification | Documentation agent + product owner | Turn test strategy into the first fixture catalogue, commands, CI checks, coverage/report format and task-specific acceptance matrix. |

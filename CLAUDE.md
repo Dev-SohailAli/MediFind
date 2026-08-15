@@ -11,6 +11,7 @@ Read in this order before planning or changing code:
 3. `docs/security-privacy-compliance.md` and `docs/security-architecture-threat-model.md`
 4. `docs/architecture.md`, `docs/free-first-production-architecture.md`, `docs/cost-and-environment-plan.md` and `docs/engineering-delivery.md`
 5. `docs/decisions.md`, `docs/claude-code-handoff.md` and the active task brief
+6. For a visual/UI task, `CLAUDE-DESIGN.md` and `docs/claude-design-agent-brief.md`
 
 ## Non-negotiable constraints
 

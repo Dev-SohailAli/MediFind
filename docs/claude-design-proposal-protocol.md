@@ -26,4 +26,4 @@ For a substantial flow, Claude should provide a low-fidelity screen/wireframe de
 - Approved proposal details become task documentation and, when material, update the design specification/decision log through the documentation process.
 - If the proposed design conflicts with any accepted requirement/ADR or reveals an ambiguity, Claude raises a decision-change request instead of selecting a convenient design.
 
-The required first design deliverable is the [initial Claude design-review brief](initial-claude-design-review-brief.md).
+The required first design deliverable is the [initial Claude design-review brief](initial-claude-design-review-brief.md), using the [Claude Design agent brief](claude-design-agent-brief.md) and its proposal workspace.

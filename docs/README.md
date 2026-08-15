@@ -13,8 +13,10 @@
 | [Claude Code handoff](claude-code-handoff.md) | Agent authority, task readiness, review and escalation protocol |
 | [Claude task template](claude-task-template.md) | Required brief format for each implementation task |
 | [Claude Code setup](claude-code-setup.md) | Superpowers installation, telemetry setting and MediFind precedence rules |
+| [Claude Design agent brief](claude-design-agent-brief.md) | Claude-facing visual system, product/safety design contract and copyable kickoff prompt |
 | [Claude design proposal protocol](claude-design-proposal-protocol.md) | Requirements-driven UI proposal and approval rule for Claude |
 | [Initial Claude design-review brief](initial-claude-design-review-brief.md) | Required whole-MVP low-fidelity design proposal scope before UI code |
+| [Design proposal workspace](design-proposals/README.md) | Location and required structure for Claude Design review artefacts |
 | [Implementation sequencing](implementation-sequencing.md) | Synthetic-data-first task order and later security/legal gates |
 | [Documentation roadmap](documentation-roadmap.md) | Remaining pre-code documentation deliverables and sequence |
 | [Design system and screens](design-system-and-screens.md) | Visual direction, onboarding, role navigation and screen inventory |

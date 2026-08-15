@@ -78,4 +78,4 @@ Every screen specification must include loading, offline, retry, permission-deni
 
 ## Implementation boundary
 
-This specification fixes information architecture and safety behaviour, not final visual assets. Exact colour values, typography family, spacing scale and high-fidelity mockups require separate approved design decisions before Claude implements visual polish. The MVP uses external map-app directions rather than an embedded interactive map.
+This specification fixes information architecture and safety behaviour. The initial semantic colour values, system-font scale, spacing and component rules used by the design agent are in the [Claude Design agent brief](claude-design-agent-brief.md). Claude applies them in a reviewable low-fidelity proposal; the founder approves their final visual application before UI implementation. The MVP uses external map-app directions rather than an embedded interactive map.

@@ -8,7 +8,7 @@ This is a documentation/design deliverable only. It authorises no application co
 
 ## Required deliverables
 
-1. **Design-system proposal:** semantic token roles; accessible light/dark colour approach; system-font typography scale; spacing/radius/elevation; touch targets; status/error/safety components; icon usage; 200% text-scale behaviour; and English/iTaukei/Fiji Hindi layout considerations.
+1. **Design-system application:** apply the approved initial semantic tokens, accessible light/dark colour approach, system-font typography scale, spacing/radius/elevation, touch targets, status/error/safety components and icon usage from the [Claude Design agent brief](claude-design-agent-brief.md). Explain the 200% text-scale and English/iTaukei/Fiji Hindi layout treatment; identify only changes that need founder approval.
 2. **Navigation/role map:** clear buyer, inventory-manager, reviewer, owner and MediFind admin navigation. Include buyer/staff workspace switching without cross-context data exposure. Owner-only navigation must not imply prescription access without reviewer role.
 3. **Low-fidelity wireframes:** screen-by-screen mobile wireframes/descriptions for the core flows below, including primary content hierarchy and actions.
 4. **State inventory:** loading, offline, retry, empty, zero-result, stale, permission request/denial, unauthenticated, forbidden, validation/conflict, generic safe error, security alert, success and kill-switch/maintenance states for every affected flow.
