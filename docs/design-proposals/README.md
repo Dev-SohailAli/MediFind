@@ -15,4 +15,4 @@ Each proposal includes:
 7. Open decisions needing founder approval.
 8. Statement that no code, services, real data or configuration changed.
 
-Use the [Claude Design agent brief](../claude-design-agent-brief.md) and [initial design-review brief](../initial-claude-design-review-brief.md) as mandatory constraints.
+Use the [Claude Design agent brief](../claude-design-agent-brief.md), [initial design-review brief](../initial-claude-design-review-brief.md) and [design-review acceptance checklist](../design-review-acceptance-checklist.md) as mandatory constraints.

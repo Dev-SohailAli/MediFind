@@ -114,7 +114,7 @@ Deliver one Markdown proposal using the [proposal workspace](design-proposals/RE
 6. An accessibility and localisation review: 200% text scaling, VoiceOver/TalkBack labels/order, non-colour status, touch targets, dark mode and English/iTaukei/Fiji Hindi expansion.
 7. An explicit non-goals list and a short list of decisions requiring founder approval.
 
-No code, assets, libraries, service accounts, test data resembling real people, external design service or cloud configuration may be added as part of this deliverable.
+No code, assets, libraries, service accounts, test data resembling real people, external design service or cloud configuration may be added as part of this deliverable. The proposal is reviewed using the [design-review acceptance checklist](design-review-acceptance-checklist.md); it remains non-binding until the founder records an outcome there.
 
 ## Copyable kickoff prompt
 

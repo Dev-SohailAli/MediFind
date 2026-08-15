@@ -21,7 +21,7 @@ For a substantial flow, Claude should provide a low-fidelity screen/wireframe de
 
 ## Approval and implementation
 
-- Claude presents the proposal and waits for explicit approval or documented changes before implementing the affected UI.
+- Claude presents the proposal and waits for an explicit outcome recorded under the [design-review acceptance checklist](design-review-acceptance-checklist.md) before implementing the affected UI.
 - It may create proposal documentation only; it must not silently make high-fidelity product/design decisions in code.
 - Approved proposal details become task documentation and, when material, update the design specification/decision log through the documentation process.
 - If the proposed design conflicts with any accepted requirement/ADR or reveals an ambiguity, Claude raises a decision-change request instead of selecting a convenient design.

@@ -16,6 +16,7 @@ Read these files in order:
 4. `docs/requirements.md`, `docs/experience-and-content.md` and `docs/data-and-search.md`
 5. `docs/accessibility-policy.md`, `docs/mobile-permissions-policy.md`, `docs/dynamic-pharmacy-content-policy.md` and `docs/notification-and-status-synchronisation.md`
 6. `docs/security-privacy-compliance.md`, `docs/security-architecture-threat-model.md` and `docs/decisions.md`
+7. `docs/design-review-acceptance-checklist.md`
 
 ## Required behaviour
 
@@ -40,7 +41,7 @@ Create or update one Markdown proposal in `docs/design-proposals/` using the [pr
 6. open decisions that genuinely need founder approval; and
 7. a statement that no code or external service was added.
 
-Wait for explicit founder approval before creating UI code or treating any proposed visual detail as final.
+Wait for explicit founder approval under the [design-review acceptance checklist](docs/design-review-acceptance-checklist.md) before creating UI code or treating any proposed visual detail as final.
 
 ## Copyable kickoff prompt
 

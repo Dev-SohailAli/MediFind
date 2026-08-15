@@ -15,6 +15,7 @@
 | [Claude Code setup](claude-code-setup.md) | Superpowers installation, telemetry setting and MediFind precedence rules |
 | [Claude Design agent brief](claude-design-agent-brief.md) | Claude-facing visual system, product/safety design contract and copyable kickoff prompt |
 | [Claude design proposal protocol](claude-design-proposal-protocol.md) | Requirements-driven UI proposal and approval rule for Claude |
+| [Design-review acceptance checklist](design-review-acceptance-checklist.md) | Founder review gate and bounded handoff from approved design to a coding task |
 | [Initial Claude design-review brief](initial-claude-design-review-brief.md) | Required whole-MVP low-fidelity design proposal scope before UI code |
 | [Design proposal workspace](design-proposals/README.md) | Location and required structure for Claude Design review artefacts |
 | [Implementation sequencing](implementation-sequencing.md) | Synthetic-data-first task order and later security/legal gates |
