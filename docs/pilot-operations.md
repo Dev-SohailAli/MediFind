@@ -8,6 +8,8 @@
 4. Create test listings and test a prescription notification/review without real health data.
 5. Approve public activation only when the compliance checklist and pharmacy SOP acknowledgement are complete.
 
+Verification remains valid for 12 months or the earliest relied-on evidence expiry, with owner reminders at 60 and 30 days. Expired evidence or a material pharmacy ownership/legal-name/branch/licence/responsible-person/official-contact change suspends public discovery, prescription handling and reservations until MediFind re-approves it under the [pharmacy verification policy](pharmacy-verification-policy.md).
+
 ## Pilot service commitments
 
 - Pharmacy staff must review and refresh publicly visible availability and listed prices at least once per business day.
@@ -33,6 +35,10 @@ Schedule planned maintenance outside typical Fiji pharmacy hours whenever practi
 
 Maintain an audited emergency kill switch that can suspend prescription upload and reservation functions independently, while retaining non-sensitive pharmacy search if safe. Record the reason, actor, affected functions, start/end time, buyer/pharmacy notice and recovery validation for every activation.
 
+For a recoverable outage, target restoration of core service within one Fiji business day and accept no more than a 24-hour data-loss window from the most recent verified backup. Do not re-enable prescription upload/review or reservations after restore until data integrity, authorization, audit and notification checks succeed. The MVP does not provide active multi-region failover; communicate a regional outage and recovery state through the public status page without exposing sensitive infrastructure detail.
+
+The public status page is an informational static page, not a support inbox. Buyers report account/security/technical issues through the authenticated in-app route and contact pharmacies directly for medicine/prescription/reservation questions. Pharmacy owners/staff use a branch-scoped in-app operational support route. There is no official WhatsApp support channel during the MVP.
+
 ## Service-account ownership
 
 Maintain a founder-controlled register of every critical vendor account (Apple, Google Play, cloud, domain/DNS, email, notifications, source control and monitoring), its purpose, billing owner, MFA/recovery method, authorised users and renewal date. Review it monthly during the pilot and immediately after any contributor departure.
@@ -41,7 +47,7 @@ Maintain a founder-controlled register of every critical vendor account (Apple, 
 
 Support may resolve account, access, translation, listing-quality and technical issues. It must not provide medical advice or make dispensing decisions. Urgent health concerns are directed to emergency/health services. Suspected forged prescription, unsafe medicine, account compromise, data exposure or regulatory complaint is escalated immediately to the designated security/compliance lead and pharmacy owner, with an audit case.
 
-Treat a reported suspicious message, impersonation attempt or unofficial app link as a security case. Preserve only necessary evidence, warn affected users/pharmacies through verified channels, revoke compromised access where indicated and publish safe guidance without repeating attacker content unnecessarily.
+Treat a reported suspicious message, impersonation attempt or unofficial app link as a security case. Preserve only necessary evidence, warn affected users/pharmacies through verified channels, revoke compromised access where indicated and publish safe guidance without repeating attacker content unnecessarily. Suspected prescription exposure, privileged compromise or unsafe prescription routing follows the critical procedure in the [incident-response runbook](incident-response-runbook.md), including immediate founder alert regardless of public support hours.
 
 Operate a responsible disclosure intake through the published security-reporting contact and `security.txt` page. Acknowledge legitimate vulnerability reports within one business day, log triage/containment/fix decisions and coordinate confidentially with the reporter where appropriate. The MVP has no paid bug bounty program.
 
@@ -51,7 +57,7 @@ MediFind may block, quarantine or escalate technically unsafe/suspicious uploads
 
 ## Analytics
 
-Collect the minimum aggregated operational data needed for: searches and zero-result rate; listing freshness; search-to-detail and request conversion; pharmacy verification duration; prescription and reservation response times; approval/decline/expiry/cancellation rates and reasons; collection/no-longer-needed confirmations; notification delivery; support categories; private pilot feedback; and accessibility/language feedback. Do not put prescription content, medicine free text entered for clinical context, raw contact details, medicine-search history or direct identifiers in analytics. Advertising, behavioural profiling and data-broker tracking are prohibited.
+Collect the minimum aggregated operational data needed for: searches and zero-result rate; listing freshness; search-to-detail and request conversion; pharmacy verification duration; prescription and reservation response times; approval/decline/expiry/cancellation rates and reasons; collection/no-longer-needed confirmations; notification delivery; support categories; private pilot feedback; and accessibility/language feedback. Produce counters server-side from approved operational/audit events and use app-store aggregate operational statistics; do not add a mobile analytics/session-replay SDK in MVP. Do not put prescription content, medicine free text entered for clinical context, raw contact details, medicine-search history or direct identifiers in analytics. Advertising, behavioural profiling and data-broker tracking are prohibited.
 
 ## Key risks and controls
 
@@ -59,7 +65,7 @@ Collect the minimum aggregated operational data needed for: searches and zero-re
 | --- | --- |
 | Stale or inaccurate stock/price | timestamps, stale labels, staff training, reminders, moderation and buyer reporting |
 | Fraudulent pharmacy or staff access | verification, owner approval, MFA, scoped roles and audit logs |
-| Prescription disclosure | encryption, selected-pharmacy-only access, expiring links, audit alerts and retention deletion |
+| Prescription disclosure | encryption, selected-pharmacy-only short-lived in-app access grants, audit alerts and retention deletion |
 | Buyer assumes a guarantee or medical advice | explicit safety language, controlled UX and pharmacy final decision |
 | Translation changes safety meaning | professional review and versioned translated content |
 | Connectivity/notification failure | in-app status is source of truth, delivery monitoring and retry/fallback support |
