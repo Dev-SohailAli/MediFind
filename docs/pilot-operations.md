@@ -2,8 +2,8 @@
 
 ## Pharmacy onboarding checklist
 
-1. Capture owner and pharmacy details, Suva address, hours, contact and responsible-person evidence.
-2. Verify against required regulator/professional records; record decision, reviewer and evidence reference.
+1. Capture owner and pharmacy details, Fiji address, hours, contact, business-registration evidence, pharmacy/licensing evidence and responsible-person evidence.
+2. Verify against required regulator/professional records; record decision, reviewer and evidence reference. The pilot activates only Suva branches, while the data model supports future Fiji expansion.
 3. Assign owner/staff roles; train staff on listings, prices, freshness, prescription handling, reservation expiry and support escalation.
 4. Create test listings and test a prescription notification/review without real health data.
 5. Approve public activation only when the compliance checklist and pharmacy SOP acknowledgement are complete.
@@ -12,16 +12,46 @@
 
 - Pharmacy staff must review and refresh publicly visible availability and listed prices at least once per business day.
 - The platform visibly labels and de-ranks listings that exceed the configured freshness threshold; it must never imply that a stale listing is current.
+- At 24 hours without a listing refresh, mark it "may be outdated" and de-rank it. At seven days, remove it from search until refreshed. Monitor these thresholds and notify pharmacies before removal where feasible.
 - Each pharmacy is expected to respond to prescription reviews and reservation requests within one pharmacy business day. MediFind must show its opening hours and must not promise a response outside them.
 - The default approved-reservation expiry is 24 hours. The approving pharmacy may set a shorter or longer expiry and must communicate the actual expiry and pickup instructions to the buyer.
+- Each branch maintains normal operating hours plus holiday/exceptional closures. Validate reservation expiry against those hours and do not present an expiry that prevents collection while the branch is open.
+
+## Pilot audience and success criteria
+
+The buyer pilot is invite-only and limited to people personally invited by MediFind or referred by a participating pilot pharmacy. Do not publish a general buyer acquisition campaign during this phase.
+
+Pilot success requires: two to three verified and actively maintained pharmacy branches; at least 80% listing-refresh compliance; most prescription/review and reservation requests answered within one pharmacy business day; no unresolved high-severity privacy or security incident; and clear qualitative evidence that participating pharmacies see enough value to consider a future paid service. Refine numerical thresholds after representative pilot volume is known.
+
+## Availability and support
+
+MediFind provides founder-operated support Monday to Friday, 9:00am–5:00pm Fiji time, excluding public holidays, during the pilot. The app and support content must make these hours clear and must never imply emergency, clinical or 24/7 support. Urgent health concerns are directed to emergency/health services, not MediFind.
+
+During a planned or unplanned service interruption, show a clear in-app maintenance/outage notice and link to a simple public status page. The status page must state the affected function, start time, current state and next update time without exposing sensitive operational/security details.
+
+Schedule planned maintenance outside typical Fiji pharmacy hours whenever practical and provide at least 24 hours' in-app/status-page notice. For suspected prescription exposure, suspicious privileged access, backup/restore failure or another critical security signal, notify the founder immediately even outside published support hours. This internal alerting does not create a public 24/7 support promise.
+
+Maintain an audited emergency kill switch that can suspend prescription upload and reservation functions independently, while retaining non-sensitive pharmacy search if safe. Record the reason, actor, affected functions, start/end time, buyer/pharmacy notice and recovery validation for every activation.
+
+## Service-account ownership
+
+Maintain a founder-controlled register of every critical vendor account (Apple, Google Play, cloud, domain/DNS, email, notifications, source control and monitoring), its purpose, billing owner, MFA/recovery method, authorised users and renewal date. Review it monthly during the pilot and immediately after any contributor departure.
 
 ## Support and escalation
 
 Support may resolve account, access, translation, listing-quality and technical issues. It must not provide medical advice or make dispensing decisions. Urgent health concerns are directed to emergency/health services. Suspected forged prescription, unsafe medicine, account compromise, data exposure or regulatory complaint is escalated immediately to the designated security/compliance lead and pharmacy owner, with an audit case.
 
+Treat a reported suspicious message, impersonation attempt or unofficial app link as a security case. Preserve only necessary evidence, warn affected users/pharmacies through verified channels, revoke compromised access where indicated and publish safe guidance without repeating attacker content unnecessarily.
+
+Operate a responsible disclosure intake through the published security-reporting contact and `security.txt` page. Acknowledge legitimate vulnerability reports within one business day, log triage/containment/fix decisions and coordinate confidentially with the reporter where appropriate. The MVP has no paid bug bounty program.
+
+Treat every break-glass prescription-access event as a security/compliance case: record reason, approver (if any), scope, start/end time, actions, buyer-notice decision and follow-up. Review it after access ends; routine support must use metadata/status views instead.
+
+MediFind may block, quarantine or escalate technically unsafe/suspicious uploads, but it does not certify a prescription as legitimate. Malware/unsafe files are blocked; safely processed reviewable flags use the pharmacy's restricted quarantine inbox. The selected pharmacy's qualified reviewer owns the validity and dispensing decision under its professional obligations.
+
 ## Analytics
 
-Collect the minimum aggregated operational data needed for: searches and zero-result rate; listing freshness; search-to-detail and request conversion; pharmacy verification duration; prescription and reservation response times; approval/decline/expiry rates; notification delivery; support categories; and accessibility/language feedback. Do not put prescription content, medicine free text entered for clinical context, or direct identifiers in analytics.
+Collect the minimum aggregated operational data needed for: searches and zero-result rate; listing freshness; search-to-detail and request conversion; pharmacy verification duration; prescription and reservation response times; approval/decline/expiry/cancellation rates and reasons; collection/no-longer-needed confirmations; notification delivery; support categories; private pilot feedback; and accessibility/language feedback. Do not put prescription content, medicine free text entered for clinical context, raw contact details, medicine-search history or direct identifiers in analytics. Advertising, behavioural profiling and data-broker tracking are prohibited.
 
 ## Key risks and controls
 
@@ -34,6 +64,11 @@ Collect the minimum aggregated operational data needed for: searches and zero-re
 | Translation changes safety meaning | professional review and versioned translated content |
 | Connectivity/notification failure | in-app status is source of truth, delivery monitoring and retry/fallback support |
 | Founder capacity creates delayed support or verification | limit pilot to 2–3 pharmacies, define support hours, record queues and defer automation only after evidence |
+| Poor-quality or misleading listing | automatic required-field/format checks, private buyer reports, logged admin review and moderation/removal authority |
+| Vendor/contractor account lockout | founder-owned accounts, MFA, recovery documentation, least privilege and monthly ownership review |
+| Data loss or unrecoverable outage | encrypted daily backups, 30-day initial retention, pre-pilot and quarterly restore tests, documented recovery procedure |
+| Support demand exceeds founder capacity | 2–3 pharmacy cap, published Fiji business hours, self-service help, support queue and non-emergency scope |
+| Sensitive feature is unsafe during incident | auditable kill switch disables uploads/reservations while preserving safe search where possible |
 
 ## Release gate
 

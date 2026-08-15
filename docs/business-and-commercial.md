@@ -6,7 +6,9 @@ MediFind is initially founder-funded and operated by its sole proprietor. The pi
 
 ## Pricing
 
-The pilot is free for participating verified pharmacies and buyers. MediFind will not charge buyers in v1. After pilot validation, the preferred commercial direction is a simple pharmacy SaaS subscription or listing fee. Pricing, billing provider, contracts, taxes, refunds and any paid plan features are explicitly deferred until the pilot demonstrates sustained pharmacy value and legal/business advice is obtained.
+The pilot is free for participating verified pharmacies and buyers. MediFind will not charge buyers in v1. After pilot validation, the preferred commercial direction is a simple pharmacy SaaS subscription or listing fee. No subscription, fee, advertising arrangement or commercial relationship may alter medicine-search ranking or result prominence. Pricing, billing provider, contracts, taxes, refunds and any paid plan features are explicitly deferred until the pilot demonstrates sustained pharmacy value and legal/business advice is obtained.
+
+The founder-approved MVP infrastructure ceiling is FJD 50–100 per month, excluding developer-account fees, domains and SMS charges. Keep the pilot small and use no-cost/low-cost environments only for synthetic/non-sensitive work; accepting real prescriptions requires a separately approved production budget and security/compliance configuration.
 
 ## Legal and operational constraints
 

@@ -21,7 +21,7 @@ Targets are set with pilot pharmacies before launch; no target is treated as a c
 
 ## V1 scope
 
-Registered buyers search medicine listings and view pharmacy name, map/location, opening hours, availability status, listed FJD price and last-updated time. They may select a verified pharmacy, upload a prescription for its staff to review, receive push notifications, and request a collection reservation after approval where appropriate. Pharmacy staff receive a secure email notification linking to their review workspace.
+Registered buyers search medicine listings and view pharmacy name, map/location, opening hours, availability status, listed FJD price and last-updated time. They may request an over-the-counter collection reservation directly, or select a verified pharmacy and upload a prescription for review before a prescription-required reservation can be approved. Buyers receive generic push notifications and follow up directly by the pharmacy's published phone number, hours and directions. V1 provides no in-app chat. Pharmacy staff receive generic push notification and review requests in their mobile workspace.
 
 ## Out of scope
 
