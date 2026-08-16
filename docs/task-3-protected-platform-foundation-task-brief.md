@@ -15,6 +15,7 @@ Read before changing code:
 - [Implementation sequencing](implementation-sequencing.md)
 - [Architecture](architecture.md)
 - [Free-first production architecture](free-first-production-architecture.md)
+- [Web/PWA free-first options](web-free-first-options.md)
 - [Backend and upload pipeline](backend-and-upload-pipeline.md)
 - [API and data contracts](api-and-data-contracts.md)
 - [API error contract](api-error-contract.md)

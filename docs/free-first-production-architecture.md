@@ -10,6 +10,8 @@ No-cost options are automatically preferred where they satisfy this document. A 
 
 Pricing and quotas below were verified on 2026-08-16 and must be checked again immediately before provisioning and at every quarterly cost review.
 
+The current web/PWA-specific comparison is recorded in [Web/PWA free-first options](web-free-first-options.md). It approves only a static synthetic preview at this stage; it does not replace the protected-platform trust chain or authorise a free-tier database for health data.
+
 ## Approved service map
 
 | Capability | Approved pilot choice | Pilot cost posture | Production-scale path without product rewrite |
