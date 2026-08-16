@@ -29,7 +29,7 @@ This record captures the repository controls verified before the first **synthet
 
 The founder must retain MFA and recovery control for the GitHub owner account. GitHub's repository API does not expose a user MFA/recovery attestation, so this remains a founder-operated account-security check rather than an automated claim in this record.
 
-The local workstation toolchain is prepared for Node, Java, pnpm/EAS and Android Studio/SDK. Gitleaks, Trivy, OpenTofu and Google Cloud CLI installation may be completed later; their absence does not allow a security check to be skipped. The first task's pull request must run the required CI checks, and any unavailable local scanner is reported rather than assumed passing.
+The local workstation toolchain was verified on 2026-08-16: Node.js 24.19.0, pnpm 11.22.0, Java 17, EAS CLI, Android Studio/SDK/ADB, Gitleaks 8.30.1, Trivy 0.74.0, OpenTofu 1.12.5, Firebase CLI 15.27.0 and Google Cloud SDK 580.0.0. No Firebase/GCP/Expo account sign-in, project, credential or deployment configuration was performed. The first task's pull request must still create and run the required CI checks; local availability never permits a check to be assumed passing.
 
 ## Synthetic-foundation merge gate
 
