@@ -27,6 +27,7 @@
 | [First synthetic-foundation test specification](first-synthetic-foundation-test-specification.md) | Exact local/CI verification and synthetic-data boundary for the first task |
 | [Task 2 synthetic buyer-search specification](task-2-synthetic-buyer-search-specification.md) | Exact synthetic-only fixture, search, UI, safety and test contract for buyer-search prototype work |
 | [Task 2 Claude implementation brief](task-2-synthetic-buyer-search-task-brief.md) | Executable Claude task scope, exclusions, acceptance evidence and delivery rules for Task 2 |
+| [Task 2 web/PWA Claude implementation brief](task-2-web-pwa-buyer-search-task-brief.md) | Current executable web/PWA buyer-search scope replacing the historical mobile implementation path |
 | [Task 3 protected-platform foundation specification](task-3-protected-platform-foundation-specification.md) | Synthetic cloud, identity, API, CI, cost and repository-control boundary; implementation remains input-gated |
 | [Task 3 Claude implementation brief](task-3-protected-platform-foundation-task-brief.md) | Founder-approved synthetic-environment platform handoff; no production authority |
 | [API mutation and concurrency](api-mutation-and-concurrency-policy.md) | Explicit commands, idempotency and version-conflict rules |
