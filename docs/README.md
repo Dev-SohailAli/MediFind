@@ -55,6 +55,7 @@
 | [Account-recovery runbook](account-recovery-runbook.md) | Secure buyer, staff, owner and admin recovery procedures |
 | [Incident response runbook](incident-response-runbook.md) | Critical security/privacy containment, notification and corrective-review procedure |
 | [Repository security and delivery](repository-security-and-delivery.md) | Required GitHub protection, dependency and secret-management controls |
+| [Synthetic-code repository readiness record](repository-readiness-record.md) | Verified private-repository controls, limits and first-task merge gate |
 | [Monorepo and toolchain policy](monorepo-and-toolchain-policy.md) | pnpm workspace layout, dependency boundaries and reproducible setup rules |
 | [GitHub work-management policy](github-work-management.md) | Documentation-governed issues, milestones, labels and Claude task workflow |
 | [Decision log](decisions.md) | Decisions that govern future implementation |
