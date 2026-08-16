@@ -1,6 +1,8 @@
 import * as React from 'react';
+import { X } from 'lucide-react';
 
 import { strings } from '../content/strings';
+import { iconStrokeWidth } from '../theme/tokens';
 
 function getInitialOnlineState(): boolean {
   return typeof navigator === 'undefined' ? true : navigator.onLine;
@@ -48,7 +50,7 @@ export function OfflineBanner() {
         aria-label={strings.offlineBannerDismissLabel}
         className="top-banner__dismiss"
       >
-        <span aria-hidden="true">✕</span>
+        <X aria-hidden="true" size={18} strokeWidth={iconStrokeWidth} />
       </button>
     </div>
   );

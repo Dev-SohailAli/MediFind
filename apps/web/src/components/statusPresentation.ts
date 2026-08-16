@@ -1,3 +1,5 @@
+import { Ban, CircleCheck, TriangleAlert } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import type { SyntheticAvailability, SyntheticMatchKind } from '@medifind/contracts';
 
 import { strings } from '../content/strings';
@@ -6,15 +8,15 @@ import type { BadgeTone } from './StatusBadge';
 export function availabilityPresentation(availability: SyntheticAvailability): {
   label: string;
   tone: BadgeTone;
-  glyph: string;
+  icon: LucideIcon;
 } {
   switch (availability) {
     case 'in_stock':
-      return { label: strings.availabilityInStockLabel, tone: 'success', glyph: '✓' };
+      return { label: strings.availabilityInStockLabel, tone: 'success', icon: CircleCheck };
     case 'low_stock':
-      return { label: strings.availabilityLowStockLabel, tone: 'warning', glyph: '▲' };
+      return { label: strings.availabilityLowStockLabel, tone: 'warning', icon: TriangleAlert };
     case 'unavailable':
-      return { label: strings.availabilityUnavailableLabel, tone: 'neutral', glyph: '⊘' };
+      return { label: strings.availabilityUnavailableLabel, tone: 'neutral', icon: Ban };
   }
 }
 

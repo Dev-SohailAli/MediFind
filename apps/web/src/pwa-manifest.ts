@@ -13,8 +13,8 @@ export const pwaManifest: Partial<ManifestOptions> = {
   description:
     'Local synthetic development build of the MediFind buyer-search prototype. No real pharmacy, medicine, account or prescription data.',
   lang: 'en',
-  theme_color: '#0F766E',
-  background_color: '#F7FAFC',
+  theme_color: '#C67139',
+  background_color: '#F5EAD8',
   display: 'standalone',
   scope: '/',
   start_url: '/',

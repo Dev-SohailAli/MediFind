@@ -6,9 +6,10 @@
  * custom logo/illustration until validated demand. A PWA manifest still
  * needs raster icons to be installable (especially iOS "Add to Home
  * Screen"), so this script produces a flat single-colour square using the
- * approved `primary` design token — a documented placeholder, not a
- * designed asset. It writes raw PNG bytes using only Node's built-in zlib
- * (no image-processing dependency, no native build step).
+ * approved `primary` design token (ADR-271 organic visual system) — a
+ * documented placeholder, not a designed asset. It writes raw PNG bytes
+ * using only Node's built-in zlib (no image-processing dependency, no
+ * native build step).
  *
  * Re-run with `pnpm --filter @medifind/web generate-icons` if the output
  * files are ever deleted; the committed PNGs in public/icons/ are the
@@ -18,7 +19,7 @@ import { deflateSync, crc32 } from 'node:zlib';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-const PRIMARY_TEAL = { r: 0x0f, g: 0x76, b: 0x6e }; // #0F766E, the approved `primary` light token
+const PRIMARY_TERRACOTTA = { r: 0xc6, g: 0x71, b: 0x39 }; // #C67139, the approved `primary` light token
 
 const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 
@@ -77,11 +78,11 @@ const targets = [
 ];
 
 for (const target of targets) {
-  const png = solidColorPng(target.size, PRIMARY_TEAL);
+  const png = solidColorPng(target.size, PRIMARY_TERRACOTTA);
   writeFileSync(`${iconsDir}${target.file}`, png);
   console.log(`[generate-icons] wrote ${target.file} (${target.size}x${target.size})`);
 }
 
-const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="MediFind synthetic development icon"><rect width="32" height="32" fill="#0F766E" /></svg>\n`;
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="MediFind synthetic development icon"><rect width="32" height="32" fill="#C67139" /></svg>\n`;
 writeFileSync(`${iconsDir}icon-any.svg`, svg, 'utf8');
 console.log('[generate-icons] wrote icon-any.svg');

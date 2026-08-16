@@ -1,6 +1,8 @@
 import * as React from 'react';
+import { X } from 'lucide-react';
 
 import { strings } from '../content/strings';
+import { iconStrokeWidth } from '../theme/tokens';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -61,7 +63,7 @@ export function InstallBanner() {
         aria-label={strings.installBannerDismissLabel}
         className="top-banner__dismiss"
       >
-        <span aria-hidden="true">✕</span>
+        <X aria-hidden="true" size={18} strokeWidth={iconStrokeWidth} />
       </button>
     </div>
   );
