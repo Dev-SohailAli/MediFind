@@ -5,7 +5,7 @@
 | [Product brief](product-brief.md) | Outcome, audience, pilot scope, success measures, roadmap |
 | [Requirements and journeys](requirements.md) | Behaviours, roles, user journeys, acceptance criteria |
 | [Data and search](data-and-search.md) | Information model, visibility and normalization rules |
-| [Experience and content](experience-and-content.md) | Mobile, accessibility, language and safety guidance |
+| [Experience and content](experience-and-content.md) | Responsive web/PWA, accessibility, language and safety guidance |
 | [Security, privacy and compliance](security-privacy-compliance.md) | Controls and Fiji validation checklist |
 | [Security architecture and threat model](security-architecture-threat-model.md) | Technical controls, attack scenarios and security verification gates |
 | [Architecture decision](architecture.md) | Target system boundaries and vendor-selection constraints |
@@ -27,8 +27,8 @@
 | [First synthetic-foundation test specification](first-synthetic-foundation-test-specification.md) | Exact local/CI verification and synthetic-data boundary for the first task |
 | [Task 2 synthetic buyer-search specification](task-2-synthetic-buyer-search-specification.md) | Exact synthetic-only fixture, search, UI, safety and test contract for buyer-search prototype work |
 | [Task 2 Claude implementation brief](task-2-synthetic-buyer-search-task-brief.md) | Executable Claude task scope, exclusions, acceptance evidence and delivery rules for Task 2 |
-| [Task 3 protected-platform foundation specification](task-3-protected-platform-foundation-specification.md) | Draft cloud, identity, API, CI, cost and repository-control boundary for the synthetic platform foundation |
-| [Task 3 Claude implementation brief](task-3-protected-platform-foundation-task-brief.md) | Draft implementation handoff for a later synthetic-environment platform task; it is not approved by this document alone |
+| [Task 3 protected-platform foundation specification](task-3-protected-platform-foundation-specification.md) | Synthetic cloud, identity, API, CI, cost and repository-control boundary; implementation remains input-gated |
+| [Task 3 Claude implementation brief](task-3-protected-platform-foundation-task-brief.md) | Founder-approved synthetic-environment platform handoff; no production authority |
 | [API mutation and concurrency](api-mutation-and-concurrency-policy.md) | Explicit commands, idempotency and version-conflict rules |
 | [API error contract](api-error-contract.md) | Safe machine codes, local translation keys, correlation IDs and anti-enumeration rules |
 | [V1 API endpoint inventory](v1-api-endpoint-inventory.md) | Approved REST route/action map for task-level schema design |
@@ -45,8 +45,8 @@
 | [Free pilot pharmacy agreement](pilot-pharmacy-agreement.md) | Required pilot terms and pharmacy activation checklist |
 | [Pharmacy onboarding and training](pharmacy-onboarding-and-training.md) | Activation sequence, staff training and go-live checklist |
 | [Public support presence](public-support-presence.md) | Minimal legal, status, support and security-reporting website policy |
-| [Mobile permissions policy](mobile-permissions-policy.md) | Just-in-time minimum permission, fallback and store-disclosure rules |
-| [Accessibility policy](accessibility-policy.md) | WCAG target, inclusive mobile requirements and assistive-technology release tests |
+| [Web platform capabilities policy](mobile-permissions-policy.md) | Just-in-time browser capability, fallback and installability rules |
+| [Accessibility policy](accessibility-policy.md) | WCAG target, responsive web requirements and assistive-technology release tests |
 | [Audit-log policy](audit-log-policy.md) | Append-only event fields, visibility restrictions and sensitive-data exclusions |
 | [Performance and reliability targets](performance-and-reliability-targets.md) | Pilot latency, result-size, listing-propagation and measurement targets |
 | [Phone verification policy](phone-verification-policy.md) | Fiji number normalisation, OTP lifecycle, fallback and beta validation rules |
@@ -62,7 +62,8 @@
 | [Repository security and delivery](repository-security-and-delivery.md) | Required GitHub protection, dependency and secret-management controls |
 | [Synthetic-code repository readiness record](repository-readiness-record.md) | Verified private-repository controls, limits and first-task merge gate |
 | [Public-source visibility review](public-source-visibility-review.md) | Conditional IP/security review for the GitHub Free public-source alternative |
-| [Monorepo and toolchain policy](monorepo-and-toolchain-policy.md) | pnpm workspace layout, dependency boundaries and reproducible setup rules |
+| [Web application and PWA direction](web-app-and-pwa-direction.md) | Current product surface, PWA capabilities, distribution boundary and future native-shell decision |
+| [Monorepo and toolchain policy](monorepo-and-toolchain-policy.md) | pnpm workspace layout, web/API/native-shell dependency boundaries and reproducible setup rules |
 | [GitHub work-management policy](github-work-management.md) | Documentation-governed issues, milestones, labels and Claude task workflow |
 | [Decision log](decisions.md) | Decisions that govern future implementation |
 

@@ -2,7 +2,7 @@
 
 ## Fail-closed private pipeline
 
-Prescription files enter private quarantine after authenticated, selected-branch upload validation. They are not available to a pharmacy reviewer, mobile client or ordinary API route until a regional private scanning workflow produces an authorised safe/reviewable classification.
+Prescription files enter private quarantine after authenticated, selected-branch upload validation. They are not available to a pharmacy reviewer, web client/PWA or ordinary API route until a regional private scanning workflow produces an authorised safe/reviewable classification.
 
 1. API validates selected branch/request/consent, permitted type/size/page count and creates a quarantine object/metadata record through server credentials.
 2. API emits an internal, minimal job event to the approved private job/queue mechanism. The event contains opaque references only; no file bytes, public URL or prescription content.
@@ -13,7 +13,7 @@ Prescription files enter private quarantine after authenticated, selected-branch
 ## Access model
 
 - The scanner uses a dedicated least-privilege service account limited to the quarantine object path and minimal result/job records. It has no general Firestore/Storage administration, user impersonation or broad production access.
-- The mobile app receives no object-store credential, file path, reusable URL or scanner credential. Ordinary API routes cannot proxy arbitrary storage/object access.
+- The web app/PWA receives no object-store credential, file path, reusable URL or scanner credential. Ordinary API routes cannot proxy arbitrary storage/object access.
 - Internal queue/job invocations require authenticated service identity, schema validation, idempotency/replay protection and an audit/correlation reference. The worker endpoint is not publicly reachable.
 - Scan definition/update source, worker image/dependency patch policy and service-account permissions require the same supply-chain and configuration review as other production components.
 

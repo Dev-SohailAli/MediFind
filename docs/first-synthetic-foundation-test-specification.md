@@ -8,7 +8,7 @@ It authorises neither application implementation nor cloud configuration by itse
 
 ## Task-1 quality objective
 
-Task 1 proves that a clean checkout can reproduce a TypeScript pnpm workspace, a minimal local-only mobile shell, an empty API package boundary and shared non-secret configuration. It does **not** prove a buyer, pharmacy, medicine, account, API, workflow, cloud service or release behaviour.
+Task 1 proves that a clean checkout can reproduce a TypeScript pnpm workspace, a minimal local-only web/PWA shell, an empty API package boundary and shared non-secret configuration. It does **not** prove a buyer, pharmacy, medicine, account, API, workflow, cloud service or release behaviour.
 
 The quality system must therefore verify four things only:
 
@@ -31,7 +31,7 @@ The quality system must therefore verify four things only:
 | Dependency/filesystem scanning | Trivy plus pnpm audit | Run locally where available and in CI using a pinned full-commit-SHA action/container/tool version. |
 | CI runtime | GitHub Actions Ubuntu runner | No cloud credential, deployment identity, app secret, real data or production configuration is available to the workflow. |
 
-The task brief resolves and pins exact compatible package versions in `package.json` and the lockfile. It must not use global project tooling, floating `latest` dependencies or an unreviewed version range that changes CI behaviour without a lockfile update. Expo/React Native versions must be selected together from their then-current compatibility guidance; the task may not substitute Expo Go for the approved Expo Prebuild/CNG direction.
+The task brief resolves and pins exact compatible package versions in `package.json` and the lockfile. It must not use global project tooling, floating `latest` dependencies or an unreviewed version range that changes CI behaviour without a lockfile update. Web/PWA runtime and browser-test versions must be selected together from their then-current compatibility guidance; a future native shell is not part of task 1.
 
 ## Required scripts and expected outcomes
 
@@ -44,7 +44,7 @@ The first task creates these root scripts or documented exact equivalents. Each 
 | `pnpm lint` | Lint completes with zero warnings. | Enforces dependency/package boundaries where a static rule can do so. |
 | `pnpm typecheck` | Every workspace package type-checks with no emitted build output. | No weakening of strict TypeScript policy. |
 | `pnpm test` | Vitest finishes non-interactively and reports raw result. | Tests use only anonymous, non-domain values and make no network request. |
-| `pnpm build` | Mobile shell and API/package build boundaries complete locally. | Does not create a release artefact, sign an app, start a public listener or invoke a provider. |
+| `pnpm build` | Web/PWA shell and API/package build boundaries complete locally. | Does not create a release artefact, sign an app, start a public listener or invoke a provider. |
 | `pnpm security:secrets` | Gitleaks finds no reportable secret in the checked scope/history defined by the task brief. | Output redacts candidate secret values. |
 | `pnpm security:trivy` | Trivy finds no unapproved critical/high issue in the selected dependency/filesystem scope. | Reports are redacted/minimal and contain no secret value. |
 | `pnpm audit` | Package-manager audit runs and findings are triaged under the vulnerability policy. | A failure/exception needs an issue and founder-approved recorded rationale. |
@@ -57,7 +57,7 @@ Task 1 is not permitted to introduce product fixtures or fake flows just to sati
 
 - workspace/package configuration is loadable by the selected toolchain;
 - the API package exposes no listener, business route or provider initialisation;
-- the mobile shell uses only its permitted static local-development label and does not request permissions or make network calls; and
+- the web/PWA shell uses only its permitted static local-development label and does not request capabilities or make network calls; and
 - prohibited imports/configuration (Firebase, cloud SDKs, database/storage clients, analytics, secrets and domain fixtures) are absent from task-1 package boundaries.
 
 Tests use anonymous non-domain strings only. They may not contain a medicine name, Fiji location, person/contact, pharmacy, role, prescription, inventory, price, reservation state, realistic document or a representation of any future workflow.
@@ -109,7 +109,7 @@ The founder reviews and merges after required evidence is present. Claude may op
 | Formatting/lint/type/test/build failure | Fix within the approved issue scope, add the safe regression/configuration test where applicable, then rerun the full affected command set. |
 | Secret scanner finding | Stop, avoid copying the value into an issue/PR, treat as a suspected exposure, follow the repository security policy and rotate/revoke if genuine. |
 | Critical/high vulnerability | Open/update a security issue, identify whether the dependency is used, patch/remove/mitigate within policy, and obtain documented approval for any temporary exception. |
-| Missing compatible dependency/tool or incompatible Expo toolchain | Stop and open a decision request; do not swap frameworks, lower versions or use a global workaround silently. |
+| Missing compatible web dependency/tool or incompatible browser target | Stop and open a decision request; do not swap frameworks, lower versions or use a global workaround silently. |
 | Need for a network call, fixture, route, account, provider, cloud setting or domain UI | Stop and request a new scoped task/contract. It is outside task 1. |
 | CI/scanner unavailable | Mark the relevant issue blocked and preserve the limitation in the pull request; do not merge on an assumed pass. |
 

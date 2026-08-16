@@ -2,7 +2,7 @@
 
 ## Goal
 
-Before any UI implementation, Claude produces one cohesive low-fidelity mobile design proposal for the MediFind MVP. The proposal must make discovery, pharmacy-owned information, prescription privacy, reservations and role boundaries easy to understand on a low/variable-connectivity Fiji mobile connection.
+Before any UI implementation, Claude produces one cohesive low-fidelity responsive web/PWA design proposal for the MediFind MVP. The proposal must make discovery, pharmacy-owned information, prescription privacy, reservations and role boundaries easy to understand on a low/variable-connectivity Fiji connection across narrow mobile and desktop browser viewports.
 
 This is a documentation/design deliverable only. It authorises no application code, provider setup, account, storage, API or production work.
 
@@ -10,7 +10,7 @@ This is a documentation/design deliverable only. It authorises no application co
 
 1. **Design-system application:** apply the approved initial semantic tokens, accessible light/dark colour approach, system-font typography scale, spacing/radius/elevation, touch targets, status/error/safety components and icon usage from the [Claude Design agent brief](claude-design-agent-brief.md). Explain the 200% text-scale and English/iTaukei/Fiji Hindi layout treatment; identify only changes that need founder approval.
 2. **Navigation/role map:** clear buyer, inventory-manager, reviewer, owner and MediFind admin navigation. Include buyer/staff workspace switching without cross-context data exposure. Owner-only navigation must not imply prescription access without reviewer role.
-3. **Low-fidelity wireframes:** screen-by-screen mobile wireframes/descriptions for the core flows below, including primary content hierarchy and actions.
+3. **Low-fidelity wireframes:** responsive page-by-page wireframes/descriptions for the core flows below, including narrow/mobile and desktop content hierarchy and actions.
 4. **State inventory:** loading, offline, retry, empty, zero-result, stale, permission request/denial, unauthenticated, forbidden, validation/conflict, generic safe error, security alert, success and kill-switch/maintenance states for every affected flow.
 5. **Safety/accessibility review:** explain how the proposed design meets product boundaries, generic notifications, screen-reader/focus behaviour, text scaling, contrast/non-colour status and translated/system-vs-pharmacy-authored content rules.
 6. **Open questions:** list no more than the material decisions that actually block an approved visual design. Do not fill gaps by silently changing a MediFind policy.

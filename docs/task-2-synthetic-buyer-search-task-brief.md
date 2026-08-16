@@ -1,10 +1,12 @@
 # Claude task brief: Task 2 synthetic buyer-search prototype
 
+> Historical implementation record: this task was completed in the legacy Expo/mobile shell before the web/PWA platform pivot. Do not use this brief to start new native distribution work; future buyer UI work targets the responsive web/PWA.
+
 ## Task
 
 - **Title:** Task 2: synthetic buyer search and navigation prototype
-- **Goal:** Replace the empty Task 1 mobile shell with a locally runnable, accessible buyer-search prototype that demonstrates approved search presentation and safe matching behaviour using fictional in-memory fixtures only.
-- **User-facing outcome:** A developer can open the Expo app and explore Search, synthetic results/detail, sorting, safe visual states, and clearly non-functional Requests/Account placeholders. The prototype never connects to a service or represents a real buyer/pharmacy/medicine.
+- **Goal:** Historical goal: replace the empty Task 1 mobile shell with a locally runnable, accessible buyer-search prototype that demonstrates approved search presentation and safe matching behaviour using fictional in-memory fixtures only.
+- **User-facing outcome:** A developer can open the legacy Expo prototype and explore Search, synthetic results/detail, sorting, safe visual states, and clearly non-functional Requests/Account placeholders. The prototype never connects to a service or represents a real buyer/pharmacy/medicine. The current product-facing equivalent must be implemented in the responsive web/PWA.
 - **Owner/approver:** MediFind founder
 - **Tracking issue:** [#5](https://github.com/Dev-SohailAli/MediFind/issues/5)
 

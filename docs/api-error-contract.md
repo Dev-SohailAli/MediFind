@@ -2,7 +2,7 @@
 
 ## Production response shape
 
-Every production API error returns a stable, allow-listed machine-readable `code`, client-localisation `messageKey`, opaque correlation `requestId`, optional safe `fieldErrors` for the caller's submitted fields, and a retryability/category signal where applicable. The mobile app renders translated safe language; the API does not return unreviewed human exception text.
+Every production API error returns a stable, allow-listed machine-readable `code`, client-localisation `messageKey`, opaque correlation `requestId`, optional safe `fieldErrors` for the caller's submitted fields, and a retryability/category signal where applicable. The web app/PWA renders translated safe language; the API does not return unreviewed human exception text.
 
 ```text
 {

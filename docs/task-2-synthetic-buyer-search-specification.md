@@ -1,8 +1,10 @@
 # Task 2: synthetic buyer-search specification
 
+> Historical implementation record: Task 2 was completed as a local Expo/mobile prototype before the web/PWA platform pivot. This document remains the bounded source for that prototype's synthetic behaviour; current buyer-facing implementation work must target the responsive web/PWA and update this contract through a decision-change request if the behaviour changes.
+
 ## Purpose and approval boundary
 
-This specification authorises the second implementation task in the [implementation sequence](implementation-sequencing.md): a **local, synthetic buyer-search and navigation prototype**. It gives Claude an exact bounded contract for the first non-sensitive mobile experience after Task 1.
+This specification authorises the second implementation task in the [implementation sequence](implementation-sequencing.md): a **local, synthetic buyer-search and navigation prototype**. It gives Claude an exact bounded contract for the first non-sensitive experience after Task 1. The completed implementation is retained as a legacy mobile prototype; the current product surface is the responsive web/PWA.
 
 Task 2 is not a product beta, public release, account flow, inventory system or backend. It creates no cloud resource, network interface, user identity, real pharmacy/medicine record, prescription, reservation, notification, analytics event, device permission request or persistent client data.
 

@@ -2,18 +2,18 @@
 
 ## Scope
 
-MediFind remains a mobile-only product in the MVP. A minimal, static public web presence is nevertheless required before external activation for information that must be reachable without an app account. It is not a buyer, pharmacy, prescription, reservation or admin workflow and holds no account/session functionality.
+MediFind's MVP product is a responsive web application/PWA. A minimal, static public support/legal presence is nevertheless required before external activation for information that must be reachable without an app account. It remains separate from the authenticated buyer, pharmacy, prescription, reservation and admin workflows and holds no account/session functionality.
 
 ## Required pages
 
-- **Home/what MediFind is:** Fiji/Suva pilot description, clear service boundary and app-store beta access only when approved.
+- **Home/what MediFind is:** Fiji/Suva pilot description, clear service boundary and browser/PWA access instructions; store access is only mentioned if separately approved.
 - **Privacy notice and terms:** approved, versioned public legal notices and operator contact required by [the legal-identity requirements](public-notice-and-legal-identity.md).
 - **Support:** published support hours, official support email, non-emergency/clinical boundary, account-safety and anti-phishing guidance.
 - **Status:** current maintenance/outage state and next-update time, with no sensitive operational detail.
 - **Security reporting:** a `security.txt` path and responsible-disclosure contact/process.
 - **Accessibility/language:** English, iTaukei and Fiji Hindi legal/safety/support content after required professional review, meeting the [accessibility policy](accessibility-policy.md) and tested with keyboard/screen-reader use.
 
-Host the public site as static assets on Cloudflare Pages under the founder-controlled MediFind domain. Use no Pages Functions, forms, cookies, analytics, account/API proxy or client storage. Static requests are currently free/unlimited and the same generated assets can move to paid Pages or another static host without affecting the mobile application. The final domain, support-email provider and DNS/Cloudflare processor controls still require their own approved configuration before launch. The site uses HTTPS, secure headers and a restricted publishing workflow and never collects prescription, health or authentication data. See the [free-first production architecture](free-first-production-architecture.md).
+Host the public support/legal site as static assets on Cloudflare Pages under the founder-controlled MediFind domain. Use no Pages Functions, forms, cookies, analytics, account/API proxy or client storage. Static requests are currently free/unlimited and the same generated assets can move to paid Pages or another static host without affecting the authenticated web/PWA. The final domain, support-email provider and DNS/Cloudflare processor controls still require their own approved configuration before launch. The site uses HTTPS, secure headers and a restricted publishing workflow and never collects prescription, health or authentication data. See the [free-first production architecture](free-first-production-architecture.md).
 
 ## Official contact policy
 

@@ -2,7 +2,7 @@
 
 ## Problem and outcome
 
-People in Fiji may know the medicine they need but not which nearby pharmacy has it. MediFind will make current, pharmacy-supplied availability and listed FJD prices discoverable in one mobile experience. The v1 pilot is limited to verified pharmacies in Suva.
+People in Fiji may know the medicine they need but not which nearby pharmacy has it. MediFind will make current, pharmacy-supplied availability and listed FJD prices discoverable in one responsive web experience that can be installed to a device Home Screen. The v1 pilot is limited to verified pharmacies in Suva.
 
 ## Audiences
 
@@ -21,7 +21,7 @@ Targets are set with pilot pharmacies before launch; no target is treated as a c
 
 ## V1 scope
 
-Registered buyers search medicine listings and view pharmacy name, map/location, opening hours, availability status, listed FJD price and last-updated time. They may request an over-the-counter collection reservation directly, or select a verified pharmacy and upload a prescription for review before a prescription-required reservation can be approved. Buyers receive generic push notifications and follow up directly by the pharmacy's published phone number, hours and directions. V1 provides no in-app chat. Pharmacy staff receive generic push notification and review requests in their mobile workspace.
+Registered buyers search medicine listings and view pharmacy name, map/location, opening hours, availability status, listed FJD price and last-updated time in the responsive web app/PWA. They may request an over-the-counter collection reservation directly, or select a verified pharmacy and upload a prescription for review before a prescription-required reservation can be approved. Buyers receive generic web notifications where supported and follow up directly by the pharmacy's published phone number, hours and directions. V1 provides no in-app chat. Pharmacy staff use the same protected web application through their role-specific workspace.
 
 ## Out of scope
 

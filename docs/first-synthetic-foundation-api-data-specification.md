@@ -2,7 +2,7 @@
 
 ## Purpose and approval boundary
 
-This is the implementation-grade API/data specification for **task 1: Foundation only** in the [implementation sequence](implementation-sequencing.md). It deliberately defines a zero-business-data foundation so Claude can create the approved monorepo/toolchain, mobile shell and API package skeleton without creating a disguised backend, account system or production-ready service.
+This is the implementation-grade API/data specification for **task 1: Foundation only** in the [implementation sequence](implementation-sequencing.md). It deliberately defines a zero-business-data foundation so Claude can create the approved monorepo/toolchain, responsive web/PWA shell and API package skeleton without creating a disguised backend, account system or production-ready service.
 
 It applies the founder-approved [initial MVP design proposal](design-proposals/initial-mvp-design-proposal.md), but does not implement a user journey or screen from that proposal. Task 2 is the first approved non-sensitive buyer-search/design task and needs its own API/data specification and task brief.
 
@@ -12,8 +12,8 @@ This document authorises no cloud account, Firebase project, Firebase SDK integr
 
 ### In scope
 
-- One TypeScript pnpm workspace matching the [monorepo and toolchain policy](monorepo-and-toolchain-policy.md): `apps/mobile`, `apps/api`, `packages/contracts` and `packages/config`.
-- A buildable mobile application shell that identifies itself only as a local synthetic-development build and contains no buyer/pharmacy/admin workflow, sign-in surface, medicine listing, interactive search, role selector or fake dashboard.
+- One TypeScript pnpm workspace matching the [monorepo and toolchain policy](monorepo-and-toolchain-policy.md): `apps/web`, `apps/mobile`, `apps/api`, `packages/contracts` and `packages/config`.
+- A buildable responsive web/PWA shell that identifies itself only as a local synthetic-development build and contains no buyer/pharmacy/admin workflow, sign-in surface, medicine listing, interactive search, role selector or fake dashboard.
 - A buildable API package skeleton with no business route, no external listener requirement and no connection to any provider, database or storage system.
 - An empty-but-versioned shared-contract package that establishes only its package boundary. It contains no prematurely invented endpoint, domain model, role, storage schema or future-field placeholder.
 - Non-secret shared lint/type/test/build configuration and documentation for the exact reproducible local commands selected in the later task brief.
@@ -32,12 +32,13 @@ This document authorises no cloud account, Firebase project, Firebase SDK integr
 
 | Location | Task-1 permitted responsibility | Task-1 prohibited content |
 | --- | --- | --- |
-| `apps/mobile` | Native mobile shell and non-secret build configuration. | Firebase client SDK, direct API/database/storage code, account/session/role state, medicine/pharmacy fixtures, network calls and protected-data cache. |
+| `apps/web` | Responsive web/PWA shell and non-secret browser configuration. | Firebase Admin SDK, direct database/storage code, account/session/role state, medicine/pharmacy fixtures, network calls and protected-data cache. |
+| `apps/mobile` | Future native shell and non-secret build configuration. | Firebase Admin SDK, direct API/database/storage code, account/session/role state, medicine/pharmacy fixtures, network calls and protected-data cache. |
 | `apps/api` | Independently type-checkable/buildable TypeScript package boundary. | Public listener, `/v1` route, Fastify business plugin, cloud SDK, provider credential, database/storage client, authorization or domain workflow. |
 | `packages/contracts` | Versioned package boundary and safe package export surface only. | Request/response/domain schemas, roles, state enums, credentials, server-only models, data-access code or speculative fields. |
 | `packages/config` | Non-secret shared tool configuration. | Runtime secrets, provider identifiers, environment URLs, production project/resource names or deployment configuration. |
 
-The mobile package must not import from `apps/api`. The API package must not be included in a mobile build. A shared dependency must be added only when the task brief names its purpose and verifies the package boundary.
+The web and mobile client packages must not import from `apps/api`. The API package must not be included in a client build. A shared dependency must be added only when the task brief names its purpose and verifies the package boundary.
 
 ## API contract
 
@@ -52,7 +53,7 @@ There are **no API routes** in task 1.
 | Request/response schemas | None. The common future error shape in [API error contract](api-error-contract.md) remains documentation, not a task-1 wire contract. |
 | Authentication/App Check | None. No token, header, mock identity or bypass is accepted/stored. |
 | Rate limits/idempotency/version headers | None. No mutation or route exists. |
-| External network access | Prohibited. The mobile and API skeleton must pass without a network request. |
+| External network access | Prohibited. The web and API skeleton must pass without a network request. |
 
 The [v1 API endpoint inventory](v1-api-endpoint-inventory.md) remains the authoritative future route map. Task 1 neither implements nor changes it.
 
@@ -95,7 +96,7 @@ Future role, state and authorization requirements remain governed by [requiremen
 
 ## Design boundary
 
-The founder-approved visual design is a source of truth for later UI work, not an instruction to implement its screens in task 1. The only task-1 mobile presentation may be a minimal non-interactive local-development shell that:
+The founder-approved visual design is a source of truth for later UI work, not an instruction to implement its screens in task 1. The only task-1 web presentation may be a minimal non-interactive local-development shell that:
 
 - uses no account, pharmacy, medicine, medical, price or reservation content;
 - does not request platform permissions;
@@ -113,7 +114,7 @@ The founder-approved visual design is a source of truth for later UI work, not a
 
 ## Required evidence before the task brief can be approved
 
-The later foundation task brief must pin the then-current Node.js Active LTS release, pnpm version, mobile/Expo approach, test/lint/format tools and exact commands in accordance with [monorepo and toolchain policy](monorepo-and-toolchain-policy.md). It must also reference:
+The later foundation task brief must pin the then-current Node.js Active LTS release, pnpm version, web/PWA approach, test/lint/format tools and exact commands in accordance with [monorepo and toolchain policy](monorepo-and-toolchain-policy.md). It must also reference:
 
 1. the completed test foundation specification;
 2. the completed repository-readiness checklist for synthetic code;
@@ -126,6 +127,6 @@ Until those items are approved, this specification authorises no code.
 
 - [x] First task is restricted to the approved foundation-only sequence.
 - [x] Endpoint list, schemas, enums, authorization matrix, state transitions, collections, indexes and migrations are explicitly empty rather than implicit.
-- [x] The mobile/API/package boundaries prevent a fake or direct-client backend from entering the foundation task.
+- [x] The web/API/package boundaries prevent a fake or direct-client backend from entering the foundation task.
 - [x] Synthetic-only, no-network, no-provider, no-data and no-telemetry constraints are explicit.
 - [x] Later search and protected workflows require their own contract/task approval.

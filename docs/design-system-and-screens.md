@@ -2,14 +2,14 @@
 
 ## Visual direction
 
-MediFind uses a clean, clinical and calm visual style: high-readability surfaces, restrained blue/teal accents, clear status labels and no discount/sale aesthetic. The design must feel trustworthy and practical rather than diagnostic, promotional or overly playful. Support light and dark themes, defaulting to the device setting with a manual Account override. Use semantic design tokens, not hard-coded colours, so contrast and theme changes remain safe.
+MediFind uses a clean, clinical and calm visual style: high-readability surfaces, restrained blue/teal accents, clear status labels and no discount/sale aesthetic. The design must feel trustworthy and practical rather than diagnostic, promotional or overly playful. Support responsive browser layouts, light and dark themes, defaulting to the browser/OS setting with a manual Account override. Use semantic design tokens, not hard-coded colours, so contrast and theme changes remain safe.
 
 ## Design principles
 
 - Prioritise a clear next action and current status over visual density.
 - State data freshness, pharmacy ownership of availability/pricing, reservation limits and prescription boundaries plainly.
 - Never use colour alone for stock, safety, error or status meaning.
-- Meet the [accessibility policy](accessibility-policy.md): WCAG 2.2 AA target, large touch targets, 200% scalable text, contrast, screen-reader labels, predictable focus/order and low-data list-first search.
+- Meet the [accessibility policy](accessibility-policy.md): WCAG 2.2 AA target, large touch/pointer targets, 200% scalable text, contrast, screen-reader labels, keyboard focus/order and low-data list-first search.
 - Show safe empty, loading, offline and error states. Never make a buyer assume that a missing/stale result means a medicine is unavailable everywhere.
 - Use polished, accessible system icons in the MVP. Do not spend pilot scope on custom logos or illustrations before validated demand.
 
@@ -34,7 +34,7 @@ The sequence links to language selection, privacy/terms, support hours and emerg
 | Pharmacy owner | Dashboard, Inventory, Account; Requests only when explicitly assigned reviewer role | Staff/role controls are high-risk actions requiring fresh MFA; ownership alone never exposes prescription content |
 | MediFind verifier/admin | Verification, Reports, Account | No routine prescription-content access |
 
-The app renders only the navigation and actions authorised for the signed-in role. A user with multiple pharmacy roles sees a clearly labelled role/branch context and never gains access by merely switching screens.
+The web app/PWA renders only the navigation and actions authorised for the signed-in role. A user with multiple pharmacy roles sees a clearly labelled role/branch context and never gains access by merely switching screens.
 
 ## Screen inventory
 
@@ -74,7 +74,7 @@ The app renders only the navigation and actions authorised for the signed-in rol
 
 ## Shared interaction states
 
-Every screen specification must include loading, offline, retry, permission-denied, unauthorized, empty, stale-data, success and safe-error states. Offline mode may show only timestamped cached public search/listing results; it disables protected displays and all sensitive submissions/changes until a fresh server check succeeds. Generic notifications deep-link only to an authenticated in-app destination; they contain no medicine, price, prescription or reservation details.
+Every screen/page specification must include loading, offline, retry, capability-denied, unauthorized, empty, stale-data, success and safe-error states. Offline mode may show only timestamped cached public search/listing results; it disables protected displays and all sensitive submissions/changes until a fresh server check succeeds. Generic web notifications deep-link only to an authenticated web destination; they contain no medicine, price, prescription or reservation details.
 
 ## Implementation boundary
 

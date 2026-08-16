@@ -44,7 +44,7 @@ For MVP, the backend creates a minimal Firestore public-search projection from a
 
 Search supports deterministic exact-token/prefix/approved-alias lookup and the documented ranking/sorts. Do not attempt unrestricted fuzzy or clinical semantic search in Firestore, create arbitrary substring indexes, or retain searches to improve ranking. Misspellings are added only as reviewed non-clinical aliases. Nearby sorting receives transient coordinates for the request, calculates distance server-side or against precomputed geographic cells, and does not persist the buyer coordinates.
 
-The API owns the search interface and result model; clients never depend on Firestore query/index syntax. If measured catalogue volume, write amplification, p95 latency or search-quality targets cannot be met, a future private managed index may consume the same minimum public projection after region, privacy, processor and cost approval. The mobile API, safety rules, canonical identity, attribution and no-sponsored-ranking policy remain unchanged.
+The API owns the search interface and result model; clients never depend on Firestore query/index syntax. If measured catalogue volume, write amplification, p95 latency or search-quality targets cannot be met, a future private managed index may consume the same minimum public projection after region, privacy, processor and cost approval. The web API, safety rules, canonical identity, attribution and no-sponsored-ranking policy remain unchanged.
 
 ## Data quality rules
 

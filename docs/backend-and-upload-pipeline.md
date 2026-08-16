@@ -2,7 +2,7 @@
 
 ## Backend decision
 
-MediFind uses a TypeScript Fastify REST API deployed to Google Cloud Run in `australia-southeast1` (Sydney), subject to the existing legal/processor/data-residency gates. API Gateway is the only public business-API entry point; IAM-private Cloud Run is the only MediFind business-operation handler. The mobile app does not directly read/write Firestore or Cloud Storage.
+MediFind uses a TypeScript Fastify REST API deployed to Google Cloud Run in `australia-southeast1` (Sydney), subject to the existing legal/processor/data-residency gates. API Gateway is the only public business-API entry point; IAM-private Cloud Run is the only MediFind business-operation handler. The web app/PWA does not directly read/write Firestore or Cloud Storage.
 
 Configure the pilot API with zero minimum instances to allow scale-to-zero, an explicit conservative maximum-instance limit, request concurrency/timeout/body limits appropriate to each route, least-privilege service identity, regional logs and budget/latency/error alerts. Reassess cold-start impact with physical Fiji-device beta tests before raising minimum instances or changing cost limits. [Cloud Run regions](https://cloud.google.com/run/docs/locations) and [scale-to-zero](https://cloud.google.com/run/docs/overview/what-is-cloud-run)
 
@@ -11,7 +11,7 @@ Fastify is the approved HTTP framework because it supports a typed, schema-valid
 ## Request trust chain
 
 1. App sends HTTPS request to the regional API Gateway with Firebase ID token, Firebase App Check token, API version and idempotency key for a repeatable state change.
-2. API Gateway terminates TLS, validates the configured Firebase JWT issuer/audience/signature/expiry for protected operations and invokes the private Cloud Run API using only its dedicated service account. The mobile app never receives that service identity.
+2. API Gateway terminates TLS, validates the configured Firebase JWT issuer/audience/signature/expiry for protected operations and invokes the private Cloud Run API using only its dedicated service account. The web app/PWA never receives that service identity.
 3. Cloud Run accepts the gateway-provided verified identity context only from the IAM-authenticated gateway, verifies the Firebase App Check token, derives MediFind role/branch/request scope server-side, applies request-size/schema/per-actor/action abuse controls and rejects invalid/untrusted requests with a generic error.
 4. Sensitive/expensive mutation endpoints use limited-use/replay-resistant App Check tokens where supported and practical; they do not rely on App Check in place of authorization. [Firebase App Check](https://firebase.google.com/products/app-check)
 5. The API performs its own authorization, state/concurrency/idempotency validation, transaction and immutable audit event before responding with minimum necessary data. An API key embedded in the app is never treated as authentication or an abuse-control secret.

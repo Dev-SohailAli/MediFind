@@ -2,7 +2,7 @@
 
 ## Command model
 
-The mobile app never submits a generic record-state patch. Every state-changing operation uses an explicit, documented API command with server-side role, branch, record-relationship, current-state and transition validation. Examples include create/refresh listing, approve/decline/cancel/collect reservation, submit/cancel/review prescription request, invite/revoke staff, approve/suspend pharmacy, update approved branch details and activate a feature flag.
+The web app/PWA never submits a generic record-state patch. Every state-changing operation uses an explicit, documented API command with server-side role, branch, record-relationship, current-state and transition validation. Examples include create/refresh listing, approve/decline/cancel/collect reservation, submit/cancel/review prescription request, invite/revoke staff, approve/suspend pharmacy, update approved branch details and activate a feature flag.
 
 An action command accepts only the minimum inputs for that action. The server, not the client, determines legal next state, prices already confirmed in an action, expiry computations, audit event and notification. Unknown fields and unauthorised state/field combinations are rejected with a stable safe error.
 
