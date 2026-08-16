@@ -24,4 +24,3 @@ labels: "type:bug, status:needs-approval"
 ## Severity and user impact
 
 ## Security or privacy impact
-
