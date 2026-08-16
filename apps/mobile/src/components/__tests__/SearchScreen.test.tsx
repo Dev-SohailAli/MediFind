@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { act, create } from 'react-test-renderer';
+import { Text } from 'react-native';
 
 import { strings } from '../../content/strings';
 import { SearchScreen } from '../SearchScreen';
@@ -110,6 +111,43 @@ describe('SearchScreen', () => {
     });
 
     expect(findAllText(renderer)).not.toContain(strings.detailSheetTitle);
+  });
+
+  it('shows synthetic distance in the detail sheet only after a manual area is selected', () => {
+    const renderer = renderScreen();
+    typeInSearchInput(renderer, 'Nivaprin');
+
+    const resultButton = renderer.root
+      .findAllByProps({ accessibilityRole: 'button' })
+      .find((node) => {
+        const label = node.props.accessibilityLabel as string | undefined;
+        return typeof label === 'string' && label.includes('Nivaprin');
+      });
+    act(() => {
+      resultButton!.props.onPress();
+    });
+
+    const sheetTextBefore = JSON.stringify(
+      renderer.root
+        .findByProps({ testID: 'result-detail-sheet' })
+        .findAllByType(Text)
+        .map((node) => node.props.children),
+    );
+    expect(sheetTextBefore).not.toContain('Nearby in the selected synthetic area');
+    expect(sheetTextBefore).not.toContain('km (synthetic)');
+
+    const marketOption = renderer.root.findByProps({ accessibilityLabel: strings.areaMarketLabel });
+    act(() => {
+      marketOption.props.onPress();
+    });
+
+    const sheetTextAfter = JSON.stringify(
+      renderer.root
+        .findByProps({ testID: 'result-detail-sheet' })
+        .findAllByType(Text)
+        .map((node) => node.props.children),
+    );
+    expect(sheetTextAfter).toContain('Nearby in the selected synthetic area');
   });
 
   it('shows the active sort selection accessibly and applies price ascending order', () => {

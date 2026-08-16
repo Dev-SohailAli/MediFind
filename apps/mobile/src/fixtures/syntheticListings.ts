@@ -100,7 +100,7 @@ export const syntheticListings: readonly SyntheticSearchListing[] = [
     availability: 'in_stock',
     priceFjdMinor: 990,
     freshness: 'may_be_outdated',
-    lastUpdatedDisplay: '9 days ago',
+    lastUpdatedDisplay: '2 days ago',
     searchEligible: true,
   },
   {
@@ -153,11 +153,12 @@ export const syntheticListings: readonly SyntheticSearchListing[] = [
     syntheticDistanceRank: 1,
     availability: 'in_stock',
     priceFjdMinor: 500,
-    freshness: 'current',
-    lastUpdatedDisplay: 'Today',
-    // Deliberately ineligible: this fixture proves excluded/stale-ineligible
-    // records are never returned by search even though every other field
-    // would otherwise match.
+    freshness: 'may_be_outdated',
+    lastUpdatedDisplay: '9 days ago',
+    // Deliberately ineligible: past the seven-day unrefreshed threshold in
+    // docs/data-and-search.md, this fixture proves a stale/excluded record
+    // is never returned by search even though every other field would
+    // otherwise match.
     searchEligible: false,
   },
 ];

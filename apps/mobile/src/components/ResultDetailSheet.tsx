@@ -14,6 +14,7 @@ export interface ResultDetailSheetProps {
   listing: SyntheticSearchListing;
   matchKind: SyntheticMatchKind;
   displayDistance: DisplayDistance;
+  showDistance: boolean;
   onClose: () => void;
 }
 
@@ -26,6 +27,7 @@ export function ResultDetailSheet({
   listing,
   matchKind,
   displayDistance,
+  showDistance,
   onClose,
 }: ResultDetailSheetProps) {
   const colors = useThemeColors();
@@ -68,9 +70,11 @@ export function ResultDetailSheet({
         <Text style={[styles.pharmacyLine, { color: colors.textPrimary }]}>
           {strings.detailSheetPharmacyPrefix} {listing.pharmacyDisplayName}
         </Text>
-        <Text style={[styles.supporting, { color: colors.textSecondary }]}>
-          {displayDistance.label}
-        </Text>
+        {showDistance ? (
+          <Text style={[styles.supporting, { color: colors.textSecondary }]}>
+            {displayDistance.label}
+          </Text>
+        ) : null}
 
         <View style={styles.statusRow}>
           <StatusBadge

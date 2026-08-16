@@ -100,6 +100,25 @@ describe('searchListings', () => {
     }
   });
 
+  it('no searchEligible:true fixture is older than the seven-day unrefreshed-removal threshold', () => {
+    // docs/data-and-search.md: "A listing that remains unrefreshed for seven
+    // days is removed from search until its pharmacy refreshes it." A
+    // searchEligible:true fixture with a display age of 7+ days would
+    // contradict that policy.
+    const daysAgo = (label: string): number => {
+      if (label === 'Today') return 0;
+      if (label === 'Yesterday') return 1;
+      const match = /^(\d+) days ago$/.exec(label);
+      return match ? Number(match[1]) : 0;
+    };
+
+    for (const listing of syntheticListings) {
+      if (listing.searchEligible) {
+        expect(daysAgo(listing.lastUpdatedDisplay)).toBeLessThan(7);
+      }
+    }
+  });
+
   it('orders default relevance by match kind before freshness before price', () => {
     const controlled: SyntheticSearchListing[] = [
       {

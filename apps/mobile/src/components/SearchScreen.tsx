@@ -93,6 +93,7 @@ export function SearchScreen() {
           listing={selectedRow.listing}
           matchKind={selectedRow.matchKind}
           displayDistance={selectedRow.displayDistance}
+          showDistance={selectedArea !== null}
           onClose={() => setSelectedListingId(null)}
         />
       ) : null}
