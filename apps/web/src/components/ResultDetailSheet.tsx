@@ -1,9 +1,11 @@
 import * as React from 'react';
+import { Clock, X } from 'lucide-react';
 import type { SyntheticMatchKind, SyntheticSearchListing } from '@medifind/contracts';
 
 import { strings } from '../content/strings';
 import type { DisplayDistance } from '../search/distance';
 import { formatFjd } from '../search/format';
+import { iconStrokeWidth } from '../theme/tokens';
 import { StatusBadge } from './StatusBadge';
 import { availabilityPresentation, matchKindLabel } from './statusPresentation';
 
@@ -102,7 +104,7 @@ export function ResultDetailSheet({
             aria-label={strings.detailSheetCloseLabel}
             className="detail-sheet__close"
           >
-            <span aria-hidden="true">✕</span>
+            <X aria-hidden="true" size={20} strokeWidth={iconStrokeWidth} />
           </button>
         </div>
 
@@ -122,10 +124,10 @@ export function ResultDetailSheet({
           <StatusBadge
             label={availability.label}
             tone={availability.tone}
-            glyph={availability.glyph}
+            icon={availability.icon}
           />
           {listing.freshness === 'may_be_outdated' ? (
-            <StatusBadge label={strings.freshnessMayBeOutdatedLabel} tone="warning" glyph="⏱" />
+            <StatusBadge label={strings.freshnessMayBeOutdatedLabel} tone="warning" icon={Clock} />
           ) : null}
         </div>
 

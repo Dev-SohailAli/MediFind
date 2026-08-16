@@ -1,3 +1,4 @@
+import { Clock } from 'lucide-react';
 import type { SyntheticMatchKind, SyntheticSearchListing } from '@medifind/contracts';
 
 import { strings } from '../content/strings';
@@ -53,13 +54,9 @@ export function ResultCard({
       <span className="result-card__supporting">{listing.pharmacyDisplayName}</span>
 
       <span className="result-card__status-row">
-        <StatusBadge
-          label={availability.label}
-          tone={availability.tone}
-          glyph={availability.glyph}
-        />
+        <StatusBadge label={availability.label} tone={availability.tone} icon={availability.icon} />
         {listing.freshness === 'may_be_outdated' ? (
-          <StatusBadge label={strings.freshnessMayBeOutdatedLabel} tone="warning" glyph="⏱" />
+          <StatusBadge label={strings.freshnessMayBeOutdatedLabel} tone="warning" icon={Clock} />
         ) : null}
       </span>
 

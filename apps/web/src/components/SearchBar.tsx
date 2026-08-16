@@ -1,4 +1,7 @@
+import { X } from 'lucide-react';
+
 import { strings } from '../content/strings';
+import { iconStrokeWidth } from '../theme/tokens';
 
 export interface SearchBarProps {
   value: string;
@@ -26,7 +29,7 @@ export function SearchBar({ value, onChange }: SearchBarProps) {
           aria-label={strings.searchInputClearLabel}
           className="search-bar__clear"
         >
-          <span aria-hidden="true">✕</span>
+          <X aria-hidden="true" size={18} strokeWidth={iconStrokeWidth} />
         </button>
       ) : null}
     </div>

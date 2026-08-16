@@ -1,4 +1,7 @@
 import * as React from 'react';
+import { Check } from 'lucide-react';
+
+import { iconStrokeWidth } from '../theme/tokens';
 
 export interface SelectorOption<T> {
   value: T;
@@ -79,7 +82,11 @@ export function SelectorGroup<T>({
             onKeyDown={(event) => handleKeyDown(event, index)}
             className="selector__option"
           >
-            {selected ? <span aria-hidden="true">✓ </span> : null}
+            {selected ? (
+              <span className="selector__option__check" aria-hidden="true">
+                <Check size={16} strokeWidth={iconStrokeWidth} />
+              </span>
+            ) : null}
             {option.label}
           </button>
         );

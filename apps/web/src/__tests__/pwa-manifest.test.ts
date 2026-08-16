@@ -36,7 +36,7 @@ describe('pwaManifest', () => {
   });
 
   it('uses the approved primary/canvas design tokens for theme_color/background_color', () => {
-    expect(pwaManifest.theme_color).toBe('#0F766E');
-    expect(pwaManifest.background_color).toBe('#F7FAFC');
+    expect(pwaManifest.theme_color).toBe('#C67139');
+    expect(pwaManifest.background_color).toBe('#F5EAD8');
   });
 });
