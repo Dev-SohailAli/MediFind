@@ -23,6 +23,7 @@
 | [Design system and screens](design-system-and-screens.md) | Visual direction, onboarding, role navigation and screen inventory |
 | [API and data contracts](api-and-data-contracts.md) | REST boundary, resource/state contracts and server-only data rules |
 | [First synthetic-foundation API/data specification](first-synthetic-foundation-api-data-specification.md) | Exact zero-route/zero-data boundary for the first monorepo and application-shell task |
+| [First synthetic-foundation test specification](first-synthetic-foundation-test-specification.md) | Exact local/CI verification and synthetic-data boundary for the first task |
 | [API mutation and concurrency](api-mutation-and-concurrency-policy.md) | Explicit commands, idempotency and version-conflict rules |
 | [API error contract](api-error-contract.md) | Safe machine codes, local translation keys, correlation IDs and anti-enumeration rules |
 | [V1 API endpoint inventory](v1-api-endpoint-inventory.md) | Approved REST route/action map for task-level schema design |
