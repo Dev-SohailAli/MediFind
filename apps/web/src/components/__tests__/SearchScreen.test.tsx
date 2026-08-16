@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { strings } from '../../content/strings';
@@ -12,6 +12,27 @@ describe('SearchScreen', () => {
     expect(screen.getByText(strings.browseEmptyTitle)).toBeInTheDocument();
   });
 
+  it('genuinely shows the loading state while a query is pending, then resolves to results', () => {
+    render(<SearchScreen />);
+    const input = screen.getByLabelText(strings.searchInputLabel);
+
+    fireEvent.change(input, { target: { value: 'Nivaprin' } });
+
+    // Synchronously reachable: the loading state is real UI, not dead code
+    // wired to nothing. It uses an accessible, polite live region.
+    const loading = screen.getByRole('status');
+    expect(loading).toHaveTextContent(strings.loadingLabel);
+    expect(loading).toHaveAttribute('aria-live', 'polite');
+    expect(screen.queryByText(strings.browseEmptyTitle)).not.toBeInTheDocument();
+
+    return waitFor(() => {
+      expect(screen.queryByText(strings.loadingLabel)).not.toBeInTheDocument();
+      expect(
+        screen.getAllByRole('button', { name: /Nivaprin.*Exact product match/i }),
+      ).toHaveLength(2);
+    });
+  });
+
   it('renders matching results with accessible identity, availability, price and match label', async () => {
     const user = userEvent.setup();
     render(<SearchScreen />);
@@ -20,9 +41,9 @@ describe('SearchScreen', () => {
 
     // Two Nivaprin listings exist (different pharmacies); both must be
     // present as distinct, individually accessible result cards.
-    expect(screen.getAllByRole('button', { name: /Nivaprin.*Exact product match/i })).toHaveLength(
-      2,
-    );
+    expect(
+      await screen.findAllByRole('button', { name: /Nivaprin.*Exact product match/i }),
+    ).toHaveLength(2);
     expect(screen.getAllByText(/FJD \d+\.\d{2}/).length).toBeGreaterThan(0);
   });
 
@@ -32,7 +53,7 @@ describe('SearchScreen', () => {
 
     await user.type(screen.getByLabelText(strings.searchInputLabel), 'zzz-not-a-real-fixture-zzz');
 
-    expect(screen.getByText(strings.zeroResultTitle)).toBeInTheDocument();
+    expect(await screen.findByText(strings.zeroResultTitle)).toBeInTheDocument();
     expect(screen.getByText(strings.zeroResultSubstituteNotice)).toBeInTheDocument();
   });
 
@@ -42,7 +63,7 @@ describe('SearchScreen', () => {
 
     await user.type(screen.getByLabelText(strings.searchInputLabel), 'Excludex');
 
-    expect(screen.getByText(strings.zeroResultTitle)).toBeInTheDocument();
+    expect(await screen.findByText(strings.zeroResultTitle)).toBeInTheDocument();
   });
 
   it('opens a local, read-only detail dialog with required safety copy on result press', async () => {
@@ -50,7 +71,10 @@ describe('SearchScreen', () => {
     render(<SearchScreen />);
 
     await user.type(screen.getByLabelText(strings.searchInputLabel), 'Nivaprin');
-    await user.click(screen.getAllByRole('button', { name: /Nivaprin.*Exact product match/i })[0]!);
+    const [firstResult] = await screen.findAllByRole('button', {
+      name: /Nivaprin.*Exact product match/i,
+    });
+    await user.click(firstResult!);
 
     const dialog = screen.getByRole('dialog', { name: strings.detailSheetTitle });
     expect(within(dialog).getByText(strings.safetyAvailabilityPrice)).toBeInTheDocument();
@@ -70,8 +94,10 @@ describe('SearchScreen', () => {
     render(<SearchScreen />);
 
     await user.type(screen.getByLabelText(strings.searchInputLabel), 'Nivaprin');
-    const trigger = screen.getAllByRole('button', { name: /Nivaprin.*Exact product match/i })[0]!;
-    await user.click(trigger);
+    const [trigger] = await screen.findAllByRole('button', {
+      name: /Nivaprin.*Exact product match/i,
+    });
+    await user.click(trigger!);
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
 
@@ -86,7 +112,10 @@ describe('SearchScreen', () => {
     render(<SearchScreen />);
 
     await user.type(screen.getByLabelText(strings.searchInputLabel), 'Nivaprin');
-    await user.click(screen.getAllByRole('button', { name: /Nivaprin.*Exact product match/i })[0]!);
+    const [firstResult] = await screen.findAllByRole('button', {
+      name: /Nivaprin.*Exact product match/i,
+    });
+    await user.click(firstResult!);
     expect(screen.getByRole('dialog')).toBeInTheDocument();
 
     await user.keyboard('{Escape}');
@@ -94,12 +123,33 @@ describe('SearchScreen', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
+  it('changing sort/area while a detail dialog is open never interrupts it (no re-entrant loading)', async () => {
+    const user = userEvent.setup();
+    render(<SearchScreen />);
+
+    await user.type(screen.getByLabelText(strings.searchInputLabel), 'Nivaprin');
+    const [firstResult] = await screen.findAllByRole('button', {
+      name: /Nivaprin.*Exact product match/i,
+    });
+    await user.click(firstResult!);
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('radio', { name: strings.areaMarketLabel }));
+
+    // Sort/area are refinements of an already-committed query: they never
+    // re-enter the loading state, so the open dialog must still be there.
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+  });
+
   it('shows synthetic distance in the detail dialog only after a manual area is selected', async () => {
     const user = userEvent.setup();
     render(<SearchScreen />);
 
     await user.type(screen.getByLabelText(strings.searchInputLabel), 'Nivaprin');
-    await user.click(screen.getAllByRole('button', { name: /Nivaprin.*Exact product match/i })[0]!);
+    const [firstResult] = await screen.findAllByRole('button', {
+      name: /Nivaprin.*Exact product match/i,
+    });
+    await user.click(firstResult!);
 
     const dialogBefore = screen.getByRole('dialog');
     expect(dialogBefore.textContent).not.toContain('Nearby in the selected synthetic area');
@@ -115,6 +165,7 @@ describe('SearchScreen', () => {
     render(<SearchScreen />);
 
     await user.type(screen.getByLabelText(strings.searchInputLabel), 'Nivaprin');
+    await screen.findAllByRole('button', { name: /Nivaprin.*Exact product match/i });
 
     const priceSortOption = screen.getByRole('radio', { name: strings.sortPriceLabel });
     expect(priceSortOption).toHaveAttribute('aria-checked', 'false');
@@ -139,8 +190,9 @@ describe('SearchScreen', () => {
     render(<SearchScreen />);
 
     await user.type(screen.getByLabelText(strings.searchInputLabel), 'Nivaprin');
+    await screen.findAllByRole('button', { name: /Nivaprin.*Exact product match/i });
     await user.clear(screen.getByLabelText(strings.searchInputLabel));
 
-    expect(screen.getByText(strings.browseEmptyTitle)).toBeInTheDocument();
+    expect(await screen.findByText(strings.browseEmptyTitle)).toBeInTheDocument();
   });
 });

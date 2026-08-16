@@ -6,20 +6,20 @@ import App from '../src/App';
 import { strings } from '../src/content/strings';
 
 describe('App', () => {
-  it('defaults to the Search tab selected, with the local synthetic build label visible', () => {
+  it('defaults to the Search tab selected, with the local synthetic build label visible', async () => {
     render(<App />);
 
-    const searchTab = screen.getByRole('tab', { name: strings.navSearchLabel });
-    expect(searchTab).toHaveAttribute('aria-selected', 'true');
+    const searchTab = screen.getByRole('button', { name: strings.navSearchLabel });
+    expect(searchTab).toHaveAttribute('aria-current', 'page');
     expect(screen.getByText(strings.localDevBuildLabel)).toBeInTheDocument();
-    expect(screen.getByText(strings.browseEmptyTitle)).toBeInTheDocument();
+    expect(await screen.findByText(strings.browseEmptyTitle)).toBeInTheDocument();
   });
 
   it('switching to Requests shows only the inert prototype notice, never account/history content', async () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.click(screen.getByRole('tab', { name: strings.navRequestsLabel }));
+    await user.click(screen.getByRole('button', { name: strings.navRequestsLabel }));
 
     expect(screen.getByText(strings.requestsPlaceholderBody)).toBeInTheDocument();
     expect(screen.queryByText(strings.browseEmptyTitle)).not.toBeInTheDocument();
@@ -32,7 +32,7 @@ describe('App', () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.click(screen.getByRole('tab', { name: strings.navAccountLabel }));
+    await user.click(screen.getByRole('button', { name: strings.navAccountLabel }));
 
     expect(screen.getByText(strings.accountPlaceholderBody)).toBeInTheDocument();
     const bodyText = document.body.textContent?.toLowerCase() ?? '';
@@ -44,33 +44,62 @@ describe('App', () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.click(screen.getByRole('tab', { name: strings.navAccountLabel }));
-    await user.click(screen.getByRole('tab', { name: strings.navSearchLabel }));
+    await user.click(screen.getByRole('button', { name: strings.navAccountLabel }));
+    await user.click(screen.getByRole('button', { name: strings.navSearchLabel }));
 
-    expect(screen.getByText(strings.browseEmptyTitle)).toBeInTheDocument();
+    expect(await screen.findByText(strings.browseEmptyTitle)).toBeInTheDocument();
   });
 
-  it('moves focus between tabs with arrow keys (roving tabindex)', async () => {
+  it('marks only the active nav button with aria-current="page"', async () => {
     const user = userEvent.setup();
     render(<App />);
 
-    const searchTab = screen.getByRole('tab', { name: strings.navSearchLabel });
-    searchTab.focus();
-    await user.keyboard('{ArrowRight}');
+    const searchTab = screen.getByRole('button', { name: strings.navSearchLabel });
+    const requestsTab = screen.getByRole('button', { name: strings.navRequestsLabel });
+    const accountTab = screen.getByRole('button', { name: strings.navAccountLabel });
 
-    expect(screen.getByRole('tab', { name: strings.navRequestsLabel })).toHaveFocus();
-    expect(screen.getByRole('tab', { name: strings.navRequestsLabel })).toHaveAttribute(
-      'aria-selected',
-      'true',
-    );
+    expect(searchTab).toHaveAttribute('aria-current', 'page');
+    expect(requestsTab).not.toHaveAttribute('aria-current');
+    expect(accountTab).not.toHaveAttribute('aria-current');
+
+    await user.click(requestsTab);
+
+    expect(searchTab).not.toHaveAttribute('aria-current');
+    expect(requestsTab).toHaveAttribute('aria-current', 'page');
   });
 
-  it('renders a skip-to-content link as the first focusable element', () => {
+  it('the nav is a plain landmark, not the (incomplete) ARIA tabs pattern', () => {
+    render(<App />);
+
+    expect(screen.getByRole('navigation', { name: 'Primary' })).toBeInTheDocument();
+    expect(screen.queryByRole('tablist')).not.toBeInTheDocument();
+    expect(screen.queryByRole('tab')).not.toBeInTheDocument();
+    expect(screen.queryByRole('tabpanel')).not.toBeInTheDocument();
+  });
+
+  it('renders a skip-to-content link targeting the persistent main landmark', () => {
     render(<App />);
 
     expect(screen.getByRole('link', { name: strings.skipToContentLabel })).toHaveAttribute(
       'href',
       '#main-content',
     );
+    expect(screen.getByRole('main')).toHaveAttribute('id', 'main-content');
+  });
+
+  it.each([
+    ['Search', strings.navSearchLabel],
+    ['Requests', strings.navRequestsLabel],
+    ['Account', strings.navAccountLabel],
+  ])('the skip link moves focus to main content from the %s page', async (_label, navLabel) => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(screen.getByRole('button', { name: navLabel }));
+
+    const skipLink = screen.getByRole('link', { name: strings.skipToContentLabel });
+    await user.click(skipLink);
+
+    expect(screen.getByRole('main')).toHaveFocus();
   });
 });

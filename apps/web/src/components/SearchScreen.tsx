@@ -3,12 +3,13 @@ import type { SyntheticArea, SyntheticSort } from '@medifind/contracts';
 
 import { strings } from '../content/strings';
 import { syntheticListings } from '../fixtures/syntheticListings';
-import { MAX_RESULTS_PER_PAGE, paginate, searchListings } from '../search/searchListings';
+import { MAX_RESULTS_PER_PAGE, paginate } from '../search/searchListings';
+import { useSearchExecution } from '../search/useSearchExecution';
 import { AreaSelector } from './AreaSelector';
 import { LoadMoreButton } from './LoadMoreButton';
 import { ResultCard } from './ResultCard';
 import { ResultDetailSheet } from './ResultDetailSheet';
-import { BrowseEmptyState, ZeroResultState } from './SafeStates';
+import { BrowseEmptyState, ErrorState, LoadingState, ZeroResultState } from './SafeStates';
 import { SearchBar } from './SearchBar';
 import { SortSelector } from './SortSelector';
 
@@ -34,22 +35,19 @@ export function SearchScreen() {
     setRevealedCount(MAX_RESULTS_PER_PAGE);
   }, []);
 
-  const outcome = React.useMemo(
-    () => searchListings(syntheticListings, { query, sort, selectedArea }),
-    [query, sort, selectedArea],
-  );
+  const execution = useSearchExecution(syntheticListings, query, sort, selectedArea);
 
-  const page = React.useMemo(
-    () => paginate(outcome.rows, revealedCount),
-    [outcome.rows, revealedCount],
-  );
+  const rows = execution.status === 'ready' ? execution.outcome.rows : [];
 
-  const selectedRow = selectedListingId
-    ? outcome.rows.find((row) => row.listing.id === selectedListingId)
-    : undefined;
+  const page = React.useMemo(() => paginate(rows, revealedCount), [rows, revealedCount]);
+
+  const selectedRow =
+    execution.status === 'ready' && selectedListingId
+      ? execution.outcome.rows.find((row) => row.listing.id === selectedListingId)
+      : undefined;
 
   return (
-    <div id="main-content" className="screen" tabIndex={-1}>
+    <div className="screen">
       <h1 className="sr-only">{strings.navSearchLabel}</h1>
       <SearchBar value={query} onChange={handleQueryChange} />
 
@@ -58,14 +56,18 @@ export function SearchScreen() {
         <SortSelector value={sort} onChange={handleSortChange} />
       </div>
 
-      {outcome.isEmptyQuery ? (
+      {execution.status === 'loading' ? (
+        <LoadingState />
+      ) : execution.status === 'error' ? (
+        <ErrorState />
+      ) : execution.outcome.isEmptyQuery ? (
         <BrowseEmptyState />
-      ) : outcome.rows.length === 0 ? (
+      ) : execution.outcome.rows.length === 0 ? (
         <ZeroResultState />
       ) : (
         <div className="results-block">
           <p className="results-count" role="status">
-            {outcome.rows.length} {strings.resultsCountSuffix}
+            {execution.outcome.rows.length} {strings.resultsCountSuffix}
           </p>
           <div className="results-grid">
             {page.visible.map((row) => (

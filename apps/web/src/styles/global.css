@@ -199,7 +199,7 @@ input {
   cursor: pointer;
 }
 
-.nav__tab[aria-selected='true'] {
+.nav__tab[aria-current='page'] {
   color: var(--color-primary);
   border-top-color: var(--color-primary);
 }
