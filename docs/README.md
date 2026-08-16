@@ -41,6 +41,7 @@
 | [Business and commercial model](business-and-commercial.md) | Ownership, pilot pricing and future subscription direction |
 | [Cost and environment plan](cost-and-environment-plan.md) | Pilot cost ceiling, Firebase/GCP setup and production-data gates |
 | [Free-first production architecture](free-first-production-architecture.md) | Approved no-cost services, unavoidable costs, secure API edge and scale-in-place triggers |
+| [Web/PWA free-first options](web-free-first-options.md) | Bounded free hosting, database and authentication comparison for synthetic previews and future evaluation |
 | [Cost circuit breaker](cost-circuit-breaker-policy.md) | Budget alert, costly-action pause and founder-only re-enable controls |
 | [Public notice and legal identity](public-notice-and-legal-identity.md) | Public-notice requirements and pre-pilot legal identity gate |
 | [Free pilot pharmacy agreement](pilot-pharmacy-agreement.md) | Required pilot terms and pharmacy activation checklist |
