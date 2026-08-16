@@ -260,6 +260,7 @@
 | ADR-256 | 2026-08-16 | Preserve 50/80/100% cost alerts; at the approved ceiling activate the tested provider-level SMS breaker and pause new prescription upload/scans while retaining safe search and existing records. | Accepted |
 | ADR-257 | 2026-08-16 | Accept the initial whole-MVP low-fidelity design proposal, including its neutral unavailable treatment, generic buyer-facing prescription-review status and distinct collected state. This authorises only bounded future UI implementation after the remaining documentation gates; it does not authorise code, production data, cloud provisioning, release or a policy change. | Accepted |
 | ADR-258 | 2026-08-16 | Use documentation-governed GitHub Issues as the executable Claude work queue, with reusable templates, labels and staged milestones; Markdown documents and ADRs remain the overriding source of truth. | Accepted |
+| ADR-259 | 2026-08-16 | Accept the first synthetic-foundation API/data specification and its zero-route, zero-domain-data, no-network, no-cloud boundary for the first future code task. This still requires approved test-foundation, repository-readiness and task-brief gates before any code. | Accepted |
 
 ## Entry template
 
