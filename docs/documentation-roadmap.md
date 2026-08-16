@@ -15,6 +15,7 @@ This roadmap identifies the documentation that must be completed or approved bef
 - Mobile/API architecture, Cloud Run/Firebase direction, environments, cost guardrails, low-connectivity and recovery targets.
 - Free-first production service map, no-cost allowances, paid safety exceptions, API Gateway/private Cloud Run edge, Firestore search projection/scale adapter, persistent rate limits, scheduled maintenance, OpenTofu/Workload Identity Federation, Cloud Armor upgrade triggers and scale-in-place thresholds.
 - Claude Code handoff, task template, Superpowers setup/precedence, repository-security and monorepo policies.
+- GitHub work-management policy, reusable issue templates, labels, staged milestones and an initial explicitly gated backlog for Claude work.
 - Founder-approved whole-MVP low-fidelity design proposal, including visual tokens, role navigation, states, safety, accessibility and localisation treatment. It authorises only bounded future UI implementation after the remaining readiness gates.
 - Draft public-support, public-notice, pilot agreement, pharmacy onboarding/training and verification policies.
 
@@ -22,10 +23,10 @@ This roadmap identifies the documentation that must be completed or approved bef
 
 | Deliverable | Owner | Completion standard |
 | --- | --- | --- |
-| Implementation-grade API/data specification | Documentation agent + product owner | Define endpoint list, request/response field schemas, exact enums/state transitions, authorization matrix, Firestore collections/indexes and migration/version rules for the first task scope. |
+| Implementation-grade API/data specification | Documentation agent + product owner | **Foundation-only specification drafted:** [first synthetic-foundation API/data specification](first-synthetic-foundation-api-data-specification.md) fixes a zero-route/zero-data first task. Founder approval is still required before it can support a coding brief. Each later feature task needs its own exact schema/authorization/state contract. |
 | Cloud foundation implementation specification | Documentation agent + product owner | Assign final project/resource names; pin exact IAM custom/predefined permissions, OpenAPI JWT scheme, Authentication/API App Check handling, Fiji SMS breaker, quotas/max instances, persistent rate-limit schema, search indexes, maintenance schedule, ClamAV image/signature updater, OpenTofu state bootstrap and OIDC/Workload Identity conditions/commands from the approved free-first blueprint. No production resource is created yet. |
 | Test foundation specification | Documentation agent + product owner | Turn test strategy into the first fixture catalogue, commands, CI checks, coverage/report format and task-specific acceptance matrix. |
-| Repository readiness | Founder | Enable GitHub Free/Dependabot plus Gitleaks/Trivy synthetic checks now. Before cloud-connected/sensitive code, upgrade the private repo for enforced `main` protection or separately approve public-source visibility; verify required checks and least-privilege Actions. |
+| Repository readiness | Founder | GitHub issue templates, labels, milestones and the initial gated backlog are configured. Enable/verify GitHub Free/Dependabot plus Gitleaks/Trivy synthetic checks before the first code task. Before cloud-connected/sensitive code, upgrade the private repo for enforced `main` protection or separately approve public-source visibility; verify required checks and least-privilege Actions. |
 | Claude readiness | Founder + Claude Code | Install Superpowers from the official marketplace, disable its optional telemetry and verify Claude reads `CLAUDE.md`/handoff before task one. |
 | First approved Claude task brief | Documentation agent + product owner | Narrow, synthetic-data-only bootstrap task with scope, non-goals, interfaces, tests, exact commands and no production/cloud deployment authority. |
 

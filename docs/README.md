@@ -22,6 +22,7 @@
 | [Documentation roadmap](documentation-roadmap.md) | Remaining pre-code documentation deliverables and sequence |
 | [Design system and screens](design-system-and-screens.md) | Visual direction, onboarding, role navigation and screen inventory |
 | [API and data contracts](api-and-data-contracts.md) | REST boundary, resource/state contracts and server-only data rules |
+| [First synthetic-foundation API/data specification](first-synthetic-foundation-api-data-specification.md) | Exact zero-route/zero-data boundary for the first monorepo and application-shell task |
 | [API mutation and concurrency](api-mutation-and-concurrency-policy.md) | Explicit commands, idempotency and version-conflict rules |
 | [API error contract](api-error-contract.md) | Safe machine codes, local translation keys, correlation IDs and anti-enumeration rules |
 | [V1 API endpoint inventory](v1-api-endpoint-inventory.md) | Approved REST route/action map for task-level schema design |
@@ -54,6 +55,7 @@
 | [Incident response runbook](incident-response-runbook.md) | Critical security/privacy containment, notification and corrective-review procedure |
 | [Repository security and delivery](repository-security-and-delivery.md) | Required GitHub protection, dependency and secret-management controls |
 | [Monorepo and toolchain policy](monorepo-and-toolchain-policy.md) | pnpm workspace layout, dependency boundaries and reproducible setup rules |
+| [GitHub work-management policy](github-work-management.md) | Documentation-governed issues, milestones, labels and Claude task workflow |
 | [Decision log](decisions.md) | Decisions that govern future implementation |
 
 ## Change policy
