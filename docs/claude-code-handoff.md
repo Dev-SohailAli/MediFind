@@ -47,7 +47,7 @@ If one condition is missing, Claude produces a decision-change request instead o
 
 Every task preserves the security architecture: API Gateway Firebase-JWT validation, IAM-private Cloud Run, server-side authorization, Firebase App Check verification, private data access through the TypeScript API, role/branch/request scoping, private prescription quarantine, generic notifications, no sensitive logging, secret management, persistent distributed rate limiting, short-lived deployment identity and approved environment isolation. It also follows the [free-first production architecture](free-first-production-architecture.md): use the approved service/allowance, preserve paid safety exceptions and report any forecast threshold crossing before implementation. Use [the threat model](security-architecture-threat-model.md) as the implementation checklist.
 
-When a task creates or changes workspace/toolchain files, it must follow the [monorepo and toolchain policy](monorepo-and-toolchain-policy.md), including exact version pinning, pnpm lockfile enforcement, mobile/server dependency boundaries and reproducible synthetic-data setup.
+When a task creates or changes workspace/toolchain files, it must follow the [monorepo and toolchain policy](monorepo-and-toolchain-policy.md), including exact version pinning, pnpm lockfile enforcement, web/API/native-shell dependency boundaries and reproducible synthetic-data setup.
 
 For every task that touches identity, authorization, prescription files, reservation status, pharmacy listings, notifications, telemetry or infrastructure, Claude must include explicit negative tests proving that unauthorised roles, branches and records cannot be accessed or changed.
 

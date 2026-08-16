@@ -2,7 +2,7 @@
 
 ## Budget objective
 
-Target zero usage charges for local development and synthetic closed-beta work, then keep real-pilot infrastructure within the founder-approved FJD 50–100 monthly ceiling wherever actual usage permits. This ceiling excludes Apple/Google developer accounts, domain/business email, SMS/phone verification and separately approved legal, translation and security-assessment costs.
+Target zero usage charges for local development and synthetic closed-beta work, then keep real-pilot infrastructure within the founder-approved FJD 50–100 monthly ceiling wherever actual usage permits. This ceiling excludes domain/business email, SMS/phone verification and separately approved legal, translation and security-assessment costs. The current PWA pilot does not require Apple/Google developer accounts; any future store distribution would be separately funded and approved.
 
 Configure budget notifications at 50%, 80% and 100% of the approved ceiling and implement the [cost circuit breaker](cost-circuit-breaker-policy.md). Unexpected spend is an operational/security incident because it can indicate abuse, configuration drift or a runaway workload.
 
@@ -34,7 +34,7 @@ Use Firebase/Google Cloud in Sydney (`australia-southeast1`) where supported:
 - Two private Sydney Cloud Scheduler jobs invoke a 15-minute request-billed scale-to-zero reconciliation service and a six-hour bounded ClamAV signature-updater Job. Production therefore fits inside the current first-three-Scheduler-jobs billing-account allowance; non-production schedules remain manual/paused unless explicitly costed.
 - OpenTofu and Firebase declarative configuration carry no licence fee; production state uses a tiny private Sydney GCS bucket and is billable rather than unsafe local or US-only free state. GitHub-to-GCP deployment uses OIDC/Workload Identity Federation instead of stored keys.
 
-Use Cloudflare Pages for the static public support/legal/status/security site with no Functions, forms, cookies or analytics. Use OS-native map links/intents rather than an embedded or server-side maps API. Use direct generic FCM/APNs plus the in-app inbox/status path for pharmacy and buyer operational notifications; no transactional-email provider is required for MVP workflow notifications.
+Use Cloudflare Pages for the static public support/legal/status/security site with no Functions, forms, cookies or analytics. Use verified external map links rather than an embedded or server-side maps API. Use generic Web Push plus the authenticated web inbox/status path for pharmacy and buyer operational notifications; native FCM/APNs is deferred and no transactional-email provider is required for MVP workflow notifications.
 
 ## Environment policy
 
@@ -51,18 +51,18 @@ Never copy production data, credentials, logs, prescription objects or backups i
 
 ### Target no-cost at pilot usage
 
-- React Native/Expo open-source framework and low-volume EAS Free builds;
+- Web/PWA runtime and browser tooling;
 - private GitHub Free repository/Actions allowance for synthetic work;
 - API Gateway calls within the first 2 million/month;
 - Cloud Run service/job compute inside the billing-account allowance;
 - Firestore operations/storage/egress inside its project quota;
 - Identity Platform Tier-1 MAU up to the current 50,000 threshold;
-- App Check, FCM/APNs and privacy-redacted Crashlytics;
+- App Check, Web Push where supported and privacy-redacted error monitoring;
 - Cloud Logging up to its current 50 GiB/project/month allowance;
 - first six Secret Manager versions/10,000 monthly accesses;
 - first 0.5 GiB Artifact Registry storage;
 - static Cloudflare Pages assets; and
-- native directions, the Firestore public-search projection, two production Cloud Scheduler jobs and server-produced aggregate product counters.
+- verified external directions links, the Firestore public-search projection, two production Cloud Scheduler jobs and server-produced aggregate product counters.
 
 ### Usage-priced or required paid from real pilot
 
@@ -120,7 +120,7 @@ If mandatory production controls cannot fit the approved budget, keep the pilot 
 
 ## Growth path
 
-Firebase/Google Cloud remains the default as usage grows because the chosen services bill beyond their no-cost allowances without changing the app's API/domain model. Upgrade EAS/GitHub/edge capacity when operational triggers are met. Consider another platform only through a documented comparison covering compliance, reliability, migration/egress, total operating labour and cost—not simply because a free quota was crossed.
+Firebase/Google Cloud remains the default as usage grows because the chosen services bill beyond their no-cost allowances without changing the app's API/domain model. Upgrade web-hosting/GitHub/edge capacity when operational triggers are met. Consider another platform only through a documented comparison covering compliance, reliability, migration/egress, total operating labour and cost—not simply because a free quota was crossed.
 
 ## Processor/vendor register
 

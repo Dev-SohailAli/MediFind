@@ -2,7 +2,7 @@
 
 ## Security objective and standard
 
-MediFind handles prescription files and pharmacy operations, so it must minimise sensitive data, resist account and API abuse, and make every sensitive access attributable. The design baseline is the current [OWASP MASVS](https://mas.owasp.org/MASVS/) and testing guidance for the iOS/Android client, plus [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/) for the backend/API. Apply the MASVS storage, cryptography, authentication, network, platform, code, resilience and privacy control groups that are relevant to the implemented design. This is a verification baseline, not a claim of OWASP certification.
+MediFind handles prescription files and pharmacy operations, so it must minimise sensitive data, resist account and API abuse, and make every sensitive access attributable. The design baseline is [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/) and browser/PWA security guidance for the web client, with MASVS/MASTG added only if the future native shell is activated. Apply the controls relevant to the implemented design. This is a verification baseline, not a claim of OWASP certification.
 
 ## Assets and trust boundaries
 
@@ -14,7 +14,7 @@ MediFind handles prescription files and pharmacy operations, so it must minimise
 | Secrets, signing keys and service credentials | managed secret/key service, never in source/mobile build/logs |
 | Audit/security events and backups | tamper-resistant access control, retention/deletion under approved policy |
 
-The mobile app is an untrusted client. It communicates only with the MediFind API over TLS; it never connects directly to the database, object store, secret store or admin-only internal services. The API is the policy enforcement point. Database, file and provider credentials are never shipped to the app.
+The browser/PWA is an untrusted client. It communicates only with the MediFind API over TLS; it never connects directly to the database, object store, secret store or admin-only internal services. The API is the policy enforcement point. Database, file and provider credentials are never shipped to the web app.
 
 ## Threats and required response
 
@@ -30,17 +30,17 @@ The mobile app is an untrusted client. It communicates only with the MediFind AP
 | Cloud/vendor or contributor compromise | least-privilege service identities, environment isolation, managed secret vault, founder-owned accounts, audit logs, dependency/secret scanning and access review |
 | Data loss/ransomware/outage | encrypted daily backups, limited backup access, restore tests, incident playbooks, status page and sensitive-feature kill switch |
 
-## Mobile-client controls
+## Web/PWA client controls
 
-- Use platform secure storage only (iOS Keychain and Android Keystore-backed storage) for session material. Do not store prescriptions, file URLs, API secrets, passwords or sensitive request content in ordinary app storage, logs, clipboard or analytics.
+- Use secure, short-lived browser session handling and never treat local storage as a trusted vault. Do not store prescriptions, file URLs, API secrets, passwords or sensitive request content in browser storage, logs, clipboard or analytics.
 - Cache only the minimum public search/listing projection for a short, documented time to improve poor-connectivity browsing. Do not persist prescription files, request/reservation details, staff/admin data or protected-screen content; never queue a sensitive mutation while offline.
 - On reconnect or app resume, re-fetch and server-authorise every sensitive view/action before it is shown or changed. Cached public availability/price must remain visibly timestamped and must not be treated as current.
-- Provide a devices/sessions screen for every user to review active sessions and revoke them immediately. Limit pharmacy owners, prescription reviewers and MediFind admins to two active devices; enrolling another device requires MFA and emits a security alert.
+- Provide a devices/sessions screen for every user to review active sessions and revoke them immediately. Limit privileged concurrent sessions server-side; new browser-session approval requires MFA and emits a security alert.
 - Enforce TLS for every API/provider connection; reject clear-text traffic. Prefer modern TLS configuration managed by the selected provider. Evaluate certificate pinning only after selecting an update-safe implementation; pinning must never prevent emergency certificate rotation.
-- Request only the minimum platform permissions described in the [mobile permissions policy](mobile-permissions-policy.md). Notifications are prompted only after a signed-in explanation; location is foreground approximate-only and only after nearby search; camera/scoped picker access occurs only for an upload action. Do not request contacts, microphone, SMS reading, call logs, broad media access or background location.
-- Protect sensitive screens from task-switcher previews and screenshots/screen recording where platform controls allow, and redact notification content. Clearly state that the app cannot prevent someone from photographing another device. Never rely on device-side controls as the sole access control.
-- Detect app integrity/root/jailbreak signals at runtime. Do not treat detection as proof or collect invasive device data; use it to gate sensitive actions and generate a reviewable security signal.
-- Build reproducible release artifacts through CI, sign iOS/Android releases with founder-controlled credentials, and distribute pilot builds only through TestFlight/Google Play closed testing.
+- Request only the minimum browser capabilities described in the [web platform capabilities policy](mobile-permissions-policy.md). Notifications are prompted only after a signed-in explanation; location is foreground approximate-only and only after nearby search; camera/selected-file access occurs only for an upload action. Do not request contacts, microphone, SMS reading, call logs, broad file access or background location.
+- Protect sensitive pages from browser history, cached content, notification previews and clipboard leakage. Clearly state that the web app cannot prevent someone from photographing a screen. Never rely on browser-side controls as the sole access control.
+- Use browser security headers, trusted-origin checks, CSRF protection where applicable, safe cookie/token handling, dependency controls and XSS/output-encoding tests. A future native-shell integrity signal is separately scoped and is not required for the PWA.
+- Build reproducible web release artifacts through CI and distribute the pilot through an invite-only HTTPS environment. Native signing/store distribution remains deferred.
 
 ## Identity, API and data controls
 
@@ -71,11 +71,11 @@ The mobile app is an untrusted client. It communicates only with the MediFind AP
 
 ## Secure delivery and release gate
 
-- Pin dependencies with lockfiles; scan dependencies, mobile packages, container/build inputs and infrastructure definitions for known vulnerabilities; generate and retain an SBOM for each release.
-- Run formatting, static/type checks, secret scanning, SAST, dependency/vulnerability scans, API/integration tests and mobile builds on every change. Add DAST/API authorization testing and device testing for implemented sensitive flows.
-- Remediate critical/high findings before production release. A high-severity mobile or backend security fix can require a minimum app version before sensitive functions are available; safe search may remain accessible where appropriate.
+- Pin dependencies with lockfiles; scan web packages, container/build inputs and infrastructure definitions for known vulnerabilities; generate and retain an SBOM for each release.
+- Run formatting, static/type checks, secret scanning, SAST, dependency/vulnerability scans, API/integration tests and browser builds on every change. Add DAST/API authorization testing and browser/device testing for implemented sensitive flows.
+- Remediate critical/high findings before production release. A high-severity web or backend security fix can require a minimum web-client version before sensitive functions are available; safe search may remain accessible where appropriate.
 - Patch or safely mitigate critical vulnerabilities within 24 hours, high-severity vulnerabilities within seven days, and review routine dependency updates monthly. Use the kill switch or minimum-version gate when a safe code fix cannot ship within the required response window.
-- Before real prescription uploads, complete an independent, scoped mobile and API security assessment using applicable OWASP MASVS/MASTG and ASVS controls. Fix every high-severity finding and document risk acceptance for any lower-severity exception before activation. Automated checks alone are insufficient. [OWASP assessment guidance](https://mas.owasp.org/MASVS/04-Assessment_and_Certification/)
+- Before real prescription uploads, complete an independent, scoped web and API security assessment using applicable OWASP ASVS and browser/PWA controls. If a native shell is later activated, add the applicable MASVS/MASTG scope. Fix every high-severity finding and document risk acceptance for any lower-severity exception before activation. Automated checks alone are insufficient.
 
 ## Decisions still gated on vendor selection
 

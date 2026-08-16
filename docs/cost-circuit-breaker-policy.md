@@ -12,9 +12,9 @@ MediFind is a founder-funded, low-cost pilot. Budget alerts and circuit breakers
 | 80% | Notify founder urgently; investigate/contain non-essential growth and prepare circuit-breaker action. |
 | 100% | Activate the tested provider-level OTP breaker and pause new prescription upload/scan initiation. Keep authenticated safe search and existing non-sensitive viewing available where safe. |
 
-The exact approved monthly ceiling begins at FJD 50-100 and is stored in server-controlled configuration, not the mobile client. Cost data can lag; per-service quotas/max instances/rate limits remain primary containment controls rather than relying solely on billing alerts.
+The exact approved monthly ceiling begins at FJD 50-100 and is stored in server-controlled configuration, not the web client/PWA. Cost data can lag; per-service quotas/max instances/rate limits remain primary containment controls rather than relying solely on billing alerts.
 
-Fiji SMS is excluded from that infrastructure ceiling but has its own founder-approved daily and monthly amount/volume cap. Firebase's mobile SDK/provider performs the actual send outside the MediFind business API, so a server feature flag alone is not a hard SMS cap. Configure a Fiji-only Identity Platform SMS-region policy, Authentication App Check, provider monitoring/quotas and a tested least-privilege provider disable/restore action. Activate that provider-level breaker when either the SMS cap or the overall 100% circuit breaker is reached. Track sent, verified and blocked messages because traffic pumping can incur cost even when verification fails and billing alerts may lag.
+Fiji SMS is excluded from that infrastructure ceiling but has its own founder-approved daily and monthly amount/volume cap. Firebase's browser SDK/provider performs the actual send outside the MediFind business API, so a server feature flag alone is not a hard SMS cap. Configure a Fiji-only Identity Platform SMS-region policy, Authentication App Check, provider monitoring/quotas and a tested least-privilege provider disable/restore action. Activate that provider-level breaker when either the SMS cap or the overall 100% circuit breaker is reached. Track sent, verified and blocked messages because traffic pumping can incur cost even when verification fails and billing alerts may lag.
 
 ## Safety boundaries
 

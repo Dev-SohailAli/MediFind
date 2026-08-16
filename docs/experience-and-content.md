@@ -1,8 +1,8 @@
 # Experience and content guidance
 
-## Mobile and accessibility
+## Responsive web and accessibility
 
-Design for touch-first iOS and Android use, low/variable connectivity, readable type, sufficient contrast, screen-reader labels, keyboard support, clear error recovery and no colour-only status meaning. Follow the [accessibility policy](accessibility-policy.md), including 200% text scaling and assistive-technology validation. Cache only non-sensitive search content; never cache prescription files on an unmanaged device. Present results as a low-data list by default and provide an optional map toggle; list view remains fully usable without map access. Request notifications only after an in-app explanation; use foreground approximate location only when the buyer selects nearby search, with manual area search always available; use the system camera/picker only when the buyer starts an upload.
+Design for responsive, touch-first browser/PWA use across iPhone Safari, Android browsers and desktop, low/variable connectivity, readable type, sufficient contrast, screen-reader labels, keyboard support, clear error recovery and no colour-only status meaning. Follow the [accessibility policy](accessibility-policy.md), including 200% text scaling and assistive-technology validation. Cache only non-sensitive search content; never cache prescription files in browser storage. Present results as a low-data list by default and provide an optional verified map-link action; list view remains fully usable without map access. Request browser notifications only after an in-app explanation; use foreground approximate location only when the buyer selects nearby search, with manual area search always available; use camera/file selection only when the buyer starts an upload.
 
 State the active search sort and show why a result is an active-ingredient rather than exact-product match. Do not use advertising, paid placement or visual treatment that makes a paid pharmacy appear more relevant in medicine search.
 

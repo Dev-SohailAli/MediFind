@@ -12,6 +12,7 @@ Read in this order before planning or changing code:
 4. `docs/architecture.md`, `docs/free-first-production-architecture.md`, `docs/cost-and-environment-plan.md` and `docs/engineering-delivery.md`
 5. `docs/decisions.md`, `docs/claude-code-handoff.md` and the active task brief
 6. For a visual/UI task, `CLAUDE-DESIGN.md` and `docs/claude-design-agent-brief.md`
+7. For a client/platform task, `docs/web-app-and-pwa-direction.md`
 
 ## Non-negotiable constraints
 
@@ -22,7 +23,7 @@ Read in this order before planning or changing code:
 - For every visual/UI task, create and obtain approval for a requirements-driven proposal under the [Claude design proposal protocol](docs/claude-design-proposal-protocol.md) before implementing the affected UI. Do not invent a high-fidelity product/design decision in code.
 - Do not use real prescription, buyer, pharmacy or production data in local development, tests, prompts, logs or fixtures.
 - Do not add advertising, tracking, analytics SDKs, data brokers, public ratings, in-app chat, payments, delivery, direct client database/storage access, or new external services without explicit written approval.
-- Use the approved free-first service map. Do not substitute a trial/sleeping/free provider, change data region, add a processor, expose Cloud Run, add EAS Update, or remove a paid security/recovery control to reduce cost.
+- Use the approved free-first service map. Do not substitute a trial/sleeping/free provider, change data region, add a processor, expose Cloud Run, add native store/EAS capability, or remove a paid security/recovery control to reduce cost. The responsive web/PWA is the current client; native Expo work is future-scope only.
 - Do not commit credentials, API keys, OTPs, device tokens, private signing material, `.env` files or production exports.
 
 ## Git and release rules

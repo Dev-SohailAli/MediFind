@@ -9,12 +9,12 @@
 | ADR-005 | 2026-08-15 | Prescription files go only to the selected verified pharmacy; secure email notifies staff and push notifies buyers. | Superseded by ADR-206 and ADR-245 |
 | ADR-006 | 2026-08-15 | V1 supports pharmacy-approved collection reservations; no payments or delivery. | Accepted |
 | ADR-007 | 2026-08-15 | Launch user-facing content in English, iTaukei and Fiji Hindi. | Accepted |
-| ADR-008 | 2026-08-15 | Use a shared-codebase mobile approach for iOS and Android; select concrete vendors after privacy/compliance review. | Accepted |
+| ADR-008 | 2026-08-15 | Use a shared-codebase mobile approach for iOS and Android; select concrete vendors after privacy/compliance review. | Superseded by ADR-266 |
 | ADR-009 | 2026-08-15 | Founder funds and operates a free pilot with 2–3 Suva pharmacies; pharmacy SaaS subscriptions/listing fees are a post-pilot option. | Accepted |
 | ADR-010 | 2026-08-15 | Begin operating as an individual; review incorporation and related obligations before paid commercial operation. | Accepted |
 | ADR-011 | 2026-08-15 | Buyer account verification requires email and phone; no government ID is collected in v1 unless legal advice requires it. | Accepted |
 | ADR-012 | 2026-08-15 | Pharmacies refresh public listings daily and aim to respond within one business day; reservations default to 24 hours with pharmacy-selected expiry. | Accepted |
-| ADR-013 | 2026-08-15 | V1 uses a shared iOS/Android mobile app for buyer, pharmacy and MediFind-admin workflows; no web dashboard is in scope. | Accepted |
+| ADR-013 | 2026-08-15 | V1 uses a shared iOS/Android mobile app for buyer, pharmacy and MediFind-admin workflows; no web dashboard is in scope. | Superseded by ADR-266 |
 | ADR-014 | 2026-08-15 | Pharmacy owners require MFA; staff/admin MFA is required unless a documented pilot exception is approved. | Accepted |
 | ADR-015 | 2026-08-15 | Buyers may delete a prescription before the selected pharmacy first opens it; after opening, retention follows the approved privacy/legal policy. | Accepted |
 | ADR-016 | 2026-08-15 | Buyer location is optional and used only for an explicit nearby search; manual area/address search remains available. | Accepted |
@@ -53,12 +53,12 @@
 | ADR-049 | 2026-08-15 | Zero-result searches may expand non-clinical terms and collect private unmet-demand reports; MediFind never suggests a therapeutic substitute. | Accepted |
 | ADR-050 | 2026-08-15 | Low stock is pharmacy-managed with no public exact quantity or universal numeric threshold. | Accepted |
 | ADR-051 | 2026-08-15 | V1 does not retain saved medicine searches, favourites or medicine-search history; pharmacy favourites are deferred. | Accepted |
-| ADR-052 | 2026-08-15 | Build a shared TypeScript React Native/Expo application for iOS and Android with a TypeScript backend/API. | Accepted |
+| ADR-052 | 2026-08-15 | Build a shared TypeScript React Native/Expo application for iOS and Android with a TypeScript backend/API. | Superseded by ADR-266 |
 | ADR-053 | 2026-08-15 | Prefer managed database, storage, authentication, notification and monitoring services that pass MediFind's hosting/security/vendor gates. | Accepted |
 | ADR-054 | 2026-08-15 | Require automated formatting, checks, tests, dependency/security scanning and builds before merge; production deployment is manually approved. | Accepted |
-| ADR-055 | 2026-08-15 | Buyers use passwordless phone-code sign-in, verified-email recovery and optional device-biometric session unlock. | Accepted |
-| ADR-056 | 2026-08-15 | Begin with invite-only TestFlight and Google Play closed-testing distribution for the pilot. | Accepted |
-| ADR-057 | 2026-08-15 | Target iOS 15+ and Android 10+ for the initial mobile application. | Accepted |
+| ADR-055 | 2026-08-15 | Buyers use passwordless phone-code sign-in, verified-email recovery and optional device-biometric session unlock. | Superseded by ADR-266 |
+| ADR-056 | 2026-08-15 | Begin with invite-only TestFlight and Google Play closed-testing distribution for the pilot. | Superseded by ADR-266 |
+| ADR-057 | 2026-08-15 | Target iOS 15+ and Android 10+ for the initial mobile application. | Superseded by ADR-266 |
 | ADR-058 | 2026-08-15 | The pilot buyer audience is invite-only and limited to MediFind or pilot-pharmacy referrals. | Accepted |
 | ADR-059 | 2026-08-15 | Pilot success requires 2–3 active verified pharmacies, at least 80% refresh compliance, timely request responses, no unresolved high-severity security/privacy issue, and evidence of future paid value. | Accepted |
 | ADR-060 | 2026-08-15 | MediFind performs technical prescription-upload abuse checks only; the selected pharmacy's authorised reviewer decides validity and dispensing. | Accepted |
@@ -94,11 +94,11 @@
 | ADR-090 | 2026-08-15 | Limit account holders to one active reservation per medicine/person until it completes, expires, is declined or is cancelled. | Accepted |
 | ADR-091 | 2026-08-15 | Three confirmed no-shows in 30 days temporarily disable reservations pending review while preserving search access. | Accepted |
 | ADR-092 | 2026-08-15 | Rate-limit verification, sign-in, search, uploads, reports and reservations; present user-safe retry/support messages. | Accepted |
-| ADR-093 | 2026-08-15 | A compromised/rooted/jailbroken device is blocked from sensitive and privileged functions while non-sensitive search may remain available where safe. | Accepted |
+| ADR-093 | 2026-08-15 | A compromised/rooted/jailbroken device is blocked from sensitive and privileged functions while non-sensitive search may remain available where safe. | Superseded by ADR-266 |
 | ADR-094 | 2026-08-15 | Critical app-security fixes can require an update before sensitive features are accessible. | Accepted |
-| ADR-095 | 2026-08-15 | An independent OWASP-informed mobile/API security assessment is required before real prescription uploads; high-severity findings block launch. | Accepted |
+| ADR-095 | 2026-08-15 | An independent OWASP-informed mobile/API security assessment is required before real prescription uploads; high-severity findings block launch. | Superseded by ADR-266 |
 | ADR-096 | 2026-08-15 | Every user can view and revoke active devices/sessions. | Accepted |
-| ADR-097 | 2026-08-15 | Privileged roles are limited to two active devices; new-device enrollment requires MFA and alerts the user. | Accepted |
+| ADR-097 | 2026-08-15 | Privileged roles are limited to two active devices; new-device enrollment requires MFA and alerts the user. | Superseded by ADR-266 |
 | ADR-098 | 2026-08-15 | Prevent prescription screenshots/recordings/task previews where the OS permits and clearly disclose physical-world limits. | Accepted |
 | ADR-099 | 2026-08-15 | All public traffic uses managed DDoS protection and WAF/API gateway; data stores and internal services are never publicly reachable. | Superseded by ADR-240 and ADR-241 |
 | ADR-100 | 2026-08-15 | Routine direct production-database access is prohibited; exceptional access is MFA-protected, reasoned, audited and time-limited. | Accepted |
@@ -114,7 +114,7 @@
 | ADR-110 | 2026-08-15 | Require biometric unlock for prescription review where supported, otherwise fresh MFA. | Accepted |
 | ADR-111 | 2026-08-15 | Publish official channels and anti-phishing guidance; never solicit credentials, OTPs or prescriptions through unsolicited communication. | Accepted |
 | ADR-112 | 2026-08-15 | Provide in-app reporting for suspicious messages/account activity using minimum necessary evidence. | Accepted |
-| ADR-113 | 2026-08-15 | Pilot builds are distributed only through TestFlight and Google Play closed testing, never unofficial links or files. | Accepted |
+| ADR-113 | 2026-08-15 | Pilot builds are distributed only through TestFlight and Google Play closed testing, never unofficial links or files. | Superseded by ADR-266 |
 | ADR-114 | 2026-08-15 | Advertising SDKs, data brokers, behavioural profiling and sale of buyer/pharmacy data are prohibited. | Accepted |
 | ADR-115 | 2026-08-15 | Collect only essential, privacy-minimised crash/performance/security/aggregated telemetry. | Accepted |
 | ADR-116 | 2026-08-15 | Public privacy documentation names each processor and its data/transfer role, backed by a maintained processor register. | Accepted |
@@ -130,27 +130,27 @@
 | ADR-126 | 2026-08-15 | The MVP is list-first; Directions opens the buyer's installed maps app and embedded maps are deferred for cost control. | Accepted |
 | ADR-127 | 2026-08-15 | Support light/dark themes, defaulting to device preference with manual Account override. | Accepted |
 | ADR-128 | 2026-08-15 | Use accessible system icons and defer custom logos/illustrations until demand is validated. | Accepted |
-| ADR-129 | 2026-08-15 | The mobile app uses a versioned REST/JSON API rather than GraphQL for MVP operational data. | Accepted |
+| ADR-129 | 2026-08-15 | The mobile app uses a versioned REST/JSON API rather than GraphQL for MVP operational data. | Superseded by ADR-266 |
 | ADR-130 | 2026-08-15 | The TypeScript backend API is the only operational data boundary; Firestore access is server-controlled and client roles are never trusted. | Accepted |
 | ADR-131 | 2026-08-15 | Store timestamps in UTC and use Pacific/Fiji for display, pharmacy business rules and reservation expiry. | Accepted |
 | ADR-132 | 2026-08-15 | Maintain Firebase/GCP configuration as reviewed version-controlled infrastructure/configuration; reconcile any emergency console change immediately. | Accepted |
 | ADR-133 | 2026-08-15 | Use server-controlled, audited feature flags with safe defaults and limited pilot cohorts for sensitive functionality. | Accepted |
 | ADR-134 | 2026-08-15 | Use staged beta rollout with documented rollback; stop/roll back on high-severity security/privacy, safety, cost or support failure. | Accepted |
 | ADR-135 | 2026-08-15 | Automated tests never use production projects, credentials or real data; use emulators or dedicated synthetic-data test projects. | Accepted |
-| ADR-136 | 2026-08-15 | Every beta release requires manual validation on one physical iPhone and one physical Android device. | Accepted |
+| ADR-136 | 2026-08-15 | Every beta release requires manual validation on iPhone and Android browser/PWA environments plus desktop browser coverage. | Accepted |
 | ADR-137 | 2026-08-15 | Security-sensitive/domain API code requires at least 90% branch coverage plus explicit role, authorization and state-transition tests. | Accepted |
 | ADR-138 | 2026-08-15 | Caregiver requests capture patient legal name and self/child/dependent relationship per request only; v1 has no reusable dependent profile. | Accepted |
 | ADR-139 | 2026-08-15 | Selected pharmacies receive only account-holder name/verified phone, patient name/relationship and minimum request data; no buyer email/address/DOB. | Accepted |
 | ADR-140 | 2026-08-15 | Buyer phone/email changes require fresh verification, appropriate session revocation and security alert. | Accepted |
 | ADR-141 | 2026-08-15 | Privileged pharmacy/admin users are invited by phone but use verified personal email as primary sign-in and authenticator-app MFA; company email is not required. | Accepted |
-| ADR-142 | 2026-08-15 | Implement privileged Firebase TOTP MFA through React Native Firebase native modules in Expo development/production builds; Expo Go is not a supported MediFind runtime. | Accepted |
+| ADR-142 | 2026-08-15 | Implement privileged Firebase TOTP MFA through React Native Firebase native modules in Expo development/production builds; Expo Go is not a supported MediFind runtime. | Superseded by ADR-266 |
 | ADR-143 | 2026-08-15 | Do not name the founder personally in public MediFind notices; approve the legally valid operator identity/contact with Fiji legal review before external activation. | Accepted |
 | ADR-144 | 2026-08-15 | Use a free-pilot pharmacy agreement that assigns pharmacy operational, clinical, listing, staff-access and compliance responsibilities before activation. | Accepted |
 | ADR-145 | 2026-08-15 | No real prescription collection or external activation occurs until Fiji legal/pharmacy review approves a specific retention/deletion schedule. | Accepted |
 | ADR-146 | 2026-08-15 | Establish a MediFind business identity before external pilot activation, so public notices/contracts do not use the founder's personal name. | Accepted |
 | ADR-147 | 2026-08-15 | Permit an authorised pharmacy owner to accept the final free-pilot agreement in-app, with versioned auditable acceptance evidence. | Accepted |
 | ADR-148 | 2026-08-15 | Require role-specific synthetic-data onboarding and recorded training completion before pharmacy activation. | Accepted |
-| ADR-149 | 2026-08-15 | Operate a minimal static public site for legal notices, support, status and security reporting only; core workflows remain mobile-only. | Accepted |
+| ADR-149 | 2026-08-15 | Operate a minimal static public site for legal notices, support, status and security reporting only; core workflows remain mobile-only. | Superseded by ADR-266 |
 | ADR-150 | 2026-08-15 | Use authenticated in-app support for buyer account/security/technical and pharmacy operational issues; buyers contact pharmacies directly for medicine/prescription/reservation questions. | Accepted |
 | ADR-151 | 2026-08-15 | Do not offer an official WhatsApp support channel in the MVP. | Accepted |
 | ADR-152 | 2026-08-15 | Permit only short-lived caching of minimum public search/listing data; never persist or queue sensitive data/actions offline. | Accepted |
@@ -173,7 +173,7 @@
 | ADR-169 | 2026-08-15 | Verified email supports existing buyer recovery only; no WhatsApp, manual or unverified-email initial phone-verification bypass. | Accepted |
 | ADR-170 | 2026-08-15 | Validate SMS delivery/cost on representative Fiji networks with synthetic accounts before buyer beta activation. | Accepted |
 | ADR-171 | 2026-08-15 | Use a TypeScript Fastify REST API on Sydney Cloud Run, configured to scale to zero with maximum-instance/cost controls. | Accepted |
-| ADR-172 | 2026-08-15 | Route all MediFind business operations through the Cloud Run API; the mobile app has no direct Firestore/Storage operation access. | Accepted |
+| ADR-172 | 2026-08-15 | Route all MediFind business operations through the Cloud Run API; the mobile app has no direct Firestore/Storage operation access. | Superseded by ADR-266 |
 | ADR-173 | 2026-08-15 | Scan prescription uploads only in a regional MediFind-controlled pipeline; never submit files to public or third-party malware-analysis feeds. | Accepted |
 | ADR-174 | 2026-08-15 | Link listings automatically only to harmless/high-confidence canonical medicine matches while preserving the pharmacy-entered listing. | Accepted |
 | ADR-175 | 2026-08-15 | Hold ambiguous/unmatched medicine identities from public search pending MediFind review; never auto-merge clinically distinct products. | Accepted |
@@ -184,9 +184,9 @@
 | ADR-180 | 2026-08-15 | Set a pilot backup recovery-point objective of 24 hours using encrypted daily backups. | Accepted |
 | ADR-181 | 2026-08-15 | Target core-service restoration within one Fiji business day; sensitive prescription/reservation functions stay disabled until post-restore integrity checks pass. | Accepted |
 | ADR-182 | 2026-08-15 | Do not implement active multi-region failover in MVP; use Sydney primary, tested restore and transparent outage status. | Accepted |
-| ADR-183 | 2026-08-16 | Target WCAG 2.2 AA for the mobile app and minimal public-support site, subject to documented exception only. | Accepted |
+| ADR-183 | 2026-08-16 | Target WCAG 2.2 AA for the mobile app and minimal public-support site, subject to documented exception only. | Superseded by ADR-266 |
 | ADR-184 | 2026-08-16 | Support 200% text scaling, screen-reader semantics/focus, large touch targets and non-colour-only critical status. | Accepted |
-| ADR-185 | 2026-08-16 | Require physical iOS VoiceOver and Android TalkBack validation for every critical buyer, pharmacy and admin beta journey. | Accepted |
+| ADR-185 | 2026-08-16 | Require physical iOS VoiceOver and Android TalkBack validation for every critical buyer, pharmacy and admin beta journey. | Superseded by ADR-266 |
 | ADR-186 | 2026-08-16 | Use structured append-only audit events with minimum safe actor/action/target/state metadata and no sensitive content. | Accepted |
 | ADR-187 | 2026-08-16 | Pharmacy owners view only permitted branch staff/listing/reservation audit history, never other pharmacies or prescription-file content. | Accepted |
 | ADR-188 | 2026-08-16 | Audit all admin verification, moderation, suspension, support, break-glass and configuration/kill-switch actions; normal users cannot alter history. | Accepted |
@@ -196,9 +196,9 @@
 | ADR-192 | 2026-08-16 | Pharmacy verification lasts 12 months or until earliest relied-on evidence expiry, whichever comes first. | Accepted |
 | ADR-193 | 2026-08-16 | Send renewal reminders at 60/30 days and suspend public discovery, prescription handling and reservations on unrenewed expiry. | Accepted |
 | ADR-194 | 2026-08-16 | Require re-verification before material ownership, legal-name, branch, licence/responsible-person or official-contact changes become public. | Accepted |
-| ADR-195 | 2026-08-16 | Use one TypeScript monorepo with mobile, API and narrowly scoped shared contract/config packages. | Accepted |
+| ADR-195 | 2026-08-16 | Use one TypeScript monorepo with mobile, API and narrowly scoped shared contract/config packages. | Superseded by ADR-266 |
 | ADR-196 | 2026-08-16 | Use pinned Node Active LTS and pnpm workspaces with committed lockfile and reproducible immutable installs. | Accepted |
-| ADR-197 | 2026-08-16 | Keep mobile/API independently deployable; shared packages contain contracts/config only and never secrets or direct data access. | Accepted |
+| ADR-197 | 2026-08-16 | Keep mobile/API independently deployable; shared packages contain contracts/config only and never secrets or direct data access. | Superseded by ADR-266 |
 | ADR-198 | 2026-08-16 | Build the initial canonical catalog only from verified pharmacy-authored listings and MediFind review. | Accepted |
 | ADR-199 | 2026-08-16 | Defer barcode scanning, automated medicine-data imports and external/government catalog integrations until post-pilot review. | Accepted |
 | ADR-200 | 2026-08-16 | A person may use one account for buyer and pharmacy roles only with explicit workspace separation and no cross-context data access. | Accepted |
@@ -215,7 +215,7 @@
 | ADR-211 | 2026-08-16 | Production API responses never expose stacks, provider/internal IDs, security rules or raw exception messages. | Accepted |
 | ADR-212 | 2026-08-16 | Store structured Fiji branch addresses with validated coordinates; show public address only after branch verification. | Accepted |
 | ADR-213 | 2026-08-16 | Store weekly and exceptional branch hours in `Pacific/Fiji` and validate reservation expiry against collection availability. | Accepted |
-| ADR-214 | 2026-08-16 | Use verified public branch location only for native-map directions; never disclose or retain buyer nearby-search location. | Accepted |
+| ADR-214 | 2026-08-16 | Use verified public branch location only for native-map directions; never disclose or retain buyer nearby-search location. | Superseded by ADR-266 |
 | ADR-215 | 2026-08-16 | Use structured MediFind-translated templates for safety-critical reservation, status, expiry and error content. | Accepted |
 | ADR-216 | 2026-08-16 | Allow only limited language-tagged pharmacy operational notes; never machine-translate them or permit medical advice/prescription interpretation. | Accepted |
 | ADR-217 | 2026-08-16 | Require plain-text sanitisation, strict length limits and no links/contact data in dynamic notes unless a future approved field permits it. | Accepted |
@@ -225,7 +225,7 @@
 | ADR-221 | 2026-08-16 | Every public listing shows one current exact-pack FJD price; contact-for-price, ranges and estimates are prohibited. | Accepted |
 | ADR-222 | 2026-08-16 | Price applies only to the exact listed identity/form/strength/pack; separate packs require separate listings. | Accepted |
 | ADR-223 | 2026-08-16 | Price changes are versioned/audited; approved reservations retain confirmed price unless operationally cancelled with notice. | Accepted |
-| ADR-224 | 2026-08-16 | Begin implementation only with synthetic-data monorepo/tooling/CI/mobile-shell foundation; defer cloud/auth/production configuration. | Accepted |
+| ADR-224 | 2026-08-16 | Begin implementation only with synthetic-data monorepo/tooling/CI/mobile-shell foundation; defer cloud/auth/production configuration. | Superseded by ADR-266 |
 | ADR-225 | 2026-08-16 | Implement non-sensitive synthetic buyer search/navigation before protected cloud/pharmacy/prescription capability. | Accepted |
 | ADR-226 | 2026-08-16 | Claude must present a requirements-driven UI design proposal for approval before implementing a visual flow. | Accepted |
 | ADR-227 | 2026-08-16 | First Claude design review covers a whole-MVP low-fidelity role/flow/system/state proposal before any UI code. | Accepted |
@@ -243,12 +243,12 @@
 | ADR-239 | 2026-08-16 | Permit no-cost production quotas under a billed Blaze project when all security/privacy/region controls remain intact; Sydney storage and backups stay paid. | Accepted |
 | ADR-240 | 2026-08-16 | Use regional API Gateway as the sole public business-API endpoint, validating Firebase JWTs and invoking IAM-private Cloud Run through a dedicated service account. | Accepted |
 | ADR-241 | 2026-08-16 | Defer external load balancing and Cloud Armor until legal/assessment, attack, public-scale, custom-domain or funded-budget triggers require them; prevent path bypass on upgrade. | Accepted |
-| ADR-242 | 2026-08-16 | Use EAS Free for low-volume signed beta builds without depending on EAS Update; paid EAS or founder-controlled builds scale the same native project. | Accepted |
+| ADR-242 | 2026-08-16 | Use EAS Free for low-volume signed beta builds without depending on EAS Update; paid EAS or founder-controlled builds scale the same native project. | Superseded by ADR-266 |
 | ADR-243 | 2026-08-16 | Use Cloudflare Pages for static public support/legal/status/security content only, with no Functions, forms, cookies, analytics, identity or application proxy. | Accepted |
 | ADR-244 | 2026-08-16 | Use ClamAV in bounded private Cloud Run Jobs with a controlled signature mirror; public malware-analysis services remain prohibited. | Accepted |
 | ADR-245 | 2026-08-16 | Use generic direct FCM/APNs and authenticated in-app status for buyer/pharmacy workflow notifications; no transactional-email notification provider is required in MVP. | Accepted |
 | ADR-246 | 2026-08-16 | Use GitHub Free and no-cost pinned security tools for documentation/synthetic work; enforced private branch protection is required before cloud-connected/sensitive code unless public source is explicitly approved. | Accepted |
-| ADR-247 | 2026-08-16 | Use native map intents and verified coordinates, server-produced aggregate metrics and existing managed observability; do not add map, analytics, session-replay or support SaaS for MVP. | Accepted |
+| ADR-247 | 2026-08-16 | Use verified external map links, server-produced aggregate metrics and existing managed observability; do not add embedded map, analytics, session-replay or support SaaS for MVP. | Accepted |
 | ADR-248 | 2026-08-16 | Send identity/security email through Firebase Authentication templates using a verified founder-controlled MediFind sender/action-link domain; defer a separate SMTP/API provider until measured need and approval. | Accepted |
 | ADR-249 | 2026-08-16 | Restrict Identity Platform SMS to Fiji, enforce Authentication App Check, monitor provider sent/blocked/verified signals and use a tested provider-level disable/restore breaker; the business API alone is not a hard SMS cap. | Accepted |
 | ADR-250 | 2026-08-16 | Build MVP medicine search from a server-generated minimum public Firestore projection behind a backend search adapter; add a private managed index only under measured quality/latency/volume triggers. | Accepted |
@@ -267,6 +267,7 @@
 | ADR-263 | 2026-08-16 | Conditionally accept the two transitive `image-size@1.2.1` build-tool audit findings for Task 1 only, because no patched npm release is published, Task 1 has no image assets or untrusted build input, and the issue is not runtime-exposed. The exception permits only the two recorded advisories, requires a fail-closed guard/raw audit evidence, expires by 2026-09-15 and ends immediately when a patched compatible dependency chain is available; see [issue #3](https://github.com/Dev-SohailAli/MediFind/issues/3). | Accepted |
 | ADR-264 | 2026-08-16 | Approve issue #5 as Task 2: an English-development-copy, local synthetic buyer search/navigation prototype only. It may add the named synthetic fixture/result contract, deterministic local exact/alias matching and the approved visual/accessibility states, but no real or realistic domain data, network/API, auth, permission, map/contact, persistence, analytics, pharmacy operation, reservation or cloud capability. | Accepted |
 | ADR-265 | 2026-08-16 | Accept a one-time documented procedural correction for Task 2: its approved whole-MVP proposal and task specification/brief supplied the required visual authority, but the task-linked proposal file was omitted before code began. After founder review, record the bounded addendum; PR #7 remains separately reviewable. Every future visual/UI task must have its linked design proposal and recorded founder outcome before code begins. | Accepted |
+| ADR-266 | 2026-08-16 | Supersede the mobile-first product-surface and store-distribution direction. The current MVP client is a responsive TypeScript web application/PWA for desktop browsers, Android browsers and iPhone Safari, distributed through an invite-only HTTPS environment and optional Home Screen installation. The existing Expo/React Native package is retained as a future native-shell option and historical Task 2 evidence; App Store, TestFlight, Google Play and EAS distribution are deferred until separately funded and approved. | Accepted |
 
 ## Entry template
 

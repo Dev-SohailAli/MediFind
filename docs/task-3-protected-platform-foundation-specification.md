@@ -17,7 +17,7 @@ If this specification conflicts with an accepted policy, Claude stops and raises
 
 Create the smallest protected platform foundation that can prove the MediFind trust chain with synthetic identities and data:
 
-`mobile/client -> API Gateway -> IAM-private API -> private data/services`
+`browser/PWA client -> API Gateway -> IAM-private API -> private data/services`
 
 The foundation must prove authentication, App Check, server-side authorization context, safe API errors, rate-limit decisions, audit boundaries, isolated environments, least-privilege delivery and recoverable infrastructure. It must not yet implement pharmacy operations, prescription handling, real buyer accounts, live Fiji SMS or a production release.
 
@@ -26,7 +26,7 @@ The foundation must prove authentication, App Check, server-side authorization c
 | Environment | Data | Credentials | Allowed purpose |
 | --- | --- | --- | --- |
 | Local | Fixtures and emulator data only | Developer-local emulator credentials; never committed | Unit, contract and integration tests without a cloud dependency |
-| Synthetic development | Non-sensitive synthetic data only | Founder-controlled, environment-scoped identities/secrets | Manual API/mobile integration and security exercises |
+| Synthetic development | Non-sensitive synthetic data only | Founder-controlled, environment-scoped identities/secrets | Manual API/web integration and security exercises |
 | Synthetic CI | Ephemeral fixtures/emulators where practical | GitHub OIDC only if a hosted synthetic check genuinely needs a cloud service | Reproducible checks and disposable integration evidence |
 | Production | Not enabled by Task 3 | Separate founder-approved deployment identity | Explicit future release gate only |
 
@@ -48,7 +48,7 @@ The only public business-API edge is API Gateway. The intended request path is:
 2. API Gateway validates the Firebase JWT issuer, audience, signature and expiry for protected routes. Invalid or missing identity is rejected before Cloud Run invocation.
 3. API Gateway invokes Cloud Run using its dedicated least-privilege service identity. Cloud Run is not unauthenticated and is not directly reachable as a business endpoint.
 4. The API verifies Firebase App Check independently, validates the allow-listed request schema and size, derives actor/role/branch context server-side and applies authorization, rate limits, concurrency rules and audit requirements.
-5. The API reads and writes private data services through server-only identities. Mobile code never reads Firestore, Cloud Storage, Secret Manager or an internal queue directly.
+5. The API reads and writes private data services through server-only identities. Web/PWA code never reads Firestore, Cloud Storage, Secret Manager or an internal queue directly.
 
 Gateway identity and App Check are trust controls, not substitutes for application authorization. A spoofed gateway header, direct Cloud Run request, missing App Check token or stale/invalid user token must fail closed.
 

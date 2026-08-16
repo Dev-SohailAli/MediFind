@@ -12,8 +12,8 @@ Automated tests never use a production Firebase/GCP project, production credenti
 | API/integration | Authentication/App Check verification, role/branch/request authorization, Firestore transactions, file quarantine, rate limits, audit events, idempotency and feature flags |
 | End-to-end | Approved buyer, pharmacy and admin journeys using synthetic fixtures only |
 | Security | Negative access tests, malformed input, replay/idempotency, session/device revocation, upload quarantine, log/telemetry/crash-report redaction and kill-switch behaviour |
-| Accessibility/localisation | WCAG 2.2 AA target; screen-reader labels/order, touch targets, 200% text scaling, contrast, light/dark themes, English/iTaukei/Fiji Hindi layout and safe fallback strings; physical VoiceOver/TalkBack critical-journey validation |
-| Device/release | Signed beta build on at least one physical iPhone and one physical Android device before every beta release, including grant/deny/revoke flows for each permitted mobile permission |
+| Accessibility/localisation | WCAG 2.2 AA target; screen-reader labels/order, keyboard/focus, touch/pointer targets, 200% text scaling, contrast, light/dark themes, English/iTaukei/Fiji Hindi layout and safe fallback strings; iPhone Safari VoiceOver, Android browser TalkBack and desktop assistive-technology validation |
+| Browser/release | Responsive browser/PWA build tested at iPhone-sized, Android-sized and desktop viewports before each beta release, including grant/deny/revoke flows for each permitted browser capability |
 
 ## Security-sensitive coverage standard
 
@@ -27,7 +27,7 @@ Mutation tests must prove 24-hour same-context idempotent retries return one res
 
 API error tests must validate allow-listed stable code/message key/request ID output, translated client coverage, safe caller-field validation only, anti-enumeration behaviour and absence of stack/provider/database/security-rule/raw exception detail.
 
-Role-combination tests must prove a buyer/staff account switches to a distinct authorised workspace without cross-context data leakage, multi-branch access requires separate assignments, and a pharmacy owner without explicit reviewer role cannot list, open or download prescription requests.
+Role-combination tests must prove a buyer/staff account switches to a distinct authorised web workspace without cross-context data leakage, multi-branch access requires separate assignments, and a pharmacy owner without explicit reviewer role cannot list, open or download prescription requests.
 
 Staff-lifecycle tests must prove seven-day invitation expiry/reissue invalidation, one active invitation context, proof/MFA before activation, last-owner protection, ownership re-verification, last-reviewer Rx disablement/hide, OTC continuity and safe restoration.
 
@@ -43,7 +43,7 @@ Pharmacy-verification tests must cover 12-month/earliest-evidence expiry calcula
 
 Branch location/hours tests must cover Fiji structured address/private re-verification state, public directions without buyer-location disclosure, weekly split/closed hours, exceptional-date precedence and `Pacific/Fiji` request/reservation expiry at closing/holiday boundaries.
 
-Offline/reconnect tests must prove that only minimum public results can be cached, sensitive content/mutations are unavailable offline, no sensitive request is queued, and reconnect/app-resume re-fetches/authorises the current server record before display or change. Redaction tests must capture representative failures and prove monitoring payloads contain none of the prohibited identifiers, health/prescription data, medicine-search text, tokens or support free text.
+Offline/reconnect tests must prove that only minimum public results can be cached, sensitive content/mutations are unavailable offline, no sensitive request is queued, browser storage contains no protected data, and reconnect/PWA-resume re-fetches/authorises the current server record before display or change. Redaction tests must capture representative failures and prove monitoring payloads contain none of the prohibited identifiers, health/prescription data, medicine-search text, tokens or support free text.
 
 ## Synthetic fixture catalogue
 
@@ -75,7 +75,7 @@ Before a beta release, record:
 - passed automated checks, coverage result and dependency/security scan result;
 - API authorization/negative-test result and synthetic upload/quarantine result;
 - accessibility/localisation result for changed screens;
-- physical iOS 15+ and Android 10+ test device/version and result;
+- iPhone Safari, Android Chrome and desktop browser/version results at representative responsive viewports;
 - budget/OTP alert, monitoring and rollback rehearsal result where changed;
 - safe simulated cost circuit-breaker evidence where high-cost paths/budgets change;
 - current free-allowance consumption/forecast, any 70% scale trigger and all billable exceptions (especially Fiji SMS, Sydney storage and backups);
