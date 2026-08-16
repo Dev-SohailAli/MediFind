@@ -27,6 +27,8 @@
 | [First synthetic-foundation test specification](first-synthetic-foundation-test-specification.md) | Exact local/CI verification and synthetic-data boundary for the first task |
 | [Task 2 synthetic buyer-search specification](task-2-synthetic-buyer-search-specification.md) | Exact synthetic-only fixture, search, UI, safety and test contract for buyer-search prototype work |
 | [Task 2 Claude implementation brief](task-2-synthetic-buyer-search-task-brief.md) | Executable Claude task scope, exclusions, acceptance evidence and delivery rules for Task 2 |
+| [Task 3 protected-platform foundation specification](task-3-protected-platform-foundation-specification.md) | Draft cloud, identity, API, CI, cost and repository-control boundary for the synthetic platform foundation |
+| [Task 3 Claude implementation brief](task-3-protected-platform-foundation-task-brief.md) | Draft implementation handoff for a later synthetic-environment platform task; it is not approved by this document alone |
 | [API mutation and concurrency](api-mutation-and-concurrency-policy.md) | Explicit commands, idempotency and version-conflict rules |
 | [API error contract](api-error-contract.md) | Safe machine codes, local translation keys, correlation IDs and anti-enumeration rules |
 | [V1 API endpoint inventory](v1-api-endpoint-inventory.md) | Approved REST route/action map for task-level schema design |
@@ -59,6 +61,7 @@
 | [Incident response runbook](incident-response-runbook.md) | Critical security/privacy containment, notification and corrective-review procedure |
 | [Repository security and delivery](repository-security-and-delivery.md) | Required GitHub protection, dependency and secret-management controls |
 | [Synthetic-code repository readiness record](repository-readiness-record.md) | Verified private-repository controls, limits and first-task merge gate |
+| [Public-source visibility review](public-source-visibility-review.md) | Conditional IP/security review for the GitHub Free public-source alternative |
 | [Monorepo and toolchain policy](monorepo-and-toolchain-policy.md) | pnpm workspace layout, dependency boundaries and reproducible setup rules |
 | [GitHub work-management policy](github-work-management.md) | Documentation-governed issues, milestones, labels and Claude task workflow |
 | [Decision log](decisions.md) | Decisions that govern future implementation |
