@@ -2,7 +2,7 @@
 
 ## Mobile and accessibility
 
-Design for touch-first iOS and Android use, low/variable connectivity, readable type, sufficient contrast, screen-reader labels, keyboard support, clear error recovery and no colour-only status meaning. Cache only non-sensitive search content; never cache prescription files on an unmanaged device. Present results as a low-data list by default and provide an optional map toggle; list view remains fully usable without map access.
+Design for touch-first iOS and Android use, low/variable connectivity, readable type, sufficient contrast, screen-reader labels, keyboard support, clear error recovery and no colour-only status meaning. Follow the [accessibility policy](accessibility-policy.md), including 200% text scaling and assistive-technology validation. Cache only non-sensitive search content; never cache prescription files on an unmanaged device. Present results as a low-data list by default and provide an optional map toggle; list view remains fully usable without map access. Request notifications only after an in-app explanation; use foreground approximate location only when the buyer selects nearby search, with manual area search always available; use the system camera/picker only when the buyer starts an upload.
 
 State the active search sort and show why a result is an active-ingredient rather than exact-product match. Do not use advertising, paid placement or visual treatment that makes a paid pharmacy appear more relevant in medicine search.
 
@@ -34,6 +34,8 @@ Do not diagnose, recommend treatment, rank medicines by suitability, or imply a 
 ## Privileged-account security education
 
 Before a pharmacy owner, prescription reviewer or MediFind admin activates a privileged role, explain in plain language that MFA protects buyers' prescription information, pharmacy listings and the staff account if a phone or password is stolen. State that MFA uses an authenticator app or passkey, not SMS alone; provide setup steps, recovery guidance and support-hour expectations. The app must not allow the user to bypass this requirement without a documented, time-limited pilot exception approved by MediFind.
+
+Use structured, MediFind-translated templates for safety-critical state, expiry, error, price and pickup information. Pharmacy-authored branch/pickup/listing notes follow the [dynamic pharmacy content policy](dynamic-pharmacy-content-policy.md): they are limited, attributed, language-tagged, un-translated, plain text and never a medical-advice or credential/prescription-request channel.
 
 ## Anti-phishing guidance
 

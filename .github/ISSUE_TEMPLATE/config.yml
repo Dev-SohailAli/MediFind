@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation index
+    url: https://github.com/SohailMoinAli/MediFind/blob/main/docs/README.md
+    about: Read the approved MediFind documentation before proposing or starting work.
