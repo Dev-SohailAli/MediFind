@@ -27,6 +27,15 @@ export interface SyntheticSearchListing {
   packDescription: string;
   aliases: readonly string[];
   pharmacyDisplayName: string;
+  /** Synthetic public branch contact/location fields (ADR-214: verified
+   * public branch location only, for native-map directions). Not a buyer
+   * location and never derived from device geolocation. Optional so a
+   * client without contact data for a fixture can omit the Call/Directions
+   * actions rather than show a broken link. */
+  pharmacyPhoneDisplay?: string;
+  pharmacyAddressDisplay?: string;
+  pharmacyLatitude?: number;
+  pharmacyLongitude?: number;
   syntheticArea: SyntheticArea;
   syntheticDistanceLabel: string;
   syntheticDistanceRank: number;

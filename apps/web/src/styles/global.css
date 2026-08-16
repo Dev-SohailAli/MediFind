@@ -534,6 +534,27 @@ input {
   margin-top: var(--space-md);
 }
 
+.detail-sheet__actions {
+  display: flex;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+.detail-sheet__action {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  min-height: var(--min-target);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--space-xl);
+  padding: var(--space-md);
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
 .safety-block {
   margin-top: var(--space-xl);
   padding: var(--space-md);

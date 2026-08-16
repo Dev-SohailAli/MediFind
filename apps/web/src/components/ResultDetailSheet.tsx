@@ -1,6 +1,7 @@
 import * as React from 'react';
 import type { SyntheticMatchKind, SyntheticSearchListing } from '@medifind/contracts';
 
+import { buildDirectionsHref, buildTelHref } from '../contact/links';
 import { strings } from '../content/strings';
 import type { DisplayDistance } from '../search/distance';
 import { formatFjd } from '../search/format';
@@ -15,6 +16,12 @@ export interface ResultDetailSheetProps {
   onClose: () => void;
 }
 
+function hasCoordinates(
+  listing: SyntheticSearchListing,
+): listing is SyntheticSearchListing & { pharmacyLatitude: number; pharmacyLongitude: number } {
+  return listing.pharmacyLatitude !== undefined && listing.pharmacyLongitude !== undefined;
+}
+
 function getFocusable(container: HTMLElement): HTMLElement[] {
   return Array.from(
     container.querySelectorAll<HTMLElement>(
@@ -24,12 +31,15 @@ function getFocusable(container: HTMLElement): HTMLElement[] {
 }
 
 /**
- * A local, read-only detail dialog. It has no call, map, reservation,
- * upload or request action — only identity, pack, pharmacy attribution,
- * price/freshness and the required safety copy. Implements the standard
- * modal-dialog keyboard contract: focus moves in on open, Tab is trapped
- * inside the dialog, Escape closes it, and focus returns to the element
- * that opened it.
+ * A local, read-only detail dialog. It has no reservation, upload or
+ * request action — only identity, pack, pharmacy attribution,
+ * price/freshness, the two always-available Call/Directions contact
+ * actions and the required safety copy. Call/Directions are `tel:`/`geo:`
+ * links resolved by the browser's own navigation to the verified synthetic
+ * branch contact/location, not an application network call. Implements
+ * the standard modal-dialog keyboard contract: focus moves in on open, Tab
+ * is trapped inside the dialog, Escape closes it, and focus returns to the
+ * element that opened it.
  */
 export function ResultDetailSheet({
   listing,
@@ -117,6 +127,38 @@ export function ResultDetailSheet({
           {strings.detailSheetPharmacyPrefix} {listing.pharmacyDisplayName}
         </p>
         {showDistance ? <p className="detail-sheet__supporting">{displayDistance.label}</p> : null}
+        {listing.pharmacyAddressDisplay ? (
+          <p className="detail-sheet__supporting">
+            {strings.detailSheetAddressPrefix}: {listing.pharmacyAddressDisplay}
+          </p>
+        ) : null}
+
+        {listing.pharmacyPhoneDisplay || hasCoordinates(listing) ? (
+          <div className="detail-sheet__actions">
+            {listing.pharmacyPhoneDisplay ? (
+              <a
+                href={buildTelHref(listing.pharmacyPhoneDisplay)}
+                aria-label={`${strings.callActionAccessiblePrefix} ${listing.pharmacyDisplayName}`}
+                className="detail-sheet__action"
+              >
+                <span aria-hidden="true">☎</span> {strings.callActionLabel}
+              </a>
+            ) : null}
+            {hasCoordinates(listing) ? (
+              <a
+                href={buildDirectionsHref(
+                  listing.pharmacyLatitude,
+                  listing.pharmacyLongitude,
+                  listing.pharmacyDisplayName,
+                )}
+                aria-label={`${strings.directionsActionAccessiblePrefix} ${listing.pharmacyDisplayName}`}
+                className="detail-sheet__action"
+              >
+                <span aria-hidden="true">⌖</span> {strings.directionsActionLabel}
+              </a>
+            ) : null}
+          </div>
+        ) : null}
 
         <div className="detail-sheet__status-row">
           <StatusBadge

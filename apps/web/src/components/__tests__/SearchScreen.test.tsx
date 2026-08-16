@@ -82,11 +82,31 @@ describe('SearchScreen', () => {
     expect(within(dialog).getByText(strings.safetyPrescriptionMayBeRequired)).toBeInTheDocument();
     expect(within(dialog).getByText(strings.safetyNoMedicalAdvice)).toBeInTheDocument();
 
-    // No call/map/reservation/upload/request action exists in the sheet.
+    // No reservation/upload/request action exists in the sheet, only the
+    // always-available Call/Directions contact actions.
     const dialogText = dialog.textContent?.toLowerCase() ?? '';
-    expect(dialogText).not.toContain('call');
-    expect(dialogText).not.toContain('directions');
     expect(dialogText).not.toContain('reserve');
+    expect(dialogText).not.toContain('upload');
+    expect(dialogText).not.toContain('request a');
+  });
+
+  it('the detail dialog offers non-network Call/Directions actions to the listed pharmacy', async () => {
+    const user = userEvent.setup();
+    render(<SearchScreen />);
+
+    await user.type(screen.getByLabelText(strings.searchInputLabel), 'Nivaprin');
+    const [firstResult] = await screen.findAllByRole('button', {
+      name: /Nivaprin.*Exact product match/i,
+    });
+    await user.click(firstResult!);
+
+    const dialog = screen.getByRole('dialog', { name: strings.detailSheetTitle });
+    const callLink = within(dialog).getByRole('link', { name: /^Call /i });
+    const directionsLink = within(dialog).getByRole('link', { name: /^Directions to /i });
+
+    expect(callLink).toHaveAttribute('href', expect.stringMatching(/^tel:\+\d+$/));
+    expect(directionsLink).toHaveAttribute('href', expect.stringMatching(/^geo:/));
+    expect(directionsLink.getAttribute('href')).not.toMatch(/https?:\/\//);
   });
 
   it('closing the detail dialog removes it and returns focus to the trigger', async () => {

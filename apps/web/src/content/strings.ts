@@ -73,6 +73,12 @@ export const strings = {
   detailSheetTitle: 'Medicine detail',
   detailSheetCloseLabel: 'Close detail',
   detailSheetPharmacyPrefix: 'Listed by',
+  detailSheetAddressPrefix: 'Address',
+
+  callActionLabel: 'Call',
+  callActionAccessiblePrefix: 'Call',
+  directionsActionLabel: 'Directions',
+  directionsActionAccessiblePrefix: 'Directions to',
 
   safetyAvailabilityPrice: 'Availability and price are provided by the pharmacy and may change.',
   safetyReservationNoGuarantee: 'A reservation is not a guarantee of supply or dispensing.',
