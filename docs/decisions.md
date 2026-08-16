@@ -258,6 +258,7 @@
 | ADR-254 | 2026-08-16 | Keep direct bounded Cloud Run Job scan execution for the pilot and add regional authenticated Cloud Tasks dispatch only when measured recovery/backlog/throughput requires it; tasks carry only opaque IDs. | Accepted |
 | ADR-255 | 2026-08-16 | Use a second Sydney Cloud Scheduler job every six hours for a least-privilege ClamAV signature-updater Job; scanners read but cannot alter the mirror, and definitions older than 24 hours fail closed. | Accepted |
 | ADR-256 | 2026-08-16 | Preserve 50/80/100% cost alerts; at the approved ceiling activate the tested provider-level SMS breaker and pause new prescription upload/scans while retaining safe search and existing records. | Accepted |
+| ADR-257 | 2026-08-16 | Accept the initial whole-MVP low-fidelity design proposal, including its neutral unavailable treatment, generic buyer-facing prescription-review status and distinct collected state. This authorises only bounded future UI implementation after the remaining documentation gates; it does not authorise code, production data, cloud provisioning, release or a policy change. | Accepted |
 
 ## Entry template
 

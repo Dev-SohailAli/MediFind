@@ -15,13 +15,13 @@ This roadmap identifies the documentation that must be completed or approved bef
 - Mobile/API architecture, Cloud Run/Firebase direction, environments, cost guardrails, low-connectivity and recovery targets.
 - Free-first production service map, no-cost allowances, paid safety exceptions, API Gateway/private Cloud Run edge, Firestore search projection/scale adapter, persistent rate limits, scheduled maintenance, OpenTofu/Workload Identity Federation, Cloud Armor upgrade triggers and scale-in-place thresholds.
 - Claude Code handoff, task template, Superpowers setup/precedence, repository-security and monorepo policies.
+- Founder-approved whole-MVP low-fidelity design proposal, including visual tokens, role navigation, states, safety, accessibility and localisation treatment. It authorises only bounded future UI implementation after the remaining readiness gates.
 - Draft public-support, public-notice, pilot agreement, pharmacy onboarding/training and verification policies.
 
 ### Still required before Claude writes the first synthetic-data-only code
 
 | Deliverable | Owner | Completion standard |
 | --- | --- | --- |
-| Final initial design specification | Claude Design + product owner | Use `CLAUDE-DESIGN.md` and the Claude Design agent brief to produce the complete low-fidelity MVP proposal: token application, component/state inventory, navigation, safety/accessibility/localisation treatment and first implementation screen scope. The founder records the result using the design-review acceptance checklist. High-fidelity branding may remain deferred. |
 | Implementation-grade API/data specification | Documentation agent + product owner | Define endpoint list, request/response field schemas, exact enums/state transitions, authorization matrix, Firestore collections/indexes and migration/version rules for the first task scope. |
 | Cloud foundation implementation specification | Documentation agent + product owner | Assign final project/resource names; pin exact IAM custom/predefined permissions, OpenAPI JWT scheme, Authentication/API App Check handling, Fiji SMS breaker, quotas/max instances, persistent rate-limit schema, search indexes, maintenance schedule, ClamAV image/signature updater, OpenTofu state bootstrap and OIDC/Workload Identity conditions/commands from the approved free-first blueprint. No production resource is created yet. |
 | Test foundation specification | Documentation agent + product owner | Turn test strategy into the first fixture catalogue, commands, CI checks, coverage/report format and task-specific acceptance matrix. |
