@@ -264,6 +264,7 @@
 | ADR-260 | 2026-08-16 | Use Node.js 24 LTS and pnpm 11.22.0, strict TypeScript, project-local Prettier/ESLint/Vitest, required format/lint/type/test/build/Gitleaks/Trivy/audit checks and least-privilege pull-request CI for the synthetic foundation; no task-1 coverage percentage is asserted. | Accepted |
 | ADR-261 | 2026-08-16 | Retain the private, founder-only repository and procedural PR-only synthetic-code workflow; enable vulnerability alerts and Dependabot security updates, use Gitleaks/Trivy where GitHub secret scanning is unavailable, and require enforced branch protection or separately approved public visibility before cloud-connected/sensitive code. | Accepted |
 | ADR-262 | 2026-08-16 | Approve GitHub issue #6 as the first executable Claude task: a local synthetic foundation only, with the approved package, verification, CI and no-cloud/no-domain-data boundaries. It remains subject to verified local tool/CI readiness and does not authorise product features or external services. | Accepted |
+| ADR-264 | 2026-08-16 | Temporarily use one interactive, repository-scoped, dedicated-account self-hosted Windows runner for founder-branch synthetic-only CI while GitHub-hosted Actions fails before jobs start. It has no secrets/cloud access, never runs untrusted PR events and is removed once hosted CI or an approved alternative is available; see [issue #11](https://github.com/SohailMoinAli/MediFind/issues/11). | Accepted |
 
 ## Entry template
 
