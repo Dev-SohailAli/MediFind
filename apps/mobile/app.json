@@ -1,10 +1,22 @@
 {
   "expo": {
     "name": "medifind-local-dev-shell",
-    "slug": "medifind-local-dev-shell",
+    "slug": "medifind",
     "version": "0.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
-    "platforms": ["ios", "android"]
+    "platforms": ["ios", "android"],
+    "ios": {
+      "bundleIdentifier": "com.sohailmoinali.medifind.dev",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d4843a96-97db-4e4a-99bb-c5f36244d7a7"
+      }
+    },
+    "owner": "sohailmoinali"
   }
 }
