@@ -70,5 +70,8 @@ jobs:
           ignore-unfixed: true
           exit-code: 1
 
-      - name: Dependency audit
-        run: pnpm audit
+      - name: Dependency audit (fail-closed exception guard, tracked by issue #8 / ADR-263)
+        # pnpm's built-in "audit" subcommand always takes priority over a same-named
+        # package.json script when invoked bare; "pnpm run audit" is required to reach
+        # scripts/audit-guard.mts instead of pnpm's unguarded native command.
+        run: pnpm run audit

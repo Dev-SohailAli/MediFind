@@ -16,7 +16,7 @@
     "build": "pnpm -r --if-present run build",
     "security:secrets": "gitleaks detect --source . --redact --exit-code 1",
     "security:trivy": "trivy fs --scanners vuln,misconfig --exit-code 1 --severity CRITICAL,HIGH --ignore-unfixed .",
-    "audit": "pnpm audit"
+    "audit": "node scripts/audit-guard.mts"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
