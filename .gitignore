@@ -1,0 +1,7 @@
+node_modules
+dist/
+.expo/
+*.tsbuildinfo
+coverage/
+debug.log
+.DS_Store

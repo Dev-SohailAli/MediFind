@@ -1,0 +1,8 @@
+{
+  "extends": "@medifind/config/typescript/base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "allowImportingTsExtensions": true
+  },
+  "include": ["tests", "scripts"]
+}

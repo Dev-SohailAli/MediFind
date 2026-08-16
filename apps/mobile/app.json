@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "medifind-local-dev-shell",
+    "slug": "medifind-local-dev-shell",
+    "version": "0.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "platforms": ["ios", "android"]
+  }
+}

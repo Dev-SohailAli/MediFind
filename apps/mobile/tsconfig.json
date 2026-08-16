@@ -1,0 +1,8 @@
+{
+  "extends": ["expo/tsconfig.base", "@medifind/config/typescript/base.json"],
+  "compilerOptions": {
+    "strict": true
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "dist", ".expo"]
+}

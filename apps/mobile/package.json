@@ -1,0 +1,23 @@
+{
+  "name": "@medifind/mobile",
+  "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "main": "index.ts",
+  "scripts": {
+    "build": "node ./scripts/export.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "expo": "~57.0.13",
+    "react": "19.2.3",
+    "react-native": "0.86.2"
+  },
+  "devDependencies": {
+    "@medifind/config": "workspace:*",
+    "@types/react": "~19.2.2",
+    "typescript": "6.0.3",
+    "vitest": "4.1.10"
+  }
+}
