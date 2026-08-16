@@ -50,12 +50,109 @@ interface PnpmAuditReport {
   advisories: Record<string, PnpmAuditAdvisory>;
 }
 
-function isPnpmAuditReport(value: unknown): value is PnpmAuditReport {
-  if (typeof value !== 'object' || value === null) {
-    return false;
+// pnpm audit's own severity vocabulary; anything outside this set is treated
+// as malformed rather than silently non-blocking.
+const KNOWN_SEVERITIES = new Set(['info', 'low', 'moderate', 'high', 'critical']);
+
+type ValidationResult = { ok: true } | { ok: false; reason: string };
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+// Every field the guard reads is validated here so a malformed nested entry
+// (wrong type, missing field, or an empty array where a real finding/path is
+// required) cannot be silently ignored or misread as "not blocking" further
+// down; any structural anomaly fails closed instead.
+function validateFinding(value: unknown, context: string): ValidationResult {
+  if (!isPlainObject(value)) {
+    return { ok: false, reason: `${context} is not an object` };
   }
-  const advisories = (value as { advisories?: unknown }).advisories;
-  return typeof advisories === 'object' && advisories !== null;
+
+  if (typeof value.version !== 'string' || value.version.length === 0) {
+    return { ok: false, reason: `${context}.version is missing or not a non-empty string` };
+  }
+
+  if (!Array.isArray(value.paths) || value.paths.length === 0) {
+    return { ok: false, reason: `${context}.paths is missing, not an array, or empty` };
+  }
+
+  if (!value.paths.every((path) => typeof path === 'string' && path.length > 0)) {
+    return { ok: false, reason: `${context}.paths contains a non-string or empty entry` };
+  }
+
+  return { ok: true };
+}
+
+function validateAdvisory(key: string, value: unknown): ValidationResult {
+  const context = `advisories["${key}"]`;
+
+  if (!isPlainObject(value)) {
+    return { ok: false, reason: `${context} is not an object` };
+  }
+
+  if (typeof value.id !== 'number') {
+    return { ok: false, reason: `${context}.id is missing or not a number` };
+  }
+
+  if (typeof value.title !== 'string') {
+    return { ok: false, reason: `${context}.title is missing or not a string` };
+  }
+
+  if (typeof value.module_name !== 'string' || value.module_name.length === 0) {
+    return { ok: false, reason: `${context}.module_name is missing or not a non-empty string` };
+  }
+
+  if (typeof value.severity !== 'string' || !KNOWN_SEVERITIES.has(value.severity)) {
+    return {
+      ok: false,
+      reason: `${context}.severity is missing, not a string, or not a recognised severity level`,
+    };
+  }
+
+  if (
+    value.github_advisory_id !== undefined &&
+    (typeof value.github_advisory_id !== 'string' || value.github_advisory_id.length === 0)
+  ) {
+    return {
+      ok: false,
+      reason: `${context}.github_advisory_id is present but not a non-empty string`,
+    };
+  }
+
+  if (!Array.isArray(value.findings) || value.findings.length === 0) {
+    return { ok: false, reason: `${context}.findings is missing, not an array, or empty` };
+  }
+
+  for (const [index, finding] of value.findings.entries()) {
+    const findingResult = validateFinding(finding, `${context}.findings[${index}]`);
+    if (!findingResult.ok) {
+      return findingResult;
+    }
+  }
+
+  return { ok: true };
+}
+
+function validateAuditReport(
+  value: unknown,
+): { ok: true; report: PnpmAuditReport } | { ok: false; reason: string } {
+  if (!isPlainObject(value)) {
+    return { ok: false, reason: 'audit output is not a JSON object' };
+  }
+
+  if (!isPlainObject(value.advisories)) {
+    return { ok: false, reason: '"advisories" field is missing or not an object' };
+  }
+
+  for (const [key, advisory] of Object.entries(value.advisories)) {
+    const advisoryResult = validateAdvisory(key, advisory);
+    if (!advisoryResult.ok) {
+      return advisoryResult;
+    }
+  }
+
+  return { ok: true, report: value as unknown as PnpmAuditReport };
 }
 
 function isBlockingSeverity(severity: string): boolean {
@@ -95,16 +192,17 @@ export function evaluateAuditReport(
     };
   }
 
-  if (!isPnpmAuditReport(parsed)) {
+  const validation = validateAuditReport(parsed);
+  if (!validation.ok) {
     return {
       ok: false,
       exitCode: 1,
       summary: 'pnpm audit output did not match the expected report shape. Failing closed.',
-      details: [],
+      details: [validation.reason],
     };
   }
 
-  const advisories = Object.values(parsed.advisories);
+  const advisories = Object.values(validation.report.advisories);
   const blocking = advisories.filter((advisory) => isBlockingSeverity(advisory.severity));
 
   if (blocking.length === 0) {

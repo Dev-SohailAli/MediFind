@@ -187,3 +187,185 @@ describe('audit-guard evaluateAuditReport', () => {
     expect(result.exitCode).toBe(0);
   });
 });
+
+describe('audit-guard evaluateAuditReport - malformed nested entries fail closed', () => {
+  const wellFormedFinding = {
+    version: '1.2.1',
+    paths: ['apps__mobile>expo>@expo/cli>metro>image-size'],
+  };
+
+  function reportRaw(advisoryOverride: Record<string, unknown>): string {
+    return JSON.stringify({
+      advisories: {
+        '1138808': {
+          id: 1138808,
+          title: 'synthetic test advisory',
+          module_name: 'image-size',
+          severity: 'high',
+          github_advisory_id: 'GHSA-w3rx-r6r6-pgpr',
+          findings: [wellFormedFinding],
+          ...advisoryOverride,
+        },
+      },
+    });
+  }
+
+  it('fails closed when severity is missing', () => {
+    const raw = reportRaw({ severity: undefined });
+    // JSON.stringify drops `undefined` properties, so this genuinely omits the field.
+    const result = evaluateAuditReport(raw, baseOptions);
+
+    expect(result.ok).toBe(false);
+    expect(result.exitCode).toBe(1);
+    expect(result.details.join(' ')).toContain('severity');
+  });
+
+  it('fails closed when severity is a non-string value', () => {
+    const raw = reportRaw({ severity: 3 });
+
+    const result = evaluateAuditReport(raw, baseOptions);
+
+    expect(result.ok).toBe(false);
+    expect(result.exitCode).toBe(1);
+    expect(result.details.join(' ')).toContain('severity');
+  });
+
+  it('fails closed when severity is a string but not a recognised severity level', () => {
+    const raw = reportRaw({ severity: 'extreme' });
+
+    const result = evaluateAuditReport(raw, baseOptions);
+
+    expect(result.ok).toBe(false);
+    expect(result.exitCode).toBe(1);
+    expect(result.details.join(' ')).toContain('severity');
+  });
+
+  it('fails closed when findings is not an array', () => {
+    const raw = reportRaw({ findings: 'not-an-array' });
+
+    const result = evaluateAuditReport(raw, baseOptions);
+
+    expect(result.ok).toBe(false);
+    expect(result.exitCode).toBe(1);
+    expect(result.details.join(' ')).toContain('findings');
+  });
+
+  it('fails closed when findings is an empty array', () => {
+    const raw = reportRaw({ findings: [] });
+
+    const result = evaluateAuditReport(raw, baseOptions);
+
+    expect(result.ok).toBe(false);
+    expect(result.exitCode).toBe(1);
+    expect(result.details.join(' ')).toContain('findings');
+  });
+
+  it('fails closed when a finding is not an object', () => {
+    const raw = reportRaw({ findings: ['not-an-object'] });
+
+    const result = evaluateAuditReport(raw, baseOptions);
+
+    expect(result.ok).toBe(false);
+    expect(result.exitCode).toBe(1);
+  });
+
+  it("fails closed when a finding's version is missing", () => {
+    const raw = reportRaw({ findings: [{ paths: wellFormedFinding.paths }] });
+
+    const result = evaluateAuditReport(raw, baseOptions);
+
+    expect(result.ok).toBe(false);
+    expect(result.exitCode).toBe(1);
+    expect(result.details.join(' ')).toContain('version');
+  });
+
+  it("fails closed when a finding's version is a non-string value", () => {
+    const raw = reportRaw({ findings: [{ version: 1.2, paths: wellFormedFinding.paths }] });
+
+    const result = evaluateAuditReport(raw, baseOptions);
+
+    expect(result.ok).toBe(false);
+    expect(result.exitCode).toBe(1);
+    expect(result.details.join(' ')).toContain('version');
+  });
+
+  it("fails closed when a finding's paths field is not an array", () => {
+    const raw = reportRaw({
+      findings: [{ version: '1.2.1', paths: 'apps__mobile>expo>metro>image-size' }],
+    });
+
+    const result = evaluateAuditReport(raw, baseOptions);
+
+    expect(result.ok).toBe(false);
+    expect(result.exitCode).toBe(1);
+    expect(result.details.join(' ')).toContain('paths');
+  });
+
+  it("fails closed when a finding's paths array is empty", () => {
+    const raw = reportRaw({ findings: [{ version: '1.2.1', paths: [] }] });
+
+    const result = evaluateAuditReport(raw, baseOptions);
+
+    expect(result.ok).toBe(false);
+    expect(result.exitCode).toBe(1);
+    expect(result.details.join(' ')).toContain('paths');
+  });
+
+  it("fails closed when a finding's paths array contains a non-string entry", () => {
+    const raw = reportRaw({ findings: [{ version: '1.2.1', paths: [123] }] });
+
+    const result = evaluateAuditReport(raw, baseOptions);
+
+    expect(result.ok).toBe(false);
+    expect(result.exitCode).toBe(1);
+    expect(result.details.join(' ')).toContain('paths');
+  });
+
+  it("fails closed when a finding's paths array contains an empty string", () => {
+    const raw = reportRaw({ findings: [{ version: '1.2.1', paths: [''] }] });
+
+    const result = evaluateAuditReport(raw, baseOptions);
+
+    expect(result.ok).toBe(false);
+    expect(result.exitCode).toBe(1);
+    expect(result.details.join(' ')).toContain('paths');
+  });
+
+  it('fails closed when an advisory entry itself is not an object', () => {
+    const raw = JSON.stringify({ advisories: { '1138808': 'not-an-object' } });
+
+    const result = evaluateAuditReport(raw, baseOptions);
+
+    expect(result.ok).toBe(false);
+    expect(result.exitCode).toBe(1);
+  });
+
+  it('fails closed when the advisories field is an array instead of an object', () => {
+    const raw = JSON.stringify({ advisories: [] });
+
+    const result = evaluateAuditReport(raw, baseOptions);
+
+    expect(result.ok).toBe(false);
+    expect(result.exitCode).toBe(1);
+  });
+
+  it('fails closed when module_name is missing', () => {
+    const raw = reportRaw({ module_name: undefined });
+
+    const result = evaluateAuditReport(raw, baseOptions);
+
+    expect(result.ok).toBe(false);
+    expect(result.exitCode).toBe(1);
+    expect(result.details.join(' ')).toContain('module_name');
+  });
+
+  it('fails closed when github_advisory_id is present but not a string', () => {
+    const raw = reportRaw({ github_advisory_id: 42 });
+
+    const result = evaluateAuditReport(raw, baseOptions);
+
+    expect(result.ok).toBe(false);
+    expect(result.exitCode).toBe(1);
+    expect(result.details.join(' ')).toContain('github_advisory_id');
+  });
+});
