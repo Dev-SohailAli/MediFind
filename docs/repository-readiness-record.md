@@ -4,9 +4,11 @@
 
 This record captures the repository controls verified before the first **synthetic-only** Claude implementation task. It does not certify readiness for cloud-connected, identity, pharmacy-admin, prescription, real-data, beta or production work; those later gates remain governed by the [repository security and delivery controls](repository-security-and-delivery.md) and [documentation roadmap](documentation-roadmap.md).
 
-**Repository:** `SohailMoinAli/MediFind` (private)  
-**Verified:** 2026-08-16  
-**Operational owner:** founder-controlled `SohailMoinAli` account  
+**Repository:** `SohailMoinAli/MediFind` (private)
+
+**Verified:** 2026-08-16
+
+**Operational owner:** founder-controlled `SohailMoinAli` account
 **Current result:** conditionally ready to prepare the first synthetic-only task; its own pull request must implement and pass the required CI/security checks before merge.
 
 ## Verified GitHub state
