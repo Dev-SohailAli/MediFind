@@ -18,6 +18,7 @@
 | [Design-review acceptance checklist](design-review-acceptance-checklist.md) | Founder review gate and bounded handoff from approved design to a coding task |
 | [Initial Claude design-review brief](initial-claude-design-review-brief.md) | Required whole-MVP low-fidelity design proposal scope before UI code |
 | [Design proposal workspace](design-proposals/README.md) | Location and required structure for Claude Design review artefacts |
+| [Task 2 buyer-search design addendum](design-proposals/2026-08-16-task-2-synthetic-buyer-search.md) | Corrective, founder-approved visual-task addendum and process record for Task 2 |
 | [Implementation sequencing](implementation-sequencing.md) | Synthetic-data-first task order and later security/legal gates |
 | [Documentation roadmap](documentation-roadmap.md) | Remaining pre-code documentation deliverables and sequence |
 | [Design system and screens](design-system-and-screens.md) | Visual direction, onboarding, role navigation and screen inventory |
