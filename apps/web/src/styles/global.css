@@ -1,0 +1,550 @@
+/*
+ * Semantic design tokens as CSS custom properties. Values must stay
+ * byte-identical to src/theme/tokens.ts (checked by
+ * src/theme/__tests__/tokens.test.ts). Defaults to the browser/OS light or
+ * dark preference; there is no manual override because Account (where that
+ * override would live per docs/design-system-and-screens.md) is a
+ * non-functional placeholder in this task.
+ */
+:root {
+  --color-canvas: #f7fafc;
+  --color-surface: #ffffff;
+  --color-surface-muted: #eef6f8;
+  --color-text-primary: #102a33;
+  --color-text-secondary: #52616b;
+  --color-border: #d9e2ec;
+  --color-primary: #0f766e;
+  --color-primary-pressed: #115e59;
+  --color-info: #1d4ed8;
+  --color-success: #15803d;
+  --color-warning: #b45309;
+  --color-danger: #b91c1c;
+
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+  --space-xxl: 24px;
+  --space-xxxl: 32px;
+  --space-huge: 40px;
+  --radius-card: 12px;
+  --min-target: 48px;
+  --desktop-breakpoint: 768px;
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-canvas: #0b1416;
+    --color-surface: #132326;
+    --color-surface-muted: #1c3034;
+    --color-text-primary: #f0f7f7;
+    --color-text-secondary: #b8c7c9;
+    --color-border: #294247;
+    --color-primary: #2dd4bf;
+    --color-primary-pressed: #14b8a6;
+    --color-info: #60a5fa;
+    --color-success: #4ade80;
+    --color-warning: #fbbf24;
+    --color-danger: #f87171;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-text-primary);
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+.skip-link {
+  position: absolute;
+  top: -3rem;
+  left: var(--space-sm);
+  z-index: 20;
+  background: var(--color-surface);
+  color: var(--color-primary);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--space-sm);
+  border: 1px solid var(--color-border);
+}
+
+.skip-link:focus {
+  top: var(--space-sm);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-info);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+.app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.app-body {
+  flex: 1;
+  order: 1;
+  min-width: 0;
+}
+
+.build-label {
+  order: 2;
+  text-align: center;
+  padding: var(--space-xs) var(--space-sm);
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.top-banner {
+  order: 0;
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--color-surface-muted);
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.top-banner--warning {
+  border-bottom: 1px solid var(--color-warning);
+}
+
+.top-banner__dismiss {
+  margin-left: auto;
+  min-height: var(--min-target);
+  min-width: var(--min-target);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--space-xl);
+  cursor: pointer;
+}
+
+/* Nav: bottom tab bar on narrow viewports, reflows to a top bar on desktop
+   via CSS `order` only — the DOM/semantics never change between the two. */
+.nav {
+  order: 3;
+  display: flex;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.nav__tab {
+  flex: 1;
+  min-height: var(--min-target);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm);
+  background: transparent;
+  border: none;
+  border-top: 3px solid transparent;
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.nav__tab[aria-selected='true'] {
+  color: var(--color-primary);
+  border-top-color: var(--color-primary);
+}
+
+@media (min-width: 768px) {
+  /* The nav stays a fixed bottom bar at every viewport width — see the
+     commit history / PR notes for why: repositioning it to the top via CSS
+     `order` on desktop would desync visual order from DOM/focus order
+     (WCAG 1.3.2). Desktop gets a wider, multi-column content layout
+     instead (below); the nav itself is unchanged. */
+  .nav__tab {
+    flex: none;
+    min-width: 160px;
+  }
+
+  .nav {
+    justify-content: center;
+    gap: var(--space-sm);
+  }
+}
+
+.screen {
+  padding: var(--space-lg);
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .screen {
+    padding: var(--space-xxl) var(--space-lg);
+  }
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--space-xl);
+  padding: 0 var(--space-md);
+  background: var(--color-surface);
+  min-height: var(--min-target);
+}
+
+.search-bar__input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  min-height: var(--min-target);
+  outline: none;
+}
+
+/* The custom, accessibly-labelled clear button in SearchBar.tsx replaces
+   the browser's own unlabelled native search-input clear affordance. */
+.search-bar__input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.search-bar__clear {
+  min-width: var(--min-target);
+  min-height: var(--min-target);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+}
+
+.controls-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+@media (min-width: 768px) {
+  .controls-row {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.selector__option {
+  border: 1px solid var(--color-border);
+  border-radius: var(--space-xl);
+  padding: var(--space-sm) var(--space-md);
+  min-height: var(--min-target);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.selector__option[aria-checked='true'] {
+  border-color: var(--color-primary);
+  background: var(--color-surface-muted);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.results-block {
+  margin-top: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.results-count {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .results-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.result-card {
+  text-align: left;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-lg);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  min-height: var(--min-target);
+}
+
+.result-card__match-kind {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: var(--color-info);
+}
+
+.result-card__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.result-card__supporting {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.result-card__status-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+}
+
+.result-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-xs);
+}
+
+.result-card__price {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--space-xxl);
+  background: var(--color-surface-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.status-badge__glyph {
+  font-size: 0.875rem;
+}
+
+.load-more-button {
+  border: 1px solid var(--color-primary);
+  border-radius: var(--space-xl);
+  padding: var(--space-md);
+  min-height: var(--min-target);
+  background: transparent;
+  color: var(--color-primary);
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.state-block {
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.state-block__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.state-block__body {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.placeholder {
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xxl);
+  gap: var(--space-sm);
+  text-align: center;
+}
+
+.placeholder__title {
+  font-size: 1.375rem;
+  font-weight: 600;
+}
+
+.placeholder__body {
+  font-size: 1rem;
+  max-width: 32rem;
+}
+
+.detail-sheet__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / 40%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 10;
+}
+
+@media (min-width: 768px) {
+  .detail-sheet__overlay {
+    align-items: center;
+  }
+}
+
+.detail-sheet {
+  background: var(--color-canvas);
+  color: var(--color-text-primary);
+  width: 100%;
+  max-width: 560px;
+  max-height: 90dvh;
+  overflow-y: auto;
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  padding: var(--space-lg);
+}
+
+@media (min-width: 768px) {
+  .detail-sheet {
+    border-radius: var(--radius-card);
+  }
+}
+
+.detail-sheet__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+}
+
+.detail-sheet__title {
+  font-size: 1.375rem;
+  font-weight: 600;
+}
+
+.detail-sheet__close {
+  min-width: var(--min-target);
+  min-height: var(--min-target);
+  background: transparent;
+  border: none;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-size: 1.25rem;
+}
+
+.detail-sheet__match-kind {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: var(--color-info);
+}
+
+.detail-sheet__medicine-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-top: var(--space-xs);
+}
+
+.detail-sheet__supporting {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.detail-sheet__pharmacy-line {
+  font-size: 1rem;
+  margin-top: var(--space-md);
+}
+
+.detail-sheet__status-row {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.detail-sheet__price {
+  font-size: 1.375rem;
+  font-weight: 600;
+  margin-top: var(--space-md);
+}
+
+.safety-block {
+  margin-top: var(--space-xl);
+  padding: var(--space-md);
+  border-radius: var(--radius-card);
+  background: var(--color-surface-muted);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.safety-block__text {
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+}

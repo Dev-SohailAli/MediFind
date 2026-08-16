@@ -9,7 +9,7 @@ describe('task-1 workspace boundary', () => {
     const appDirs = readdirSync(`${repoRoot}/apps`).sort();
     const packageDirs = readdirSync(`${repoRoot}/packages`).sort();
 
-    expect(appDirs).toEqual(['api', 'mobile']);
+    expect(appDirs).toEqual(['api', 'mobile', 'web']);
     expect(packageDirs).toEqual(['config', 'contracts']);
   });
 
