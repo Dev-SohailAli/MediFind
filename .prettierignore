@@ -1,0 +1,13 @@
+node_modules
+dist
+.expo
+coverage
+pnpm-lock.yaml
+CLAUDE.md
+CLAUDE-DESIGN.md
+docs
+.github/dependabot.yml
+.github/ISSUE_TEMPLATE
+.github/pull_request_template.md
+.claude
+README.md
