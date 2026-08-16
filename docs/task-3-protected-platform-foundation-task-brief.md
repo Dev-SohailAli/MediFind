@@ -5,7 +5,7 @@
 - **Title:** Task 3: synthetic protected-platform foundation
 - **Goal:** Implement the smallest synthetic-environment platform boundary that proves the approved API trust chain, server-derived authorization context, safe errors, rate-limit/audit seams, isolated delivery and recoverable infrastructure.
 - **Tracking issue:** [#10](https://github.com/Dev-SohailAli/MediFind/issues/10)
-- **Approval state:** Draft handoff. This brief is not executable until the founder/documentation owner approves the accompanying [Task 3 specification](task-3-protected-platform-foundation-specification.md), repository-control path and founder inputs.
+- **Approval state:** Founder-approved Claude handoff (2026-08-16). This brief authorizes preparation of a separate synthetic-environment implementation PR; it does not authorize production resources, credentials or deployment.
 
 ## Sources of authority
 
