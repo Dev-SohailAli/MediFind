@@ -39,6 +39,7 @@ prohibitions only and never authorize new work.
 | [Task 2 web/PWA Claude implementation brief](task-2-web-pwa-buyer-search-task-brief.md) | Current executable synthetic web/PWA buyer-search scope |
 | [Task 3 protected-platform foundation specification](task-3-protected-platform-foundation-specification.md) | Synthetic cloud, identity, API, CI, cost and repository-control boundary; implementation remains input-gated |
 | [Task 3 Claude implementation brief](task-3-protected-platform-foundation-task-brief.md) | Founder-approved synthetic-environment platform handoff; no production authority |
+| [Task 4 synthetic D1 data-contract proposal](task-4-synthetic-d1-data-contract-proposal.md) | Proposed exact synthetic search schema, fixtures, field privacy, authorization owner, export and migration shape; not yet implementation authority |
 | [API mutation and concurrency](api-mutation-and-concurrency-policy.md) | Explicit commands, idempotency and version-conflict rules |
 | [API error contract](api-error-contract.md) | Safe machine codes, local translation keys, correlation IDs and anti-enumeration rules |
 | [V1 API endpoint inventory](v1-api-endpoint-inventory.md) | Approved REST route/action map for task-level schema design |
