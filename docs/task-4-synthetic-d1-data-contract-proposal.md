@@ -2,7 +2,7 @@
 
 ## Status and decision boundary
 
-**Status:** Proposed; not yet accepted for implementation.
+**Status:** Accepted on 2026-08-17 for the bounded synthetic Task 4 brief.
 
 This document proposes the smallest useful D1 slice after the Worker
 foundation: server-owned synthetic search data for `GET /v1/search` and
@@ -412,7 +412,7 @@ confirm all of the following:
 - No account, contact, reservation, prescription, real-data or production
   capability is accidentally authorized.
 
-After this document and its proposed ADR row are accepted, create a separate
-Task 4 implementation brief naming exact Worker files, route schemas, binding
+The contract is now accepted through ADR-275. Create a separate Task 4
+implementation brief naming exact Worker files, route schemas, binding
 approval, browser acceptance, cost evidence and verification commands. Only
 that approved brief may authorize the D1 vertical-slice PR.
