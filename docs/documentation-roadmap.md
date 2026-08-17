@@ -15,7 +15,7 @@
 | Cloudflare architecture | [Cloudflare web architecture](cloudflare-web-architecture.md) and [architecture decision](architecture.md) are the active sources of truth |
 | Web task brief | The brief names exact Worker files/routes, synthetic data boundary, tests and Cloudflare bindings; it contains no native/Firebase/GCP language |
 | Cost plan | Free limits, alerting, failure behaviour and founder-controlled account ownership are recorded |
-| Data contract | D1 schema, export/migration shape, privacy classification and authorization owner are approved before persistence code |
+| Data contract | [Task 4 synthetic D1 data contract](task-4-synthetic-d1-data-contract-proposal.md) is accepted; the separate Task 4 implementation brief remains required before persistence code |
 | Browser acceptance | Responsive, keyboard, screen-reader, offline, install and reduced-capability checks are recorded for the changed web flow |
 | Repository controls | Main remains PR-only, checks are required, and no secret/deployment authority is committed |
 
