@@ -1,10 +1,14 @@
 /*
  * Semantic design tokens as CSS custom properties. Colour/spacing values
  * must stay byte-identical to src/theme/tokens.ts (checked by
- * src/theme/__tests__/tokens.test.ts). Defaults to the browser/OS light or
- * dark preference; there is no manual override because Account (where that
- * override would live per docs/design-system-and-screens.md) is a
- * non-functional placeholder in this task.
+ * src/theme/__tests__/tokens.test.ts). Always defaults to the light organic
+ * palette, regardless of OS/browser colour-scheme preference. The dark
+ * palette stays fully defined below but is reachable only through an
+ * explicit `[data-theme="dark"]` attribute on `<html>`; nothing sets that
+ * attribute yet because Account (where that manual override would live per
+ * docs/design-system-and-screens.md) is a non-functional placeholder in
+ * this task. A future task can wire a real toggle without touching these
+ * token values.
  *
  * Palette: founder-approved organic visual system, ADR-271 /
  * docs/design-proposals/2026-08-17-organic-visual-system.md. The neutral,
@@ -66,36 +70,36 @@
   --min-target: 48px;
   --desktop-breakpoint: 768px;
 
-  color-scheme: light dark;
+  color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-canvas: #2e2b25;
-    --color-surface: #474238;
-    --color-surface-muted: #645c50;
-    --color-text-primary: #f9f4ed;
-    --color-text-secondary: #c0b6a5;
-    --color-border: color-mix(in srgb, #f9f4ed 16%, transparent);
-    --color-primary: #f6a06b;
-    --color-on-primary: #2e2b25;
-    --color-primary-pressed: #ffc6a5;
-    --color-on-primary-pressed: #2e2b25;
-    --color-secondary: #aebf92;
-    --color-on-secondary: #ccdbb2;
-    --color-info-bg: #645c50;
-    --color-info-text: #f9f4ed;
-    --color-success-bg: #272e1b;
-    --color-success-text: #f0fae1;
-    --color-warning-bg: #8c491a;
-    --color-warning-text: #fff2eb;
-    --color-danger-bg: #643312;
-    --color-danger-text: #ffe1d0;
+:root[data-theme='dark'] {
+  --color-canvas: #2e2b25;
+  --color-surface: #474238;
+  --color-surface-muted: #645c50;
+  --color-text-primary: #f9f4ed;
+  --color-text-secondary: #c0b6a5;
+  --color-border: color-mix(in srgb, #f9f4ed 16%, transparent);
+  --color-primary: #f6a06b;
+  --color-on-primary: #2e2b25;
+  --color-primary-pressed: #ffc6a5;
+  --color-on-primary-pressed: #2e2b25;
+  --color-secondary: #aebf92;
+  --color-on-secondary: #ccdbb2;
+  --color-info-bg: #645c50;
+  --color-info-text: #f9f4ed;
+  --color-success-bg: #272e1b;
+  --color-success-text: #f0fae1;
+  --color-warning-bg: #8c491a;
+  --color-warning-text: #fff2eb;
+  --color-danger-bg: #643312;
+  --color-danger-text: #ffe1d0;
 
-    --shadow-sm: 0 1px 3px color-mix(in srgb, #000000 30%, transparent);
-    --shadow-md: 0 4px 12px color-mix(in srgb, #000000 36%, transparent);
-    --shadow-lg: 0 16px 32px color-mix(in srgb, #000000 44%, transparent);
-  }
+  --shadow-sm: 0 1px 3px color-mix(in srgb, #000000 30%, transparent);
+  --shadow-md: 0 4px 12px color-mix(in srgb, #000000 36%, transparent);
+  --shadow-lg: 0 16px 32px color-mix(in srgb, #000000 44%, transparent);
+
+  color-scheme: dark;
 }
 
 * {
