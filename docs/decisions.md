@@ -131,11 +131,11 @@ retained as an auditable history and must not be used to start new work.
 | ADR-120 | 2026-08-15 | Claude Code implements only approved task briefs on feature branches and opens PRs; it never directly changes main, deploys or publishes without explicit approval. | Accepted |
 | ADR-121 | 2026-08-15 | Accepted product, security and architecture documentation is immutable to Claude; conflicts become decision-change requests owned by the documentation agent. | Accepted |
 | ADR-122 | 2026-08-15 | Every Claude task uses a written brief with scope, linked decisions, contracts, acceptance tests and security/privacy constraints. | Accepted |
-| ADR-123 | 2026-08-15 | MediFind uses a clean, clinical, high-readability visual direction with calm blue/teal accents and no pharmacy-sale aesthetic. | Accepted |
+| ADR-123 | 2026-08-15 | MediFind uses a clean, clinical, high-readability visual direction with calm blue/teal accents and no pharmacy-sale aesthetic. | Superseded by ADR-271 |
 | ADR-124 | 2026-08-15 | Buyers receive skippable onboarding covering search, pharmacy-managed data, prescription privacy and reservation limits before registration. | Accepted |
 | ADR-125 | 2026-08-15 | Navigation is role-specific: buyer Search/Requests/Account; pharmacy roles use authorised Dashboard/Inventory/Requests/Account; admins use Verification/Reports/Account. | Accepted |
 | ADR-126 | 2026-08-15 | The MVP is list-first; Directions opens the buyer's installed maps app and embedded maps are deferred for cost control. | Accepted |
-| ADR-127 | 2026-08-15 | Support light/dark themes, defaulting to device preference with manual Account override. | Accepted |
+| ADR-127 | 2026-08-15 | Support light/dark themes, defaulting to device preference with manual Account override. | Superseded by ADR-273 |
 | ADR-128 | 2026-08-15 | Use accessible system icons and defer custom logos/illustrations until demand is validated. | Accepted |
 | ADR-129 | 2026-08-15 | The mobile app uses a versioned REST/JSON API rather than GraphQL for MVP operational data. | Superseded by ADR-272 |
 | ADR-130 | 2026-08-15 | The TypeScript backend API is the only operational data boundary; Firestore access is server-controlled and client roles are never trusted. | Superseded by ADR-272 |
@@ -281,6 +281,7 @@ retained as an auditable history and must not be used to start new work.
 | ADR-270 | 2026-08-16 | Record Supabase Free, Firebase Spark and Cloudflare data products as bounded synthetic-only candidates for future evaluation. Do not replace the approved protected Firebase/GCP/API Gateway/IAM boundary or place protected/health data on a free-tier service without a separate region, privacy, security, backup, recovery, cost and migration decision. | Superseded by ADR-272 |
 | ADR-271 | 2026-08-17 | Accept the founder-approved organic visual system for the responsive web/PWA: warm background/surface tokens, terracotta and sage accents, neutral/accent tonal ramps, Caprasimo headings, Figtree body/UI text, 4.4px-based spacing, 8/16/28px radius tiers, soft ink-tinted elevation and Lucide icons at 2.75px stroke. It supersedes the prior teal/blue and system-font baseline. This authorises documentation and a later bounded UI-token implementation PR only; it does not add runtime font requests, external services, production capability or change safety/accessibility requirements. | Accepted |
 | ADR-272 | 2026-08-17 | Make MediFind web-only and Cloudflare-first. The active product is the responsive `apps/web` PWA hosted on Cloudflare Pages, with a future server-only Cloudflare Worker and D1/R2/KV evaluated behind explicit tasks. Archive the former native prototype outside the workspace. Supersede the Firebase/GCP/API Gateway/Cloud Run/Firestore/native-push/store direction. No native app, cloud account, real data, protected binding or production release is authorised by this decision. | Accepted |
+| ADR-273 | 2026-08-17 | The responsive web/PWA defaults to the light organic palette regardless of OS/browser dark-mode preference. Dark tokens remain defined only behind an explicit future `data-theme="dark"` selector; no automatic dark-mode switch or current theme-toggle UI is authorised. | Accepted |
 
 ## Entry template
 

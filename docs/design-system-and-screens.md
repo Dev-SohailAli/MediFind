@@ -2,7 +2,7 @@
 
 ## Visual direction
 
-MediFind uses a warm, organic and calm visual style: readable warm surfaces, restrained terracotta and sage accents, clear status labels and no discount/sale aesthetic. The design must feel trustworthy and practical rather than diagnostic, promotional or overly playful. Support responsive browser layouts, light and dark themes, defaulting to the browser/OS setting with a manual Account override. Use the accepted semantic tokens in the [Claude Design agent brief](claude-design-agent-brief.md), not hard-coded colours, so contrast and theme changes remain safe.
+MediFind uses a warm, organic and calm visual style: readable warm surfaces, restrained terracotta and sage accents, clear status labels and no discount/sale aesthetic. The design must feel trustworthy and practical rather than diagnostic, promotional or overly playful. The responsive web/PWA defaults to the light organic palette regardless of browser/OS preference. Dark tokens remain available only for a future explicit manual theme selector; there is no current theme-toggle UI. Use the accepted semantic tokens in the [Claude Design agent brief](claude-design-agent-brief.md), not hard-coded colours, so contrast and theme changes remain safe. See ADR-271 and ADR-273.
 
 ## Design principles
 
