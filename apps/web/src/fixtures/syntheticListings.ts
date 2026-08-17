@@ -2,8 +2,7 @@ import type { SyntheticSearchListing } from '@medifind/contracts';
 
 /**
  * SYNTHETIC_ONLY: every medicine, brand, active-ingredient, pharmacy and
- * pack value below is an invented fictional demonstrator ported from the
- * historical Task 2 mobile prototype. None of these names describe a real
+ * pack value below is an invented fictional demonstrator. None of these names describe a real
  * product, business or clinical fact, and none may be replaced by a real
  * value without a separate approved task. See
  * docs/task-2-synthetic-buyer-search-specification.md.

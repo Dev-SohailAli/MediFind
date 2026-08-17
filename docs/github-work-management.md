@@ -29,7 +29,37 @@ Use the repository issue templates. Every implementation task names its scope, n
 
 Labels classify area (`area:*`), type (`type:*`), work state (`status:*`) and hard gates (`data:synthetic-only`, `gate:cloud`, `gate:prescription`). Milestones show planned maturity stages only; they do not authorize work.
 
-The initial milestones are Documentation Readiness, Synthetic Foundation, Buyer Search Prototype, Protected Platform, Pharmacy Operations and Pilot Readiness.
+The active milestones are Documentation Reset, Synthetic Web Preview, Cloudflare Worker Foundation, D1 Data Slice, Pharmacy Operations and Pilot Readiness. Native/mobile and Firebase/GCP milestones are closed and must not receive new work.
+
+## Web-only GitHub synchronization queue
+
+The repository reset is complete locally, but GitHub record mutations require a
+write-enabled account. At the last external audit, these records still needed
+synchronization:
+
+- [Issue #3](https://github.com/Dev-SohailAli/MediFind/issues/3) is an obsolete
+  Expo/Metro audit exception and should be closed as not planned; the current
+  dependency audit is clean.
+- [Issue #19](https://github.com/Dev-SohailAli/MediFind/issues/19) remains the
+  useful synthetic Cloudflare Pages preview task, but its body should use the
+  current `apps/web/dist` path and web-only terminology.
+- [PR #21](https://github.com/Dev-SohailAli/MediFind/pull/21) is browser-only
+  work, but its description still mentions the archived mobile workspace and
+  pre-reset test counts; replace that historical wording before review or close
+  the stale PR if its branch is no longer needed.
+- Create a new issue for the synthetic Cloudflare Worker foundation using
+  [the current Task 3 brief](task-3-protected-platform-foundation-task-brief.md).
+
+Do not mark this queue complete from local documentation alone. Re-read each
+GitHub record after mutation and verify that no open issue or PR names native
+apps, Firebase/GCP, Cloud Run, API Gateway, Firestore, native push or store
+distribution as active work.
+
+The current connector audit is split: repository metadata reports full access
+for the connected account (`admin`, `maintain`, `push` and `triage`), while the
+connector's issue and pull-request mutation endpoints still return GitHub API
+`403 Resource not accessible by integration`. Treat the queue as incomplete
+until a write succeeds and the resulting GitHub records are re-read.
 
 ## Claude Code operating rule
 

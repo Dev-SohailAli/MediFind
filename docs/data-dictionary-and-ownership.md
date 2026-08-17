@@ -2,7 +2,7 @@
 
 ## Rules of interpretation
 
-This is the implementation-grade logical model for MediFind’s first API/data specification. Collection names are internal implementation names, not mobile-client capabilities. The TypeScript API is the only operational reader/writer; Firebase client SDKs receive no broad access to these records. Every record has opaque immutable ID, `createdAt`, `updatedAt`, schema version and safe audit/correlation reference where applicable. Timestamps are UTC; user-facing display/business rules use `Pacific/Fiji`.
+This is the implementation-grade logical model for MediFind’s future Worker/data tasks. Record names are internal implementation names, not browser capabilities. The server-only Cloudflare Worker is the only operational reader/writer; the browser receives no broad D1/R2/KV access. Every record has an opaque immutable ID, `createdAt`, `updatedAt`, schema version and safe audit/correlation reference where applicable. Timestamps are UTC; user-facing display/business rules use `Pacific/Fiji`.
 
 `Public` means eligible for anonymous-style search response after account authentication in v1; it never means writeable by a client or visible without buyer sign-in. `Protected` means only the authenticated owner/role/branch relationship can access it. `Restricted` means privileged, minimal-use access only. Prescription content is never included in a general record response.
 

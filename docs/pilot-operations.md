@@ -41,7 +41,7 @@ The public status page is an informational static page, not a support inbox. Buy
 
 ## Service-account ownership
 
-Maintain a founder-controlled register of every critical vendor account (Apple, Google Play, cloud, domain/DNS, email, notifications, source control and monitoring), its purpose, billing owner, MFA/recovery method, authorised users and renewal date. Review it monthly during the pilot and immediately after any contributor departure.
+Maintain a founder-controlled register of every critical vendor account (Cloudflare, domain/DNS, source control, monitoring and any separately approved identity/notification provider), its purpose, billing owner, MFA/recovery method, authorised users and renewal date. Review it monthly during the pilot and immediately after any contributor departure.
 
 ## Support and escalation
 
@@ -57,7 +57,7 @@ MediFind may block, quarantine or escalate technically unsafe/suspicious uploads
 
 ## Analytics
 
-Collect the minimum aggregated operational data needed for: searches and zero-result rate; listing freshness; search-to-detail and request conversion; pharmacy verification duration; prescription and reservation response times; approval/decline/expiry/cancellation rates and reasons; collection/no-longer-needed confirmations; notification delivery; support categories; private pilot feedback; and accessibility/language feedback. Produce counters server-side from approved operational/audit events and use app-store aggregate operational statistics; do not add a mobile analytics/session-replay SDK in MVP. Do not put prescription content, medicine free text entered for clinical context, raw contact details, medicine-search history or direct identifiers in analytics. Advertising, behavioural profiling and data-broker tracking are prohibited.
+Collect the minimum aggregated operational data needed for: searches and zero-result rate; listing freshness; search-to-detail and request conversion; pharmacy verification duration; prescription and reservation response times; approval/decline/expiry/cancellation rates and reasons; collection/no-longer-needed confirmations; notification delivery; support categories; private pilot feedback; and accessibility/language feedback. Produce counters server-side from approved operational/audit events and use browser/server operational statistics; do not add an analytics or session-replay SDK in MVP. Do not put prescription content, medicine free text entered for clinical context, raw contact details, medicine-search history or direct identifiers in analytics. Advertising, behavioural profiling and data-broker tracking are prohibited.
 
 ## Key risks and controls
 

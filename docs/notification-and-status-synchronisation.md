@@ -1,27 +1,20 @@
-# Notification and status synchronisation policy
+# Web notification and status synchronisation
 
-## Source of truth
+## Decision
 
-The MediFind API is the sole authority for current prescription, reservation, verification, listing and staff state. Push notifications are a generic prompt to authenticate and fetch the current authorised record; they never carry state authority, medicine, prescription, price, reservation or private details.
+The web application is authoritative through authenticated Worker reads. A
+browser notification, if added later, is a generic signal to reopen or refresh
+state. It must not contain prescription content, health data, medicine-search
+text, reservation details or access tokens.
 
-## MVP update model
+The current synthetic preview has no notification provider, account, polling,
+realtime channel or persistent notification subscription.
 
-- Use standards-based Web Push where supported as the primary generic signal for buyer and authorised pharmacy-staff updates. Native FCM/APNs remains a future-shell option only.
-- Use the authenticated web inbox/status as the non-push fallback. MVP does not send pharmacy workflow notifications through a transactional-email provider; future email requires separate need, processor, sender-domain and cost approval.
-- A notification deep-links only to an authenticated web destination. On open, the browser client verifies current session/role/session conditions and re-fetches the current server record before display.
-- Requests/reservations and other status pages refresh on initial open, PWA/browser resume, explicit refresh and a successful action completion. The UI displays the actual last-refresh/state time and handles safe loading/error/offline states.
-- Declining notification permission does not block the workflow; the authenticated web status view remains the source of truth.
-- Do not run continuous foreground/background polling, WebSockets, Firestore listeners, Realtime Database subscriptions or other persistent realtime channels in MVP.
-- Do not retry a failed state mutation automatically in the background. The API idempotency/concurrency policy governs a user-initiated retry after the app refreshes current state.
+## Future rules
 
-## Registration and delivery controls
-
-- Associate a push-subscription reference with the authenticated user/session and permitted role context; update/revoke it on sign-out, session revocation, recovery and permission change.
-- Send only generic operational/security notifications. Delivery/retry metrics use pseudonymous references and contain no sensitive payload.
-- Notification failure is observable and never causes an email containing sensitive data. The web app continues to surface the current state on the next authorised access.
-
-## Test requirements
-
-- Test notification receipt, browser permission denial, expired/revoked session, stale deep link, role/branch change, PWA/offline open, subscription revocation and safe re-fetch in iPhone Safari, Android Chrome and desktop browsers.
-- Prove notification payloads, delivery logs and analytics contain no prohibited medical, prescription, price, reservation, raw contact or credential data.
-- Prove a delayed/duplicated notification cannot display/commit a stale state and never bypasses current server authorization.
+- Ask for notification permission only after a user enables an approved
+  workflow and provide an in-app status fallback.
+- Re-fetch and authorize current state when a notification is opened, on app
+  resume and after a mutation.
+- Treat duplicate, stale, delayed and revoked subscriptions safely.
+- Keep provider code behind a Worker adapter; do not add native push SDKs.

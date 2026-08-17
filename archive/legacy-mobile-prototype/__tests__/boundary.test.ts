@@ -108,7 +108,7 @@ describe('mobile Task 2 prototype boundary', () => {
     };
     const allDeps = { ...pkg.dependencies, ...pkg.devDependencies };
 
-    expect(Object.keys(allDeps)).not.toContain('@medifind/api');
+    expect(Object.keys(allDeps)).not.toContain('@medifind/worker');
   });
 
   it('keeps the test-only renderer as a devDependency, never a runtime dependency', () => {

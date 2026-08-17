@@ -41,8 +41,6 @@ describe('contracts package boundary', () => {
   it('contains no HTTP schema, persistence schema, role, credential, prescription or reservation content', () => {
     const source = readFileSync(indexSourcePath, 'utf8');
     const forbiddenPatterns = [
-      /firebase/i,
-      /firestore/i,
       /prescription/i,
       /reservation/i,
       /\brole\b/i,

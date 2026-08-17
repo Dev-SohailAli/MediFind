@@ -6,8 +6,8 @@
  * deferred. Medicine/pharmacy identity is fixture data, never a
  * translation key.
  *
- * Ported from apps/mobile/src/content/strings.ts (historical Task 2
- * prototype) and extended only with the web/PWA-specific keys named in
+ * Shared with the former local prototype and extended only with the
+ * web/PWA-specific keys named in
  * docs/task-2-web-pwa-buyer-search-task-brief.md: install guidance, an
  * offline banner and a skip link.
  */

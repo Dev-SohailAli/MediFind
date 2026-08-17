@@ -15,7 +15,7 @@ function isIosSafari(): boolean {
 }
 
 /**
- * Just-in-time installability guidance, per docs/mobile-permissions-policy.md
+ * Just-in-time installability guidance, per docs/web-platform-capabilities-policy.md
  * ("PWA installation/offline shell ... Installation is optional"). Never
  * blocks app use; dismissing it only hides the banner for this session (no
  * browser storage is used to remember the choice).

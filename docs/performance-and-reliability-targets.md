@@ -18,6 +18,6 @@ These are measurable engineering targets for the invite-only Suva pilot, not gua
 ## Measurement and release rules
 
 - Define representative synthetic load, device/network test scenarios, measurement method, baseline and acceptance evidence in each relevant Claude task brief.
-- Monitor aggregate latency, timeout/error rate, page size, index/propagation lag and Cloud Run cold-start behaviour without logging raw query text or protected content.
+- Monitor aggregate latency, timeout/error rate, page size, index/propagation lag and Worker cold-start/CPU behaviour without logging raw query text or protected content.
 - Investigate a sustained target miss or a regression versus the accepted baseline before expanding a beta cohort. Use feature flags, capacity/index adjustment or safe degraded UX; document a material architecture/cost change.
 - Search remains non-sensitive and can show timestamped public cached results when offline. Prescription, reservation, staff/admin and other sensitive actions never degrade into stale/offline mutation.

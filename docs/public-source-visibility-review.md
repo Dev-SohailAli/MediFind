@@ -11,7 +11,7 @@ GitHub reports that enforced branch protection for this private repository requi
 ## Scope reviewed
 
 - Current tracked source, documentation, workflows and full reachable Git history.
-- Synthetic mobile fixtures and test fixtures.
+- Synthetic web/PWA fixtures and test fixtures.
 - Pull-request/issue workflow and the current Task 2/Task 3 planning records.
 - GitHub Actions workflow permissions, action pinning and security-scan configuration.
 
@@ -21,18 +21,18 @@ GitHub reports that enforced branch protection for this private repository requi
 - Current tracked-source credential-pattern review: no private key, GitHub token, provider key, email address or phone number was found. Matches were documentation/test words such as `password`, `secret` and `api key`, not secret values.
 - Task 2 boundary tests and the merged PR evidence prohibit real or realistic buyer, pharmacy, medicine, prescription, contact, coordinate, credential and network data.
 - The repository’s CI workflow uses read-only contents/pull-request permissions and full-commit-SHA-pinned third-party actions. Hosted Quality CI passed for the merged Task 2 PR.
-- No Firebase/GCP project, deployment environment, cloud credential, signing credential or production export is present in the repository.
+- No Cloudflare account token, Worker secret, deployment environment credential or production export is present in the repository.
 
 ## Public exposure that remains
 
 Making the repository public would expose the complete Git history, documentation, architecture/security policies, synthetic fixtures, workflows, issues, pull requests and contributor/account attribution. The documents include operational design and security-boundary detail; they do not contain credentials, real data or production configuration according to the evidence above.
 
-The founder must also review issue and pull-request conversations separately because GitHub discussions are not covered by a source-tree secret scan. Do not place credentials, device tokens, EAS tokens, Apple signing material, cloud identifiers that are intended to be secret, or private support/legal correspondence in those records.
+The founder must also review issue and pull-request conversations separately because GitHub discussions are not covered by a source-tree secret scan. Do not place credentials, Cloudflare tokens, Worker secrets, database exports, or private support/legal correspondence in those records.
 
 ## Required actions before visibility change
 
 1. Confirm the founder accepts public exposure of the complete Git history, documentation, issues and pull requests.
-2. Set the GitHub default branch to `main`; it is currently `agent/free-first-documentation-baseline`.
+2. Confirm the GitHub default branch and active pull-request source branch before changing visibility; this review intentionally does not hard-code a temporary task branch.
 3. Confirm the Task 3 documentation PR is reviewed and no private operational material was added after this scan.
 4. Keep all credentials and signing material in founder-controlled keychains/provider secret managers; never commit them before or after visibility change.
 5. After public visibility is enabled, verify pull-request workflow, required hosted checks, Dependabot and security-scan alerting again. Public visibility is not a substitute for least-privilege Actions, environment approvals or independent security review.

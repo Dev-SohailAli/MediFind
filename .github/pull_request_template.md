@@ -13,7 +13,8 @@ Closes #
 
 - [ ] This pull request stays within the linked issue's approved scope and non-goals.
 - [ ] No secret, real person/pharmacy/medicine/prescription data, production configuration or unapproved external service was added.
-- [ ] Cloud, sensitive-data and release authority are unchanged unless the linked issue explicitly authorizes them.
+- [ ] Cloudflare, sensitive-data and release authority are unchanged unless the linked issue explicitly authorizes them.
+- [ ] No native app, store, Firebase/GCP or other superseded platform work was added.
 
 ## Verification evidence
 
