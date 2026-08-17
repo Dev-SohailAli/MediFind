@@ -1,5 +1,5 @@
 {
-  "name": "@medifind/api",
+  "name": "@medifind/worker",
   "version": "0.0.0",
   "private": true,
   "license": "UNLICENSED",

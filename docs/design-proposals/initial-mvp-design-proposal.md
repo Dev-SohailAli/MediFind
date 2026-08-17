@@ -3,7 +3,7 @@
 **Source brief:** [Claude Design agent brief](../claude-design-agent-brief.md) v2026-08-16, applied with the [design system and screen specification](../design-system-and-screens.md), [initial Claude design-review brief](../initial-claude-design-review-brief.md) and accepted ADRs in [the decision log](../decisions.md).
 **Prepared by:** Claude Design agent
 **Status:** approved for bounded implementation (see [§9 Founder decision record](#9-founder-decision-record)); this approval does not authorise code until the remaining documentation readiness gates are complete
-**Reviewed documentation:** `docs/claude-design-agent-brief.md`, `docs/design-system-and-screens.md`, `docs/initial-claude-design-review-brief.md`, `docs/requirements.md`, `docs/experience-and-content.md`, `docs/data-and-search.md`, `docs/accessibility-policy.md`, `docs/mobile-permissions-policy.md`, `docs/dynamic-pharmacy-content-policy.md`, `docs/notification-and-status-synchronisation.md`, `docs/security-privacy-compliance.md`, `docs/security-architecture-threat-model.md`, `docs/decisions.md`, `docs/design-review-acceptance-checklist.md`, `docs/pharmacy-verification-policy.md`, `docs/pilot-pharmacy-agreement.md`, `docs/pharmacy-onboarding-and-training.md`, `docs/audit-log-policy.md`, `docs/web-app-and-pwa-direction.md`.
+**Reviewed documentation:** `docs/claude-design-agent-brief.md`, `docs/design-system-and-screens.md`, `docs/initial-claude-design-review-brief.md`, `docs/requirements.md`, `docs/experience-and-content.md`, `docs/data-and-search.md`, `docs/accessibility-policy.md`, `docs/web-platform-capabilities-policy.md`, `docs/dynamic-pharmacy-content-policy.md`, `docs/notification-and-status-synchronisation.md`, `docs/security-privacy-compliance.md`, `docs/security-architecture-threat-model.md`, `docs/decisions.md`, `docs/design-review-acceptance-checklist.md`, `docs/pharmacy-verification-policy.md`, `docs/pilot-pharmacy-agreement.md`, `docs/pharmacy-onboarding-and-training.md`, `docs/audit-log-policy.md`, `docs/web-app-and-pwa-direction.md`.
 
 **Revision note (final approved pass):** removed the agreement-version re-acceptance hard block (initial acceptance before go-live only; later agreement-version handling deferred to a future documented decision), removed the audit-view `Export` action (authorised scoped in-app viewing only), and replaced the admin `Contact pharmacy` action with a safe in-app support-case/deferred-follow-up record that introduces no messaging, email or external provider. No product policy, service or infrastructure changed.
 
@@ -36,7 +36,7 @@ The following are out of scope for this proposal and for the MVP, and nothing in
 - Medicine favourites, saved searches or medicine-search history (ADR-051).
 - Reusable dependent/patient profiles; patient identity is captured per request only (ADR-138).
 - Barcode scanning, automated medicine-data imports or external/government catalog integrations (ADR-199).
-- Custom logo, illustration library, custom font or paid visual asset (ADR-128).
+- Custom logo, illustration library or paid visual asset (ADR-128); the separately accepted Caprasimo/Figtree typography system is the visual-system exception.
 - WhatsApp support channel or transactional-email workflow notifications (ADR-151, ADR-245).
 - Diagnostic language, clinical recommendations, dispensing/stock/price guarantees before approval.
 - Any new permission, data field, processor, external service or cost beyond what the read documentation already approves.
@@ -55,7 +55,7 @@ MediFind is used in a real pharmacy-search moment, often on a variable connectio
 2. **Freshness and pharmacy ownership.** Because price/availability are pharmacy-managed and can be stale, freshness and "listed by the pharmacy" language sit next to the data itself, not buried in a details screen.
 3. **Legibility under real conditions.** High-contrast text, large touch targets, list-first low-data screens, and layouts that survive 200% text scaling and iTaukei/Fiji Hindi text expansion.
 4. **Plain-language trust.** No clinical or promissory language; every safety boundary (no guarantee, pharmacy decides, may be outdated) is stated in the same structured, translated vocabulary everywhere it appears.
-5. **Polished restraint.** Calm clinical-teal system, system icons only, no gradients/neon/discount styling, one obvious primary action per screen.
+5. **Polished restraint.** Warm organic terracotta/sage system, Lucide icons, no gradients/neon/discount styling, one obvious primary action per screen.
 
 This ordering directly follows the priority list in the [Claude Design agent brief](../claude-design-agent-brief.md#design-outcome).
 
@@ -92,7 +92,7 @@ The proposal uses the semantic tokens from the design-agent brief exactly as def
 | Maintenance / kill-switch banner | `warning` full-width persistent banner | Not an error the user caused; explains what is temporarily unavailable |
 | Freshness/supporting metadata text | `supporting` type token, `textSecondary` | Never the only signal of staleness — always paired with the chip above it |
 
-Spacing/radius/typography follow the brief's 4-pt scale, 16-pt screen padding, 12-pt card radius and system-font type scale without modification. Minimum touch target 48×48 dp/pt throughout, including inside dense list rows.
+Spacing, radius and typography follow the accepted organic system: 4.4px-based spacing tokens, 16px minimum screen padding, 8/16/28px radius tiers, Caprasimo headings, Figtree body/UI text and soft ink-tinted elevation. Minimum touch target remains 48×48 dp/pt throughout, including inside dense list rows.
 
 ---
 

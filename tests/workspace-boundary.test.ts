@@ -5,18 +5,19 @@ import { fileURLToPath } from 'node:url';
 const repoRoot = fileURLToPath(new URL('..', import.meta.url));
 
 describe('task-1 workspace boundary', () => {
-  it('declares exactly the four approved package boundaries', () => {
+  it('declares exactly the approved web package boundaries', () => {
     const appDirs = readdirSync(`${repoRoot}/apps`).sort();
     const packageDirs = readdirSync(`${repoRoot}/packages`).sort();
 
-    expect(appDirs).toEqual(['api', 'mobile', 'web']);
+    expect(appDirs).toEqual(['web', 'worker']);
     expect(packageDirs).toEqual(['config', 'contracts']);
   });
 
-  it('scopes the pnpm workspace to apps/* and packages/* only', () => {
+  it('scopes the pnpm workspace to the active web packages only', () => {
     const workspaceManifest = readFileSync(`${repoRoot}/pnpm-workspace.yaml`, 'utf8');
 
-    expect(workspaceManifest).toContain('apps/*');
+    expect(workspaceManifest).toContain("'apps/web'");
+    expect(workspaceManifest).toContain("'apps/worker'");
     expect(workspaceManifest).toContain('packages/*');
   });
 
@@ -38,5 +39,21 @@ describe('task-1 workspace boundary', () => {
     expect(rootEntries).not.toContain('.env');
     expect(rootEntries).not.toContain('firebase.json');
     expect(rootEntries).not.toContain('.firebaserc');
+  });
+
+  it('describes the active synthetic fixtures as web/PWA fixtures', () => {
+    const visibilityReview = readFileSync(
+      `${repoRoot}/docs/public-source-visibility-review.md`,
+      'utf8',
+    );
+
+    expect(visibilityReview).toContain('Synthetic web/PWA fixtures');
+    expect(visibilityReview).not.toContain('Synthetic mobile fixtures');
+  });
+
+  it('does not retain native-platform ignore rules', () => {
+    const gitignore = readFileSync(`${repoRoot}/.gitignore`, 'utf8');
+
+    expect(gitignore).not.toContain('.expo/');
   });
 });

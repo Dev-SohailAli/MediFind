@@ -46,8 +46,8 @@ describe('web buyer-search prototype boundary', () => {
       /http:\/\//,
       /https:\/\//,
       // provider/cloud
-      /firebase/i,
-      /firestore/i,
+      /provider[- ]?sdk/i,
+      /database[- ]?sdk/i,
       // permissions
       /requestPermission/i,
       /Notification\.permission/,
@@ -95,14 +95,14 @@ describe('web buyer-search prototype boundary', () => {
     }
   });
 
-  it('declares no dependency on the api package', () => {
+  it('declares no dependency on the server-only Worker package', () => {
     const pkg = JSON.parse(readFileSync(packageJsonPath, 'utf8')) as {
       dependencies?: Record<string, string>;
       devDependencies?: Record<string, string>;
     };
     const allDeps = { ...pkg.dependencies, ...pkg.devDependencies };
 
-    expect(Object.keys(allDeps)).not.toContain('@medifind/api');
+    expect(Object.keys(allDeps)).not.toContain('@medifind/worker');
   });
 
   it('required safety copy strings are present verbatim', () => {

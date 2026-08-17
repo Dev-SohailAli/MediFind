@@ -16,7 +16,7 @@
     "build": "pnpm -r --if-present run build",
     "security:secrets": "gitleaks detect --source . --redact --exit-code 1",
     "security:trivy": "trivy fs --scanners vuln,misconfig --exit-code 1 --severity CRITICAL,HIGH --ignore-unfixed .",
-    "audit": "node scripts/audit-guard.mts"
+    "audit": "pnpm audit --audit-level high"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
@@ -28,5 +28,22 @@
     "typescript": "6.0.3",
     "typescript-eslint": "8.67.0",
     "vitest": "4.1.10"
-  }
+  },
+  "description": "MediFind is a documentation-first plan for a Suva, Fiji pilot that helps buyers find medicines at verified pharmacies.",
+  "main": "eslint.config.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dev-SohailAli/MediFind.git"
+  },
+  "keywords": [],
+  "author": "",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Dev-SohailAli/MediFind/issues"
+  },
+  "homepage": "https://github.com/Dev-SohailAli/MediFind#readme"
 }

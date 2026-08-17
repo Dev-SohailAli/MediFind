@@ -17,9 +17,9 @@ function readAllSourceFiles(): string {
     .join('\n');
 }
 
-describe('api package boundary', () => {
+describe('Cloudflare Worker package boundary', () => {
   it('exposes only an anonymous, non-domain package export', () => {
-    expect(PACKAGE_BOUNDARY).toBe('api');
+    expect(PACKAGE_BOUNDARY).toBe('worker');
   });
 
   it('declares no runtime, cloud SDK or database dependency', () => {
@@ -30,16 +30,13 @@ describe('api package boundary', () => {
     expect(pkg.dependencies ?? {}).toEqual({});
   });
 
-  it('starts no listener, exposes no route and initialises no provider', () => {
+  it('has no runtime route or provider until a Cloudflare task authorises one', () => {
     const source = readAllSourceFiles();
     const forbiddenPatterns = [
       /\.listen\(/,
       /createServer\(/,
       /fastify\(/i,
       /\/v1/,
-      /firebase/i,
-      /firestore/i,
-      /admin\.initializeApp/,
       /fetch\(/,
       /http:\/\//,
       /https:\/\//,

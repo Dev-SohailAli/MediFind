@@ -2,7 +2,7 @@
 
 ## Decision
 
-MediFind's public-facing privacy notice, terms, support pages and app-store text must not name the founder personally. They may identify the service simply as **MediFind** during documentation and synthetic-data development.
+MediFind's public-facing privacy notice, terms, support pages and website/PWA text must not name the founder personally. They may identify the service simply as **MediFind** during documentation and synthetic-data development.
 
 Before any external buyer or pharmacy pilot is activated, establish and use a MediFind business identity. Fiji legal review must confirm the legally valid operator identity, contact method, business address (where required), governing law/dispute information and any registration disclosures required for the actual operating structure. Insert those approved details into the public notices before launch. Do not use a placeholder or anonymous identity where law requires an identifiable controller or contracting party.
 

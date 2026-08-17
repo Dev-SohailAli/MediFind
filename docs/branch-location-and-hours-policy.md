@@ -15,7 +15,7 @@ The system supports all Fiji addresses for future expansion. The Suva-only limit
 
 ## Directions and buyer location
 
-The app uses only the verified public branch address/coordinates to open directions in the buyer's installed native mapping application. MVP does not embed an interactive map or transmit buyer location to pharmacies. Nearby search may use an approximate foreground buyer location transiently as defined in the [mobile permissions policy](mobile-permissions-policy.md); it is not stored on the branch, listing, request, reservation or analytics records.
+The web app uses only the verified public branch address/coordinates to open a directions link in the user's chosen browser/maps handler. MVP does not embed an interactive map or transmit buyer location to pharmacies. Nearby search uses manual area/branch selection; it does not require location permission or store buyer coordinates.
 
 ## Opening-hours contract
 

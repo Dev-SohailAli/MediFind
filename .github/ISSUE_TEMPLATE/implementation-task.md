@@ -12,7 +12,7 @@ labels: "type:task, status:needs-approval"
 ## Authority and release boundary
 
 - Data classification: <!-- synthetic-only / approved non-sensitive / sensitive -->
-- Cloud authority: <!-- none / named synthetic environment only / separate approval required -->
+- Cloud authority: <!-- none / named synthetic Cloudflare environment only / separate approval required -->
 - Production or public-release authority: none unless this issue explicitly says otherwise.
 
 ## Required reading
@@ -47,6 +47,7 @@ labels: "type:task, status:needs-approval"
 
 - A governing document, design, contract or ADR is missing, ambiguous or conflicts with this issue.
 - The work would add a dependency, network call, cloud resource, secret, real data, cost, permission, or release authority not named above.
+- The work mentions a native app, Firebase, Google Cloud, Cloud Run, API Gateway, Firestore or another provider not approved by the active Cloudflare web architecture.
 - A requirement needs to change.
 
 ## Pull-request evidence

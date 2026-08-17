@@ -1,57 +1,36 @@
-# Security, privacy and compliance
+# Web security, privacy and compliance
 
-## Security and privacy baseline
+## Current data boundary
 
-- Authenticate all accounts; verify buyer email and phone during registration; invite pharmacy staff by phone but require verified personal email as the primary privileged sign-in factor; require MFA for pharmacy owners before production launch and require it for staff/admin roles unless a documented pilot exception is approved. Privileged MFA must use an authenticator app or passkey, not SMS alone.
-- Require individual named accounts for pharmacy owners and staff; prohibit credential sharing; require device screen lock for privileged mobile sessions; let pharmacy owners revoke staff pharmacy access immediately and record each grant/revocation in the audit log.
-- Expire pharmacy-owner/admin sessions after eight hours and require fresh MFA. Require fresh MFA for staff/role changes, pharmacy ownership/contact changes, privileged-device approval, privileged recovery and break-glass access.
-- Enforce role-, pharmacy- and request-scoped authorisation server-side.
-- Collect device location only after a buyer's specific “near me” action. Manual area/address search must be available without location permission; do not retain precise location beyond the search session unless a future, separately consented feature requires it.
-- Encrypt prescription files in transit and at rest; store them separately from public listing data; use short-lived single-purpose in-app access grants that require current authentication and authorisation. Do not send prescription access links by email.
-- Before routing a prescription file, perform technical abuse controls: supported file/type and size validation, malware scanning, encrypted upload, duplicate/tamper-signal detection and legibility confirmation. Malware or technically unsafe files are blocked and never exposed to a pharmacy. Safely processed files with reviewable suspicion, duplicate/tamper or legibility flags are isolated in a restricted, labelled pharmacy quarantine inbox for an authorised reviewer. These controls do not determine clinical or legal validity; only the selected pharmacy's authorised reviewer may do so.
-- Prescription uploads permit PDF, JPG/JPEG, PNG and HEIC only, with a 10 MB per-file and 10-page per-upload limit. Strip non-essential image device/GPS metadata before reviewer display where technically safe and preserve only records ultimately required by Fiji legal/pharmacy advice. Unsafe/suspicious/unsupported files receive a generic retry/new-file message; never reveal technical detection details.
-- Keep development, staging and production data/secrets isolated. Real buyer, pharmacy and prescription data is permitted only in production; use synthetic, non-sensitive data elsewhere.
-- Keep audit events for verification, staff access, upload/view/download, status decisions, listing edits and administrative action. Alert on anomalous prescription access.
-- MediFind admins cannot view prescription contents during normal operations. Any exceptional break-glass access requires a specific documented reason, time-limited grant, immutable audit event and buyer notification where legally appropriate; review each event after access ends.
-- Obtain explicit buyer consent before upload; publish a plain-language privacy notice; support access, correction and deletion requests subject to legal-retention advice.
-- Require buyer self-attestation of age 18+ and collect only legal full name, verified email and verified phone at registration in v1; do not collect date of birth, government ID or medical history unless Fiji legal advice later requires it. Contact-method verification is not represented as government identity verification.
-- For a dependent request, store patient legal name and self/child/dependent relationship only on that request/reservation; do not create reusable dependent profiles. Restrict the selected pharmacy's view to account-holder name/verified phone, patient name/relationship where different and minimum request data; exclude buyer email, address and date of birth.
-- Before every prescription upload, obtain separate, specific confirmation that the file will be disclosed only to the pharmacy the buyer selected. Do not broadcast, route, expose or solicit the prescription to/from nearby or alternative pharmacies.
-- Provide in-app account deletion requests with clear retention explanation; promptly revoke active sessions/notifications and complete deletion or de-identification of eligible data under the approved policy.
-- A buyer may delete an uploaded prescription before the selected pharmacy has opened it. After first pharmacy access, the file becomes part of the review record and is retained/deleted under the approved privacy policy and Fiji legal advice; the buyer must see this boundary before upload.
-- An unviewed prescription request expires after two pharmacy business days. Clearly disclose this before upload, notify the buyer at expiry, and delete the associated file after a short retention period approved through Fiji legal/pharmacy review while retaining only the minimum necessary audit record.
-- Use a mandatory 24-hour security hold before restored buyer accounts may access or submit prescription requests; revoke all prior sessions and push tokens when phone recovery completes. A staff authenticator loss requires owner-controlled revocation/reset/re-invitation, not self-service bypass. Pharmacy-owner/admin recovery requires the logged manual role-verification process in the [account-recovery runbook](account-recovery-runbook.md), suspends privileged actions and must not use email alone.
-- Provide a devices/sessions view and immediate self-service session revocation for every user. Limit privileged roles to two active devices; require MFA and generate a security alert when a privileged device is enrolled.
-- Send buyers a generic security alert for a new-device sign-in, phone/email change or account recovery, with an in-app way to report unrecognised activity. Send pharmacy owners a generic security alert whenever staff access at their branch is granted, changed or revoked.
-- Require fresh sign-in and verification for buyer phone/email changes; revoke affected sessions/tokens where appropriate and send the documented security alert.
-- Use generic push notifications plus the authenticated in-app inbox as the prescription-reviewer alert/status path and never include medicine names, prescription information, reservation details, prices or other sensitive content in a notification title/body or lock-screen preview. MVP does not use transactional email for workflow notifications.
-- Suppress task-switcher previews and screenshots/screen recording of prescription content where the platform supports it; explain that physical photography cannot be prevented.
-- Require biometric unlock before a prescription reviewer displays prescription content when supported; otherwise require fresh MFA.
-- Apply persistent distributed rate limits and abuse detection to sign-in-related business actions, search, uploads, reports and reservation requests; never rely on one server instance's memory or store raw IP values. Firebase performs verification-code sends outside the business API, so additionally require Fiji-only provider region policy, Authentication App Check, provider monitoring/quotas and a tested provider-level SMS breaker. Give users a clear retry/support message without exposing detection thresholds or security logic.
-- Use one active six-digit phone verification code per purpose, expiring after 10 minutes; resend invalidates the previous code. Store normalised `+679` numbers as protected contact data and never log raw OTPs/full phone values. Verified email, WhatsApp and manual support do not substitute for initial phone verification. Complete a Fiji SMS delivery validation with synthetic data before buyer beta activation.
-- Publish official MediFind support channels and anti-phishing guidance. MediFind and pharmacies must never request OTPs, passwords, authenticator codes or prescription files through unsolicited communication. Provide an in-app suspicious-message/account-activity reporting path that collects only minimum necessary evidence.
-- Offer no official WhatsApp support channel in the MVP. Buyers use authenticated in-app support for account/security/technical issues and contact pharmacies directly for medicine, prescription or reservation matters; pharmacies use a branch-scoped in-app operational-support route. The public site supports only approved legal/support/status/security content.
-- Define retention and secure deletion periods with Fiji legal counsel before collection. Backups and logs must follow the same classification and retention controls.
-- Do not set a product-defined retention period for opened prescription, review, reservation or audit records until Fiji legal/pharmacy advice approves the retention schedule.
-- Send verification, request-status, security and outage communications as operational messages. Require separate, freely given opt-in for marketing, subscription promotion or non-essential communications, with an easy withdrawal mechanism.
-- Prohibit advertising SDKs, data brokers, behavioural profiling and sale of buyer/pharmacy data. Collect only essential crash, performance, security and aggregated operational telemetry; never send prescription content, raw contact details, medicine-search history or free-text health information to telemetry.
-- The privacy notice must identify each third-party processor that receives personal/device data, its purpose, data categories, hosting/transfer location and relevant user controls. Maintain a current processor register covering Firebase/Google Cloud/API Gateway, Web Push/browser providers where used, SMS, error monitoring and any future provider. Record Cloudflare Pages/GitHub as operational suppliers with their deliberately restricted data scope; external map-link hand-off is disclosed/reviewed without sending buyer location through MediFind's backend. Apple, Google Play and EAS remain future native-shell suppliers only.
-- Maintain incident response through the [incident-response runbook](incident-response-runbook.md): immediately contain suspected prescription exposure, privileged compromise or unsafe routing; preserve evidence; assess affected people/data; notify stakeholders through verified channels as facts/legal duties permit; remediate; and complete a post-incident review within five business days.
-- Encrypt backups, restrict access to the same or tighter roles as production data, include backup restoration in incident exercises, and validate backup retention/deletion against the approved prescription-retention policy.
-- Public notices must refer to the service as MediFind and must not name the founder personally. Before external activation, Fiji legal review must approve the legally valid operator identity/contact and every disclosure legally required in the [public-notice requirements](public-notice-and-legal-identity.md).
+The active app and public preview use invented fixtures only. They collect no
+accounts, contact details, health data, cookies, analytics or prescriptions.
+Cloudflare Pages is treated as a static operational supplier for this preview.
 
-## Required pre-pilot validation
+## Future protected web pilot
 
-This is a product compliance checklist, not legal advice. Obtain written Fiji legal and pharmacy-professional review before activating any pharmacy or accepting any prescription.
+Before collecting personal or health data, document the selected Cloudflare
+products, processing purpose, data categories, region/transfer position,
+subprocessors, retention/deletion, support access, backup/recovery and user
+rights. Obtain Fiji legal and pharmacy review before activation.
 
-- Confirm verification evidence against the Fiji Pharmacy Profession Board/Fiji MRA registers and applicable licensing requirements.
-- Confirm the public-search, prescription-upload and reservation flows do not breach requirements for prescriptions, dispensing, record keeping, restricted supply, or advertising under the [Pharmacy & Poisons Act](https://www.health.gov.fj/wp-content/uploads/2014/09/20_Pharmacy-Poisons-Act-Cap-115.pdf).
-- Confirm medicines listed by pharmacies are appropriate to advertise/search and that no controlled or restricted item is exposed contrary to law or professional guidance.
-- Confirm the permitted OTC/prescription-required classification process and any future controlled/restricted-medicine policy with Fiji pharmacy/legal review before those categories are exposed.
-- Confirm privacy, hosting, cross-border transfer, retention, consent, breach notification and data-subject requirements applicable in Fiji.
-- Review Fiji MRA requirements and the status of participating pharmacies/products with the [Fiji Medicines Regulatory Authority](https://www.health.gov.fj/fiji-mra/).
-- Validate proposed Australia/New Zealand hosting and every cross-border transfer, subprocesser and support-access route with Fiji privacy/legal advice before production data is collected.
-- Obtain pharmacy SOPs covering prescription review, reservation expiry, buyer communication, price accuracy and escalation of suspect/falsified medicine reports.
-- Approve the final privacy notice, terms and free-pilot pharmacy agreement, including the legal operator identity, before external buyer/pharmacy activation.
+The future Worker must enforce server-side authorization, persistent rate
+limits, safe anti-enumeration errors, explicit state transitions, idempotency,
+version conflicts and append-only redacted audit events. Browser code must not
+access D1/R2/KV directly.
 
-No legal/compliance check may be marked complete solely by product or engineering staff.
+Authentication, MFA, recovery, notification, file quarantine and scanning are
+separate approval gates. No provider is allowed to be selected solely because
+it has a free tier.
+
+## Privacy prohibitions
+
+Do not put names, phone/email values, tokens, prescription content, health
+information, search text or support free text in logs, browser analytics,
+notifications or public URLs. Do not use advertising, session replay, public
+ratings, data brokers or unrelated third-party processors in the MVP.
+
+## Incident and deletion readiness
+
+Before a protected pilot, establish a founder-owned incident contact, access
+revocation, breach containment, retention/deletion execution, export, backup
+restore and user-support procedure. Test these procedures with synthetic data.

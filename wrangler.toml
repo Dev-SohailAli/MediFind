@@ -1,4 +1,6 @@
-name = "medifind-synthetic-preview"
+# Static Pages preview only. Worker bindings are intentionally absent until the
+# approved Cloudflare Worker foundation task supplies a separate environment.
+name = "medifind-synthetic-web-preview"
 compatibility_date = "2026-08-16"
 pages_build_output_dir = "./apps/web/dist"
 send_metrics = false

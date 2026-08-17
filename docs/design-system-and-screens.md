@@ -2,7 +2,7 @@
 
 ## Visual direction
 
-MediFind uses a clean, clinical and calm visual style: high-readability surfaces, restrained blue/teal accents, clear status labels and no discount/sale aesthetic. The design must feel trustworthy and practical rather than diagnostic, promotional or overly playful. Support responsive browser layouts, light and dark themes, defaulting to the browser/OS setting with a manual Account override. Use semantic design tokens, not hard-coded colours, so contrast and theme changes remain safe.
+MediFind uses a warm, organic and calm visual style: readable warm surfaces, restrained terracotta and sage accents, clear status labels and no discount/sale aesthetic. The design must feel trustworthy and practical rather than diagnostic, promotional or overly playful. Support responsive browser layouts, light and dark themes, defaulting to the browser/OS setting with a manual Account override. Use the accepted semantic tokens in the [Claude Design agent brief](claude-design-agent-brief.md), not hard-coded colours, so contrast and theme changes remain safe.
 
 ## Design principles
 
@@ -11,7 +11,7 @@ MediFind uses a clean, clinical and calm visual style: high-readability surfaces
 - Never use colour alone for stock, safety, error or status meaning.
 - Meet the [accessibility policy](accessibility-policy.md): WCAG 2.2 AA target, large touch/pointer targets, 200% scalable text, contrast, screen-reader labels, keyboard focus/order and low-data list-first search.
 - Show safe empty, loading, offline and error states. Never make a buyer assume that a missing/stale result means a medicine is unavailable everywhere.
-- Use polished, accessible system icons in the MVP. Do not spend pilot scope on custom logos or illustrations before validated demand.
+- Use polished, accessible Lucide icons in the MVP at 2.75px stroke width. Do not spend pilot scope on custom logos or illustrations before validated demand.
 
 ## Buyer onboarding
 
@@ -78,4 +78,4 @@ Every screen/page specification must include loading, offline, retry, capability
 
 ## Implementation boundary
 
-This specification fixes information architecture and safety behaviour. The initial semantic colour values, system-font scale, spacing and component rules used by the design agent are in the [Claude Design agent brief](claude-design-agent-brief.md). Claude applies them in a reviewable low-fidelity proposal; the founder approves their final visual application before UI implementation. The MVP uses external map-app directions rather than an embedded interactive map.
+This specification fixes information architecture and safety behaviour. The accepted organic semantic colour values, Caprasimo/Figtree typography, spacing, radius, elevation and component rules used by the design agent are in the [Claude Design agent brief](claude-design-agent-brief.md) and [accepted visual-system proposal](design-proposals/2026-08-17-organic-visual-system.md). The founder approved the visual system on 2026-08-17; UI implementation remains a separate reviewable coding PR. The MVP uses external map-app directions rather than an embedded interactive map.

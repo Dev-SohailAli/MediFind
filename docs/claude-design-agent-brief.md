@@ -4,7 +4,7 @@
 
 This is the design contract for a Claude Design session connected to the MediFind repository. It translates approved product, safety, accessibility and operational requirements into clear constraints a design agent can apply consistently. It does **not** authorise app code, production configuration, new services or a change to an accepted product decision.
 
-The first proposal is a low-fidelity, whole-MVP review artefact. The founder must explicitly approve it before a coding agent implements any visual flow.
+The first proposal is a low-fidelity, whole-MVP review artefact. The founder must explicitly approve it before a coding agent implements any visual flow. The organic visual system recorded below was approved on 2026-08-17; implementation remains a separate, reviewable coding task.
 
 ## Product in one sentence
 
@@ -24,49 +24,58 @@ Prioritise, in order:
 4. trust through plain language and predictable behaviour; and
 5. polished restraint over decorative novelty.
 
-## Initial visual system
+## Accepted organic visual system
 
-Use these as the proposal baseline. They are semantic roles, not permission to use colour as the only status signal. The founder approves the final application in the first design review; a coding agent must not substitute arbitrary brand colours later.
+Use these as the visual baseline. They are semantic roles, not permission to use colour as the only status signal. The previous teal/blue baseline is superseded by ADR-271. A coding agent must not substitute arbitrary colours, typefaces or visual effects later.
 
 ### Colour tokens
 
-| Role | Light | Dark | Use |
-| --- | --- | --- | --- |
-| `canvas` | `#F7FAFC` | `#0B1416` | Main app background |
-| `surface` | `#FFFFFF` | `#132326` | Cards, sheets and primary controls |
-| `surfaceMuted` | `#EEF6F8` | `#1C3034` | Grouped content and calm emphasis |
-| `textPrimary` | `#102A33` | `#F0F7F7` | Primary text/icons |
-| `textSecondary` | `#52616B` | `#B8C7C9` | Supporting text only |
-| `border` | `#D9E2EC` | `#294247` | Dividers and control boundaries |
-| `primary` | `#0F766E` | `#2DD4BF` | Main actions, selected controls and trusted progress |
-| `primaryPressed` | `#115E59` | `#14B8A6` | Pressed/active primary action |
-| `info` | `#1D4ED8` | `#60A5FA` | Informational status and focus treatment |
-| `success` | `#15803D` | `#4ADE80` | Approved/completed state with icon and text |
-| `warning` | `#B45309` | `#FBBF24` | Stale/pending/needs-attention state with icon and text |
-| `danger` | `#B91C1C` | `#F87171` | Destructive/declined/error state with icon and text |
+| Role | Value | Use |
+| --- | --- | --- |
+| `canvas` | `#F5EAD8` | Main app background |
+| `surface` | `#EBDDC5` | Cards, sheets and primary surfaces |
+| `textPrimary` | `#201E1D` | Primary text and icons |
+| `primary` | `#C67139` | Main actions and selected controls |
+| `secondary` | `#7A8A5E` | Secondary actions and calm emphasis |
+| `divider` | `color-mix(in srgb, #201E1D 16%, transparent)` | Dividers and control boundaries |
+
+The tonal ramps below are the complete source for light-to-dark variants; do not invent additional hues or separate ad-hoc dark-mode colours.
+
+| Ramp | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `neutral` | `#F9F4ED` | `#EEE7DB` | `#DCD3C4` | `#C0B6A5` | `#A19786` | `#82796A` | `#645C50` | `#474238` | `#2E2B25` |
+| `accent` | `#FFF2EB` | `#FFE1D0` | `#FFC6A5` | `#F6A06B` | `#D67F48` | `#B2622D` | `#8C491A` | `#643312` | `#402310` |
+| `accent-2` | `#F0FAE1` | `#E1EECC` | `#CCDBB2` | `#AEBF92` | `#8FA073` | `#728157` | `#56633F` | `#3D472B` | `#272E1B` |
+
+Semantic aliases remain available to existing screen specifications: `primary` maps to `color-accent`, `primaryPressed` uses a deeper approved accent-ramp value, `secondary` maps to `color-accent-2`, `surfaceMuted` and `textSecondary` use approved neutral-ramp values, and `border` maps to `divider`. `info`, `success`, `warning` and `danger` must use only the approved ramps with contrast-checked text/icon pairings; they do not introduce new hues or rely on colour alone.
 
 - Use `primary` for one obvious main action per screen where possible; avoid competing filled buttons.
 - Pair every status colour with a plain-language label and an icon or shape. Do not rely on red/green distinction, colour contrast alone or a tiny badge.
 - Meet WCAG 2.2 AA contrast for normal text and controls. Where a coloured token cannot meet contrast with a proposed text colour, use a tinted surface plus `textPrimary`, not reduced contrast.
-- Do not use gradients, glass effects, neon, discount/sale styling, health-diagnosis imagery or alarmist red as the normal visual language.
+- Do not use gradients, glass effects, neon, discount/sale styling, health-diagnosis imagery or alarmist red as the normal visual language. Use the warm background, terracotta accent and sage secondary accent with restraint.
 
 ### Typography and layout tokens
 
-| Token | System type scale | Use |
+| Token | Organic type scale | Use |
 | --- | --- | --- |
-| `display` | 28/34, semibold | A short page title only |
-| `title` | 22/28, semibold | Screen and sheet titles |
-| `heading` | 18/24, semibold | Group/card headings |
-| `body` | 16/24, regular | Default readable content |
-| `label` | 14/20, medium | Inputs, metadata and actions |
-| `supporting` | 14/20, regular | Freshness, help and explanatory copy |
-| `micro` | 12/16, medium | Non-essential compact metadata only; never safety-critical text |
+| `h1` | 42px, Caprasimo 400 | Primary page title |
+| `h2` | 32px, Caprasimo 400 | Major section title |
+| `h3` | 25px, Caprasimo 400 | Section/card heading |
+| `h4` | 20px, Caprasimo 400 | Subsection heading |
+| `h5` | 16px, Figtree 700 | Compact heading |
+| `h6` | 13px, Figtree 700, uppercase/tracked | Non-critical eyebrow label |
+| `body` | 15px/1.55, Figtree 400 | Default readable content |
+| `label` | 15px, Figtree 600 | Inputs, metadata and actions |
+| `supporting` | 15px/1.55, Figtree 400 | Freshness, help and explanatory copy |
 
-- Use a widely available system/web font stack with platform fallbacks. Do not add a paid or custom font in the MVP.
-- Use a 4-point spacing scale: `4, 8, 12, 16, 20, 24, 32, 40, 48`.
-- Use 16px minimum horizontal padding on narrow viewports, increasing responsively where it improves scanability. Use 12px card/control radius and restrained elevation; clear borders are preferred to heavy shadows.
+- Use `Caprasimo` for headings and `Figtree` for body/UI text at weights 400, 600 and 700, with robust local fallbacks. Font loading must preserve the offline shell and must not depend on an unreviewed third-party runtime request.
+- Use the supplied organic spacing values: `4.4, 8.8, 13.2, 17.6, 26.4, 35.2px`. The handoff names `space-1` through `space-8` but provides six numeric values; do not invent values for unnamed scale entries. Raise a clarification only if implementation needs a value that was not supplied.
+- Use `8px` small, `16px` medium and `28px` large radii. Buttons, inputs and tags may use `999px`; cards and dialogs may use approximately `32px` where it improves the organic visual language.
+- Use soft, ink-tinted small/medium/large elevation rather than neutral grey shadows. Keep 16px minimum horizontal padding on narrow viewports and preserve generous spacing around critical actions.
 - Minimum interactive target is 48 × 48 dp/pt. Critical actions have generous spacing and must remain usable at 200% text scaling.
 - Support browser/OS light/dark preference by default with a manual Account override. Never create a separate information hierarchy for dark mode.
+
+Use Lucide icons with a `2.75` stroke width. Do not add a custom logo or illustration library as part of this visual-system change.
 
 ### Components and interaction rules
 
@@ -127,7 +136,7 @@ Read these repository files in order:
 3. docs/design-system-and-screens.md
 4. docs/initial-claude-design-review-brief.md
 5. docs/requirements.md, docs/experience-and-content.md and docs/data-and-search.md
-6. docs/accessibility-policy.md, docs/mobile-permissions-policy.md, docs/dynamic-pharmacy-content-policy.md and docs/notification-and-status-synchronisation.md
+6. docs/accessibility-policy.md, docs/web-platform-capabilities-policy.md, docs/dynamic-pharmacy-content-policy.md and docs/notification-and-status-synchronisation.md
 7. docs/security-privacy-compliance.md, docs/security-architecture-threat-model.md and docs/decisions.md
 
 Then create one complete low-fidelity responsive web/PWA MVP design proposal in docs/design-proposals/ using the workspace template. Apply the approved initial colour, typography, spacing, content, accessibility and safety rules in the design brief. Cover buyer, pharmacy and MediFind admin roles; all stated user journeys; and loading, offline, empty, stale, browser-capability, error, security, maintenance and success states.

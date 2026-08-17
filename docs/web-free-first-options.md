@@ -1,82 +1,58 @@
 # Web/PWA free-first options
 
-## Decision boundary
+## Current choice
 
-The web/PWA approach reduces immediate platform cost, but “free” is not by
-itself a security, privacy, backup, region or reliability decision. The
-current buyer-search app remains local-fixture-only. No database, identity
-provider, API, storage service or analytics provider is added to it.
+Use Cloudflare as the default web platform. The static synthetic preview is
+already bounded to Cloudflare Pages. The next protected-platform design should
+evaluate Cloudflare Workers with D1, R2 and KV before adding another vendor.
 
-This document records the bounded options for a temporary synthetic preview
-and for later protected-platform evaluation. It does not authorise real data,
-production identity, prescription storage, public account activation or a
-provider migration.
+This is a cost and platform decision, not permission to collect real health or
+identity data. The public preview remains synthetic-only.
 
-## Recommended now: static HTTPS preview
+## Service options
 
-Use Cloudflare Pages Free for the temporary web/PWA preview once the founder
-creates or authorises the Cloudflare account:
-
-- connect the public repository to a Pages project;
-- build only `apps/web` and publish its static `dist` output;
-- use pull-request preview URLs for iPhone Safari and desktop verification;
-- keep the preview synthetic-only, with no Pages Functions, database, auth,
-  cookies, analytics or application proxy; and
-- delete or disable the preview when device verification is complete.
-
-Cloudflare documents 500 free builds per month, unlimited active preview
-deployments, HTTPS `pages.dev` preview URLs and a default `noindex` header on
-previews. Preview URLs are public unless Cloudflare Access is separately
-configured, so only the existing invented fixtures may be exposed.
-
-Sources: [Pages limits](https://developers.cloudflare.com/pages/platform/limits/)
-and [Pages preview deployments](https://developers.cloudflare.com/pages/configuration/preview-deployments/).
-
-## Database options
-
-| Option | What the free tier is useful for | Current decision |
+| Capability | Preferred early option | Boundary and migration rule |
 | --- | --- | --- |
-| Supabase Free | Synthetic Postgres, Auth and Storage experiments; Sydney (`ap-southeast-2`) is available; 500 MB database and 1 GB file storage | Candidate for a separate synthetic-only evaluation, not approved for protected or health data |
-| Firebase Spark | Synthetic Firestore and most non-phone Authentication without payment details | Retain as the current approved platform candidate; Spark does not provide Cloud Run/Cloud Functions and phone verification is billed per SMS |
-| Cloudflare D1/KV/R2 | Small edge/static experiments | Not selected for the protected platform; it would replace the approved API/IAM/data boundary and needs a separate architecture review |
-| Self-hosted database | Avoids a vendor subscription | Rejected for now because backup, patching, availability and recovery would become founder-operated responsibilities |
+| Static web/PWA | Cloudflare Pages | Free synthetic preview; no application secrets or protected data in static assets |
+| Dynamic API | Cloudflare Worker | Server-only boundary; keep routes and domain contracts provider-neutral |
+| Structured data | Cloudflare D1 | First candidate for non-sensitive pilot records; test limits, backup/export and region before protected use |
+| Private files | Cloudflare R2 | Deferred; no prescription files until legal/privacy/retention/scanning/recovery approval |
+| Cache/config | Workers KV | Non-authoritative only; never use for authorization or state transitions |
+| Strong per-entity coordination | Durable Objects | Defer until measured concurrency requires it |
+| Async retries | Queues or Workflows | Defer until a workflow needs durable retry/backlog handling |
+| Browser abuse control | Worker limits plus Turnstile where approved | Defense in depth; never replaces authorization |
+| Authentication | Provider-neutral Worker adapter | No provider is selected for protected accounts yet; synthetic preview has no auth |
+| Email/SMS | Deferred | No notification or OTP provider is required for the current web preview |
 
-Supabase Free is attractive for experiments, but free projects can pause after
-low activity, have only two active free projects, and do not include automatic
-backups or point-in-time recovery. Sydney availability does not itself prove
-Fiji legal, privacy, processor or health-data suitability.
+## Cost controls
 
-Sources: [Supabase pricing](https://supabase.com/pricing),
-[Supabase regions](https://supabase.com/docs/guides/platform/regions),
-[free-project pausing](https://supabase.com/docs/guides/platform/free-project-pausing),
-and [Supabase backups](https://supabase.com/docs/guides/platform/backups).
+- Keep static assets on Pages Free while possible.
+- Set explicit Worker/D1/R2 usage budgets and fail safely when a limit is
+  reached. Search may remain available while costly mutations pause.
+- Do not rely on a free tier as a spend cap. Confirm account billing settings,
+  provider limit behaviour and alerting before enabling paid usage.
+- Prefer a single Cloudflare account owned by the founder, with separate
+  projects/environments and least-privilege deployment tokens.
+- Export synthetic data and schema regularly so a provider change is possible.
 
-## Authentication options
+Cloudflare's limits and pricing are time-sensitive. Recheck [Pages
+limits](https://developers.cloudflare.com/pages/platform/limits/), [Workers
+limits](https://developers.cloudflare.com/workers/platform/limits/), [D1
+FAQ](https://developers.cloudflare.com/d1/reference/faq/) and [R2
+pricing](https://developers.cloudflare.com/r2/pricing/) before a deployment or
+cost commitment.
 
-- The current PWA has no authentication by design.
-- Firebase Authentication’s no-cost options are suitable for synthetic
-  non-phone experiments, but phone verification is billed per SMS and Firebase
-  Cloud Run/API services require the pay-as-you-go path.
-- Supabase Auth is a candidate for a synthetic experiment, but its free plan
-  limitations, project pausing, MFA feature split and missing backup/recovery
-  controls must be reviewed before any protected use.
-- No free tier authorises real buyer, pharmacy, prescription or privileged
-  account activation. Identity, MFA, recovery, SMS cost and legal/privacy
-  controls remain separate approval gates.
+## Alternatives
 
-Source: [Firebase pricing and plans](https://firebase.google.com/pricing) and
-[Firebase pricing-plan documentation](https://firebase.google.com/docs/projects/billing/firebase-pricing-plans).
+Supabase, Neon, Turso and other free database/auth providers may be evaluated
+only when Cloudflare fails a documented requirement. An alternative must pass
+data region, privacy/processor, backup/recovery, availability, export,
+authorization, cost and migration review. It must not be added merely to avoid
+writing the Worker boundary.
 
-## Hosting and protected-platform rule
+## Explicitly rejected for this direction
 
-Cloudflare Pages Free is approved only for the synthetic static preview. It
-does not replace the approved future trust chain:
-
-`browser/PWA -> API Gateway -> IAM-private API -> private data/services`
-
-Before protected implementation, compare Firebase/GCP and any Supabase or
-Cloudflare alternative against region, DPA/processor terms, server-derived
-authorization, App Check or equivalent attestation, persistent rate limits,
-audit redaction, backups, recovery, cost breakers and exit/migration evidence.
-If an alternative changes that boundary, create and approve a decision-change
-request before code or resource creation.
+Firebase, Google Cloud, native mobile build services, store accounts, a
+self-hosted database, public object storage, direct browser database access,
+analytics/advertising providers and a second backend platform are not part of
+the current plan.

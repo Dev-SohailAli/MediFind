@@ -1,4 +1,4 @@
-# MediFind — Claude Code instructions
+# MediFind — Codex instructions
 
 ## Role and authority
 
@@ -40,5 +40,5 @@ before planning or editing.
   treat it as stale and update the source-of-truth documentation/ADR before
   implementing the affected behaviour.
 
-For design work, also read `CLAUDE-DESIGN.md` and the approved visual-system
+For design work, also read `Codex-DESIGN.md` and the approved visual-system
 proposal before touching UI.

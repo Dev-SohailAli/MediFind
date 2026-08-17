@@ -2,13 +2,7 @@ const baseConfig = require('./packages/config/eslint/base.cjs');
 
 module.exports = [
   {
-    ignores: [
-      '**/node_modules/**',
-      '**/dist/**',
-      '**/.expo/**',
-      'pnpm-lock.yaml',
-      '**/coverage/**',
-    ],
+    ignores: ['**/node_modules/**', '**/dist/**', 'pnpm-lock.yaml', '**/coverage/**'],
   },
   ...baseConfig,
   {
@@ -41,22 +35,6 @@ module.exports = [
     },
   },
   {
-    files: ['apps/mobile/**/*.{ts,tsx}'],
-    rules: {
-      'no-restricted-imports': [
-        'error',
-        {
-          patterns: [
-            {
-              group: ['@medifind/api', '**/apps/api/**'],
-              message: 'apps/mobile must not import from apps/api.',
-            },
-          ],
-        },
-      ],
-    },
-  },
-  {
     files: ['apps/web/**/*.{ts,tsx}'],
     rules: {
       'no-restricted-imports': [
@@ -64,8 +42,8 @@ module.exports = [
         {
           patterns: [
             {
-              group: ['@medifind/api', '**/apps/api/**'],
-              message: 'apps/web must not import from apps/api (this task makes no API call).',
+              group: ['@medifind/worker', '**/apps/worker/**'],
+              message: 'apps/web must not import from the server-only Worker package.',
             },
           ],
         },

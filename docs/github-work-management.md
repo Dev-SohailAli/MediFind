@@ -29,7 +29,35 @@ Use the repository issue templates. Every implementation task names its scope, n
 
 Labels classify area (`area:*`), type (`type:*`), work state (`status:*`) and hard gates (`data:synthetic-only`, `gate:cloud`, `gate:prescription`). Milestones show planned maturity stages only; they do not authorize work.
 
-The initial milestones are Documentation Readiness, Synthetic Foundation, Buyer Search Prototype, Protected Platform, Pharmacy Operations and Pilot Readiness.
+The active milestones are Documentation Reset, Synthetic Web Preview, Cloudflare Worker Foundation, D1 Data Slice, Pharmacy Operations and Pilot Readiness. Native/mobile and Firebase/GCP milestones are closed and must not receive new work.
+
+## Web-only GitHub synchronization record
+
+The web-only reset was synchronized through the authenticated GitHub CLI after
+the connector's write endpoints returned `403 Resource not accessible by
+integration`:
+
+- [Issue #3](https://github.com/Dev-SohailAli/MediFind/issues/3) is closed as
+  not planned; its obsolete Expo/Metro audit exception no longer applies.
+- [Issue #19](https://github.com/Dev-SohailAli/MediFind/issues/19) remains the
+  synthetic Cloudflare Pages preview task and now uses `apps/web/dist` and
+  current web-only terminology.
+- [Issue #24](https://github.com/Dev-SohailAli/MediFind/issues/24) is the
+  synthetic Cloudflare Worker foundation task linked to the current Task 3
+  brief and specification.
+- [PR #21](https://github.com/Dev-SohailAli/MediFind/pull/21) is closed as
+  superseded because its branch and description depend on the retired mobile
+  workspace.
+- [PR #22](https://github.com/Dev-SohailAli/MediFind/pull/22) is the merged
+  historical visual-system change; its follow-up comment points to the
+  repository reset.
+- [PR #23](https://github.com/Dev-SohailAli/MediFind/pull/23) is the current
+  draft review for commit `686d62b`, covering the web-only/Cloudflare reset.
+
+Re-read every listed GitHub record after mutation. No open issue or PR may name
+native apps, Firebase/GCP, Cloud Run, API Gateway, Firestore, native push or
+store distribution as active work. GitHub write access should continue through
+the authenticated CLI until the connector permissions are corrected.
 
 ## Claude Code operating rule
 

@@ -1,15 +1,38 @@
-# Approved implementation sequencing
+# Approved web-only implementation sequencing
 
 ## Rule
 
-No implementation task begins until the task brief and its relevant contracts are approved. This sequence is deliberately synthetic-data-first and does not authorise production deployment, real pharmacy/buyer data, real prescriptions, live cloud resources or a public app release.
+Every task must match the active web-only Cloudflare architecture. No native
+app, Firebase/GCP resource, real data, production secret or public protected
+workflow is implied by task order.
 
-## Planned task order
+## Planned order
 
-1. **Foundation only.** Create the approved pnpm monorepo/toolchain, quality gates, CI scaffolding, responsive web/PWA shell and API package skeleton. Use synthetic data only. Do not configure Firebase projects, authentication, Cloud Run, storage, production secrets or cloud deployment.
-2. **Non-sensitive experience.** Implement the approved buyer search/navigation/design components in the web/PWA against synthetic fixtures only. No real user identity, pharmacy, medicine inventory, prescription, reservation or external data connection is allowed.
-3. **Protected platform foundation.** Only after cloud-foundation documentation and live repository controls are approved: configure isolated synthetic Firebase/GCP environments and implement the server/API/auth boundaries with synthetic data. The web/PWA buyer-search brief must be complete and green before protected workflows are added.
-4. **Pharmacy operations.** Implement verified pharmacy, branch/staff, catalog/listing and reservation capability in narrow, tested tasks after their exact schemas/authorization tests are approved.
-5. **Prescription capability.** Implement prescription upload/quarantine/review only after all related security, legal/privacy, retention, scanning, assessment and pilot-readiness gates are satisfied. Real prescription activation remains a separate explicit approval.
+1. **Web foundation.** Keep the pnpm workspace limited to `apps/web`,
+   `apps/worker`, `packages/contracts` and `packages/config`; maintain local
+   quality gates and static Pages preview configuration.
+2. **Synthetic buyer experience.** Finish the responsive search/result/detail
+   flow against invented fixtures. Verify accessibility, offline, install and
+   safe states in browsers. No account or persistence.
+3. **Cloudflare Worker foundation.** Add a minimal Worker route boundary,
+   environment separation, safe errors, request validation, server-owned
+   authorization seams, rate-limit seams and observability redaction. Use
+   synthetic data only. Do not bind real data or enable sensitive workflows.
+4. **Synthetic D1 data slice.** Define and test the smallest D1 schema and
+   repository adapter for synthetic pharmacy/listing records. Prove migration,
+   export, quota failure and safe degradation before considering a pilot.
+5. **Protected web workflow.** After authentication, privacy, legal, cost,
+   backup and operational gates, implement pharmacy verification, listings,
+   buyer requests and collection status as separate approved slices.
+6. **Prescription capability.** Only after region, privacy, retention,
+   quarantine, malware scanning, access control, recovery and independent
+   security gates are complete. Real prescription activation is a separate
+   founder approval.
 
-Each task remains independently approved, tested, reviewed through a PR and documented. This order may change only through the decision-change process.
+## Permanent exclusions from this sequence
+
+Native mobile applications, Expo/React Native, app stores, Firebase, Google
+Cloud, Cloud Run, API Gateway, Firestore, native push SDKs, payment, delivery,
+public ratings and external medicine catalogs are not future tasks in this
+roadmap unless the founder creates a new product decision that explicitly
+reopens them.

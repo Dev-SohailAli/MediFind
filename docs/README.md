@@ -1,5 +1,13 @@
 # MediFind documentation index
 
+## Current implementation authority
+
+The active product is the responsive web/PWA in `apps/web`. Platform work is
+governed by the Cloudflare Worker foundation brief and specification; the
+Task 2 web/PWA brief remains the feature-specific synthetic buyer-search
+contract. The former native/mobile records are historical or explicit
+prohibitions only and never authorize new work.
+
 | Document | Purpose |
 | --- | --- |
 | [Product brief](product-brief.md) | Outcome, audience, pilot scope, success measures, roadmap |
@@ -8,7 +16,8 @@
 | [Experience and content](experience-and-content.md) | Responsive web/PWA, accessibility, language and safety guidance |
 | [Security, privacy and compliance](security-privacy-compliance.md) | Controls and Fiji validation checklist |
 | [Security architecture and threat model](security-architecture-threat-model.md) | Technical controls, attack scenarios and security verification gates |
-| [Architecture decision](architecture.md) | Target system boundaries and vendor-selection constraints |
+| [Architecture decision](architecture.md) | Web-only target system boundaries and vendor-selection constraints |
+| [Cloudflare web architecture](cloudflare-web-architecture.md) | Web-only runtime, Cloudflare service map, free-first rules and data gates |
 | [Engineering delivery](engineering-delivery.md) | Stack direction, quality gates, testing and change-control rules |
 | [Claude Code handoff](claude-code-handoff.md) | Agent authority, task readiness, review and escalation protocol |
 | [Claude task template](claude-task-template.md) | Required brief format for each implementation task |
@@ -27,7 +36,7 @@
 | [First synthetic-foundation test specification](first-synthetic-foundation-test-specification.md) | Exact local/CI verification and synthetic-data boundary for the first task |
 | [Task 2 synthetic buyer-search specification](task-2-synthetic-buyer-search-specification.md) | Exact synthetic-only fixture, search, UI, safety and test contract for buyer-search prototype work |
 | [Task 2 Claude implementation brief](task-2-synthetic-buyer-search-task-brief.md) | Executable Claude task scope, exclusions, acceptance evidence and delivery rules for Task 2 |
-| [Task 2 web/PWA Claude implementation brief](task-2-web-pwa-buyer-search-task-brief.md) | Current executable web/PWA buyer-search scope replacing the historical mobile implementation path |
+| [Task 2 web/PWA Claude implementation brief](task-2-web-pwa-buyer-search-task-brief.md) | Current executable synthetic web/PWA buyer-search scope |
 | [Task 3 protected-platform foundation specification](task-3-protected-platform-foundation-specification.md) | Synthetic cloud, identity, API, CI, cost and repository-control boundary; implementation remains input-gated |
 | [Task 3 Claude implementation brief](task-3-protected-platform-foundation-task-brief.md) | Founder-approved synthetic-environment platform handoff; no production authority |
 | [API mutation and concurrency](api-mutation-and-concurrency-policy.md) | Explicit commands, idempotency and version-conflict rules |
@@ -35,19 +44,19 @@
 | [V1 API endpoint inventory](v1-api-endpoint-inventory.md) | Approved REST route/action map for task-level schema design |
 | [Notification and status synchronisation](notification-and-status-synchronisation.md) | Generic push, authorised refresh and no-persistent-realtime update model |
 | [Data dictionary and ownership](data-dictionary-and-ownership.md) | Logical records, minimum fields, privacy classification and mutation ownership |
-| [Infrastructure and release blueprint](infrastructure-and-release-blueprint.md) | Reproducible Firebase/GCP configuration, flags and staged beta rollout |
+| [Infrastructure and release blueprint](infrastructure-and-release-blueprint.md) | Reproducible Cloudflare configuration, flags and staged web rollout |
 | [Test and acceptance strategy](test-and-acceptance-strategy.md) | Synthetic test environments, security coverage and beta release evidence |
 | [Pilot operations](pilot-operations.md) | Onboarding, support, analytics, risk and release readiness |
 | [Business and commercial model](business-and-commercial.md) | Ownership, pilot pricing and future subscription direction |
-| [Cost and environment plan](cost-and-environment-plan.md) | Pilot cost ceiling, Firebase/GCP setup and production-data gates |
-| [Free-first production architecture](free-first-production-architecture.md) | Approved no-cost services, unavoidable costs, secure API edge and scale-in-place triggers |
-| [Web/PWA free-first options](web-free-first-options.md) | Bounded free hosting, database and authentication comparison for synthetic previews and future evaluation |
+| [Cost and environment plan](cost-and-environment-plan.md) | Pilot cost ceiling, Cloudflare account separation and production-data gates |
+| [Free-first production architecture](free-first-production-architecture.md) | Approved Cloudflare-first services, unavoidable costs and scale-in-place triggers |
+| [Web/PWA free-first options](web-free-first-options.md) | Cloudflare Pages/Workers/D1/R2/KV choices for synthetic previews and future evaluation |
 | [Cost circuit breaker](cost-circuit-breaker-policy.md) | Budget alert, costly-action pause and founder-only re-enable controls |
 | [Public notice and legal identity](public-notice-and-legal-identity.md) | Public-notice requirements and pre-pilot legal identity gate |
 | [Free pilot pharmacy agreement](pilot-pharmacy-agreement.md) | Required pilot terms and pharmacy activation checklist |
 | [Pharmacy onboarding and training](pharmacy-onboarding-and-training.md) | Activation sequence, staff training and go-live checklist |
 | [Public support presence](public-support-presence.md) | Minimal legal, status, support and security-reporting website policy |
-| [Web platform capabilities policy](mobile-permissions-policy.md) | Just-in-time browser capability, fallback and installability rules |
+| [Web platform capabilities policy](web-platform-capabilities-policy.md) | Just-in-time browser capability, fallback and installability rules |
 | [Accessibility policy](accessibility-policy.md) | WCAG target, responsive web requirements and assistive-technology release tests |
 | [Audit-log policy](audit-log-policy.md) | Append-only event fields, visibility restrictions and sensitive-data exclusions |
 | [Performance and reliability targets](performance-and-reliability-targets.md) | Pilot latency, result-size, listing-propagation and measurement targets |
@@ -57,15 +66,15 @@
 | [Price integrity](price-integrity-policy.md) | Exact-pack FJD price, versioning, audit and reservation-price protection |
 | [Pharmacy verification policy](pharmacy-verification-policy.md) | Evidence expiry, renewal reminders, suspension and material-change controls |
 | [Staff access lifecycle](staff-access-lifecycle-policy.md) | Invitation expiry, owner continuity and reviewer-dependent prescription controls |
-| [Backend and upload pipeline](backend-and-upload-pipeline.md) | Cloud Run/Fastify boundary, App Check trust chain and private prescription scanning flow |
+| [Worker and upload pipeline](worker-and-upload-pipeline.md) | Cloudflare Worker boundary and deferred private upload/scanning flow |
 | [Prescription scanning workflow](prescription-scanning-workflow-policy.md) | Private asynchronous quarantine, worker access and fail-closed scan outcome controls |
 | [Account-recovery runbook](account-recovery-runbook.md) | Secure buyer, staff, owner and admin recovery procedures |
 | [Incident response runbook](incident-response-runbook.md) | Critical security/privacy containment, notification and corrective-review procedure |
 | [Repository security and delivery](repository-security-and-delivery.md) | Required GitHub protection, dependency and secret-management controls |
 | [Synthetic-code repository readiness record](repository-readiness-record.md) | Verified private-repository controls, limits and first-task merge gate |
 | [Public-source visibility review](public-source-visibility-review.md) | Conditional IP/security review for the GitHub Free public-source alternative |
-| [Web application and PWA direction](web-app-and-pwa-direction.md) | Current product surface, PWA capabilities, distribution boundary and future native-shell decision |
-| [Monorepo and toolchain policy](monorepo-and-toolchain-policy.md) | pnpm workspace layout, web/API/native-shell dependency boundaries and reproducible setup rules |
+| [Web application and PWA direction](web-app-and-pwa-direction.md) | Current web-only product surface, PWA capabilities and Cloudflare distribution boundary |
+| [Monorepo and toolchain policy](monorepo-and-toolchain-policy.md) | pnpm workspace layout, web/Worker dependency boundaries and reproducible setup rules |
 | [GitHub work-management policy](github-work-management.md) | Documentation-governed issues, milestones, labels and Claude task workflow |
 | [Decision log](decisions.md) | Decisions that govern future implementation |
 
