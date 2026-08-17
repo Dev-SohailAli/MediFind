@@ -31,35 +31,33 @@ Labels classify area (`area:*`), type (`type:*`), work state (`status:*`) and ha
 
 The active milestones are Documentation Reset, Synthetic Web Preview, Cloudflare Worker Foundation, D1 Data Slice, Pharmacy Operations and Pilot Readiness. Native/mobile and Firebase/GCP milestones are closed and must not receive new work.
 
-## Web-only GitHub synchronization queue
+## Web-only GitHub synchronization record
 
-The repository reset is complete locally, but GitHub record mutations require a
-write-enabled account. At the last external audit, these records still needed
-synchronization:
+The web-only reset was synchronized through the authenticated GitHub CLI after
+the connector's write endpoints returned `403 Resource not accessible by
+integration`:
 
-- [Issue #3](https://github.com/Dev-SohailAli/MediFind/issues/3) is an obsolete
-  Expo/Metro audit exception and should be closed as not planned; the current
-  dependency audit is clean.
+- [Issue #3](https://github.com/Dev-SohailAli/MediFind/issues/3) is closed as
+  not planned; its obsolete Expo/Metro audit exception no longer applies.
 - [Issue #19](https://github.com/Dev-SohailAli/MediFind/issues/19) remains the
-  useful synthetic Cloudflare Pages preview task, but its body should use the
-  current `apps/web/dist` path and web-only terminology.
-- [PR #21](https://github.com/Dev-SohailAli/MediFind/pull/21) is browser-only
-  work, but its description still mentions the archived mobile workspace and
-  pre-reset test counts; replace that historical wording before review or close
-  the stale PR if its branch is no longer needed.
-- Create a new issue for the synthetic Cloudflare Worker foundation using
-  [the current Task 3 brief](task-3-protected-platform-foundation-task-brief.md).
+  synthetic Cloudflare Pages preview task and now uses `apps/web/dist` and
+  current web-only terminology.
+- [Issue #24](https://github.com/Dev-SohailAli/MediFind/issues/24) is the
+  synthetic Cloudflare Worker foundation task linked to the current Task 3
+  brief and specification.
+- [PR #21](https://github.com/Dev-SohailAli/MediFind/pull/21) is closed as
+  superseded because its branch and description depend on the retired mobile
+  workspace.
+- [PR #22](https://github.com/Dev-SohailAli/MediFind/pull/22) is the merged
+  historical visual-system change; its follow-up comment points to the
+  repository reset.
+- [PR #23](https://github.com/Dev-SohailAli/MediFind/pull/23) is the current
+  draft review for commit `686d62b`, covering the web-only/Cloudflare reset.
 
-Do not mark this queue complete from local documentation alone. Re-read each
-GitHub record after mutation and verify that no open issue or PR names native
-apps, Firebase/GCP, Cloud Run, API Gateway, Firestore, native push or store
-distribution as active work.
-
-The current connector audit is split: repository metadata reports full access
-for the connected account (`admin`, `maintain`, `push` and `triage`), while the
-connector's issue and pull-request mutation endpoints still return GitHub API
-`403 Resource not accessible by integration`. Treat the queue as incomplete
-until a write succeeds and the resulting GitHub records are re-read.
+Re-read every listed GitHub record after mutation. No open issue or PR may name
+native apps, Firebase/GCP, Cloud Run, API Gateway, Firestore, native push or
+store distribution as active work. GitHub write access should continue through
+the authenticated CLI until the connector permissions are corrected.
 
 ## Claude Code operating rule
 
