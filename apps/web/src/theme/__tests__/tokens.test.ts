@@ -22,8 +22,12 @@ describe('design tokens stay in sync with global.css', () => {
     }
   });
 
-  it('the dark palette only applies under prefers-color-scheme: dark, never as the only definition', () => {
-    expect(css).toMatch(/@media \(prefers-color-scheme: dark\)/);
+  it('defaults to the light organic palette regardless of OS/browser colour-scheme preference', () => {
+    expect(css).not.toMatch(/@media \(prefers-color-scheme: dark\)/);
+  });
+
+  it('keeps the dark palette defined but only reachable through an explicit manual theme selector, never as the only definition', () => {
+    expect(css).toMatch(/:root\[data-theme=['"]dark['"]\]/);
   });
 
   it('the minimum touch target is expressed as 48px in the CSS custom property', () => {
