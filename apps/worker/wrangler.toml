@@ -1,0 +1,11 @@
+# Synthetic Cloudflare Worker foundation only (Task 3). This configuration
+# has no account ID, route, secret or binding. D1/R2/KV stay disabled until a
+# separate approved task supplies an exact schema/migration and the founder
+# provides the Cloudflare account/project names, deployment owner/recovery
+# contact and synthetic database approval named in
+# docs/task-3-protected-platform-foundation-specification.md. This file is
+# not deployed by this task; no `wrangler deploy`/`wrangler publish` is run.
+name = "medifind-synthetic-worker-foundation"
+main = "src/index.ts"
+compatibility_date = "2026-08-16"
+send_metrics = false
