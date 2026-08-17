@@ -8,6 +8,7 @@ export interface D1LikeBinding {
   prepare(query: string): {
     bind(...values: unknown[]): {
       first<T>(): Promise<T | null>;
+      all<T>(): Promise<{ results: T[] }>;
     };
   };
 }

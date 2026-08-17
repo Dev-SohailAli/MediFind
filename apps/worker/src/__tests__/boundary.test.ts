@@ -38,19 +38,27 @@ describe('Cloudflare Worker package boundary (Task 3 foundation)', () => {
     expect(pkg.dependencies ?? {}).toEqual({});
   });
 
-  it('implements only the exact foundation route approved by docs/v1-api-endpoint-inventory.md', () => {
-    expect(ROUTES).toEqual([{ method: 'GET', path: '/v1/health', action: 'health:read' }]);
+  it('implements only the exact routes approved by docs/v1-api-endpoint-inventory.md and ADR-275', () => {
+    expect(ROUTES).toEqual([
+      { method: 'GET', path: '/v1/health', action: 'health:read' },
+      { method: 'GET', path: '/v1/search', action: 'search:read' },
+      { method: 'GET', path: '/v1/listings/:id', action: 'listing:read' },
+    ]);
   });
 
-  it('never implements a pharmacy, reservation, prescription, payment or delivery capability', () => {
+  it('never implements a reservation, prescription, payment, delivery, verification or staff capability', () => {
     const source = readAllSourceFiles();
     const forbiddenDomainPatterns = [
       /reservation/i,
       /prescription/i,
-      /pharmacy/i,
       /payment/i,
       /delivery/i,
-      /\/v1\/(search|listings|verify|staff)/i,
+      // "pharmacy" itself is legitimately part of the Task 4 read-only search
+      // slice (pharmacy_organisations/pharmacy_branches display data), but
+      // pharmacy *operations* (verification decisions, staff assignment) are
+      // still out of scope for this task.
+      /\/v1\/(verify|staff)/i,
+      /pharmacy[_-]?(verification|staff|owner)/i,
     ];
 
     for (const pattern of forbiddenDomainPatterns) {

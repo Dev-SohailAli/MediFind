@@ -1,0 +1,30 @@
+{
+  "format_version": 1,
+  "schema_version": 1,
+  "synthetic_only": true,
+  "contains_real_data": false,
+  "tables": [
+    "medicine_concepts",
+    "pharmacy_organisations",
+    "pharmacy_branches",
+    "medicine_listings",
+    "public_search_projection",
+    "public_search_terms"
+  ],
+  "row_counts": {
+    "medicine_concepts": 7,
+    "pharmacy_organisations": 4,
+    "pharmacy_branches": 4,
+    "medicine_listings": 8,
+    "public_search_projection": 7,
+    "public_search_terms": 31
+  },
+  "checksums": {
+    "data/medicine_concepts.jsonl": "c2d89e973d9f252945cf838c7e2b1ce48fd75c751d0ed27cb780a49a8c4de2f9",
+    "data/pharmacy_organisations.jsonl": "9be3c05138e8752991b2af76fbdcd2168bb67d4ef8723378ed93a369ecf2dee7",
+    "data/pharmacy_branches.jsonl": "122f7d40b0fbe3eab4ab084b5deb62f2b8a4721021e3aebd1e5700214307272b",
+    "data/medicine_listings.jsonl": "33f77c22eb060a14613a1ff483e918ad92332910b79dd6976d6f212f809cc6c9",
+    "data/public_search_projection.jsonl": "71ae1e170be7fda41d7b6ae7042e6bda14b8fad6649cb080cf09ddeb3114249b",
+    "data/public_search_terms.jsonl": "035def99a13c6305b635541163280f731337a948f8259776c9c9dd2d47f01f5a"
+  }
+}
