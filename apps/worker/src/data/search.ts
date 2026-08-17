@@ -1,7 +1,7 @@
 import type { PublicSearchResultItem } from '@medifind/contracts';
 
 import type { Env } from '../types/env.js';
-import type { SyntheticArea } from './projection.js';
+import { DEFAULT_STALE_AFTER_MS, type SyntheticArea } from './projection.js';
 
 export type SearchSort = 'relevance' | 'price_low_to_high' | 'distance';
 
@@ -15,6 +15,7 @@ export interface NormalizedSearchInput {
   readonly sort: SearchSort;
   readonly page: number;
   readonly pageSize: number;
+  readonly referenceNowIso?: string;
 }
 
 // "total results are capped at 100" (Task 4 data contract).
@@ -56,6 +57,60 @@ interface RawProjectionRow {
 
 const PUBLIC_PROJECTION_COLUMNS =
   'listing_id, medicine_display_name, brand_name, active_ingredient_display_name, strength, dosage_form, pack_description, pharmacy_display_name, synthetic_area, direction_text, availability_state, price_fjd_minor, synthetic_distance_label, synthetic_distance_rank, last_refreshed_at';
+
+const SYNTHETIC_AREAS: readonly SyntheticArea[] = ['harbour', 'market', 'garden'];
+const AVAILABILITY_STATES: readonly RawProjectionRow['availability_state'][] = [
+  'in_stock',
+  'low_stock',
+  'unavailable',
+];
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+function isRawProjectionRow(value: unknown): value is RawProjectionRow {
+  if (!isRecord(value)) return false;
+
+  return (
+    typeof value.listing_id === 'string' &&
+    value.listing_id.length > 0 &&
+    typeof value.medicine_display_name === 'string' &&
+    (typeof value.brand_name === 'string' || value.brand_name === null) &&
+    typeof value.active_ingredient_display_name === 'string' &&
+    typeof value.strength === 'string' &&
+    typeof value.dosage_form === 'string' &&
+    typeof value.pack_description === 'string' &&
+    typeof value.pharmacy_display_name === 'string' &&
+    SYNTHETIC_AREAS.includes(value.synthetic_area as SyntheticArea) &&
+    typeof value.direction_text === 'string' &&
+    AVAILABILITY_STATES.includes(
+      value.availability_state as RawProjectionRow['availability_state'],
+    ) &&
+    Number.isSafeInteger(value.price_fjd_minor) &&
+    (value.price_fjd_minor as number) >= 0 &&
+    typeof value.synthetic_distance_label === 'string' &&
+    Number.isSafeInteger(value.synthetic_distance_rank) &&
+    (value.synthetic_distance_rank as number) >= 0 &&
+    typeof value.last_refreshed_at === 'string' &&
+    Number.isFinite(Date.parse(value.last_refreshed_at))
+  );
+}
+
+function assertRawProjectionRow(value: unknown): RawProjectionRow {
+  if (!isRawProjectionRow(value)) {
+    throw new Error('invalid public search projection row');
+  }
+  return value;
+}
+
+function freshnessCutoffIso(referenceNowIso: string): string {
+  const referenceMs = Date.parse(referenceNowIso);
+  if (!Number.isFinite(referenceMs)) {
+    throw new Error('invalid search reference time');
+  }
+  return new Date(referenceMs - DEFAULT_STALE_AFTER_MS).toISOString();
+}
 
 function mapRow(row: RawProjectionRow): PublicProjectionResult {
   return {
@@ -117,13 +172,8 @@ function compareByDistance(
 
 /**
  * Relevance ordering matches apps/web/src/search/rank.ts's matchKind ->
- * (area-adjusted distance) -> price -> id chain, minus the client's
- * freshness tie-break: the accepted Task 4 projection schema has no
- * freshness enum column (only last_refreshed_at, already used once as a
- * one-time eligibility gate at projection-build time). For the accepted
- * fixture set every listing has a distinct price, so freshness never
- * actually changes relative order there; dropping it here changes nothing
- * observable while keeping this route honest about what the schema stores.
+ * (area-adjusted distance) -> price -> id chain. Freshness is enforced at
+ * read time by the projection query, so stale rows cannot enter this sort.
  */
 function compareByRelevance(
   a: RawProjectionRow,
@@ -147,15 +197,22 @@ function compareByRelevance(
 async function fetchCandidateListingIds(
   db: NonNullable<Env['DB']>,
   tokens: readonly string[],
+  freshnessCutoff: string,
 ): Promise<string[]> {
-  const existsClauses = tokens
+  const productClauses = tokens
     .map(
       () =>
-        `EXISTS (SELECT 1 FROM public_search_terms t WHERE t.listing_id = p.listing_id AND t.normalized_term LIKE ? ESCAPE '\\')`,
+        `EXISTS (SELECT 1 FROM public_search_terms t WHERE t.listing_id = p.listing_id AND t.match_kind = 'product' AND t.normalized_term LIKE ? ESCAPE '\\')`,
     )
     .join(' AND ');
-  const sql = `SELECT p.listing_id AS listing_id FROM public_search_projection p WHERE ${existsClauses} LIMIT ${MAX_TOTAL_RESULTS}`;
-  const params = tokens.map(likePrefixParam);
+  const ingredientClauses = tokens
+    .map(
+      () =>
+        `EXISTS (SELECT 1 FROM public_search_terms t WHERE t.listing_id = p.listing_id AND t.match_kind IN ('ingredient', 'alias') AND t.normalized_term LIKE ? ESCAPE '\\')`,
+    )
+    .join(' AND ');
+  const sql = `SELECT p.listing_id AS listing_id FROM public_search_projection p WHERE p.last_refreshed_at >= ? AND ((${productClauses}) OR (${ingredientClauses})) LIMIT ${MAX_TOTAL_RESULTS}`;
+  const params = [freshnessCutoff, ...tokens.map(likePrefixParam), ...tokens.map(likePrefixParam)];
 
   const { results } = await db
     .prepare(sql)
@@ -170,20 +227,32 @@ async function fetchMatchPriority(
   tokens: readonly string[],
 ): Promise<Map<string, number>> {
   const idPlaceholders = candidateIds.map(() => '?').join(', ');
-  const tokenClauses = tokens.map(() => `normalized_term LIKE ? ESCAPE '\\'`).join(' OR ');
-  const sql = `SELECT listing_id, match_kind FROM public_search_terms WHERE listing_id IN (${idPlaceholders}) AND (${tokenClauses})`;
-  const params = [...candidateIds, ...tokens.map(likePrefixParam)];
+  const sql = `SELECT listing_id, normalized_term, match_kind FROM public_search_terms WHERE listing_id IN (${idPlaceholders})`;
+  const params = [...candidateIds];
 
   const { results } = await db
     .prepare(sql)
     .bind(...params)
-    .all<{ listing_id: string; match_kind: 'product' | 'ingredient' | 'alias' }>();
+    .all<{
+      listing_id: string;
+      normalized_term: string;
+      match_kind: 'product' | 'ingredient' | 'alias';
+    }>();
+
+  const productMatches = new Map<string, Set<string>>();
+  const ingredientMatches = new Map<string, Set<string>>();
+  for (const row of results) {
+    const matchedTokens = tokens.filter((token) => row.normalized_term.startsWith(token));
+    if (matchedTokens.length === 0) continue;
+    const matches = row.match_kind === 'product' ? productMatches : ingredientMatches;
+    const listingMatches = matches.get(row.listing_id) ?? new Set<string>();
+    for (const token of matchedTokens) listingMatches.add(token);
+    matches.set(row.listing_id, listingMatches);
+  }
 
   const priority = new Map<string, number>();
-  for (const row of results) {
-    const current = priority.get(row.listing_id) ?? 1;
-    const candidate = row.match_kind === 'product' ? 0 : 1;
-    priority.set(row.listing_id, Math.min(current, candidate));
+  for (const listingId of candidateIds) {
+    priority.set(listingId, productMatches.get(listingId)?.size === tokens.length ? 0 : 1);
   }
   return priority;
 }
@@ -191,15 +260,16 @@ async function fetchMatchPriority(
 async function fetchProjectionRowsByIds(
   db: NonNullable<Env['DB']>,
   candidateIds: readonly string[],
+  freshnessCutoff: string,
 ): Promise<RawProjectionRow[]> {
   const idPlaceholders = candidateIds.map(() => '?').join(', ');
-  const sql = `SELECT ${PUBLIC_PROJECTION_COLUMNS} FROM public_search_projection WHERE listing_id IN (${idPlaceholders})`;
+  const sql = `SELECT ${PUBLIC_PROJECTION_COLUMNS} FROM public_search_projection WHERE last_refreshed_at >= ? AND listing_id IN (${idPlaceholders})`;
 
   const { results } = await db
     .prepare(sql)
-    .bind(...candidateIds)
-    .all<RawProjectionRow>();
-  return results;
+    .bind(freshnessCutoff, ...candidateIds)
+    .all<unknown>();
+  return results.map(assertRawProjectionRow);
 }
 
 /**
@@ -224,14 +294,16 @@ export async function searchProjection(
   const db = env.DB;
 
   try {
-    const candidateIds = await fetchCandidateListingIds(db, input.queryTokens);
+    const referenceNowIso = input.referenceNowIso ?? new Date().toISOString();
+    const cutoff = freshnessCutoffIso(referenceNowIso);
+    const candidateIds = await fetchCandidateListingIds(db, input.queryTokens, cutoff);
     if (candidateIds.length === 0) {
       return { status: 'ok', results: [], total: 0 };
     }
 
     const [matchPriority, rows] = await Promise.all([
       fetchMatchPriority(db, candidateIds, input.queryTokens),
-      fetchProjectionRowsByIds(db, candidateIds),
+      fetchProjectionRowsByIds(db, candidateIds, cutoff),
     ]);
 
     const sorted = [...rows];
@@ -258,19 +330,24 @@ export async function searchProjection(
   }
 }
 
-export async function getListingById(env: Env, listingId: string): Promise<ListingOutcome> {
+export async function getListingById(
+  env: Env,
+  listingId: string,
+  referenceNowIso = new Date().toISOString(),
+): Promise<ListingOutcome> {
   if (!env.DB) {
     return { status: 'unavailable', reason: 'binding_disabled' };
   }
 
   try {
+    const cutoff = freshnessCutoffIso(referenceNowIso);
     const row = await env.DB.prepare(
-      `SELECT ${PUBLIC_PROJECTION_COLUMNS} FROM public_search_projection WHERE listing_id = ?`,
+      `SELECT ${PUBLIC_PROJECTION_COLUMNS} FROM public_search_projection WHERE listing_id = ? AND last_refreshed_at >= ?`,
     )
-      .bind(listingId)
-      .first<RawProjectionRow>();
+      .bind(listingId, cutoff)
+      .first<unknown>();
 
-    return { status: 'ok', result: row ? mapRow(row) : null };
+    return { status: 'ok', result: row ? mapRow(assertRawProjectionRow(row)) : null };
   } catch {
     return { status: 'unavailable', reason: 'quota_or_provider_error' };
   }

@@ -14,6 +14,76 @@ function envWithFakeD1(): Env {
   return { DB: binding };
 }
 
+function envWithProductAndAliasCollision(): Env {
+  const { db, binding } = createFakeD1(migrationPath);
+
+  db.prepare(
+    `INSERT INTO medicine_listings (id, concept_id, branch_id, brand_name, availability_state, price_fjd_minor, synthetic_distance_label, synthetic_distance_rank, last_refreshed_at, listing_state, identity_match_state, version, schema_version, created_at, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+  ).run(
+    'calorex-alt-product',
+    'concept-calorex-relief',
+    'branch-gardenview',
+    null,
+    'in_stock',
+    2000,
+    '9.0 km (synthetic)',
+    9,
+    '2026-08-17T00:00:00.000Z',
+    'active',
+    'approved',
+    1,
+    1,
+    '2026-08-17T00:00:00.000Z',
+    '2026-08-17T00:00:00.000Z',
+  );
+  db.prepare(
+    `INSERT INTO public_search_projection (listing_id, medicine_display_name, brand_name, active_ingredient_display_name, strength, dosage_form, pack_description, pharmacy_display_name, synthetic_area, direction_text, availability_state, price_fjd_minor, synthetic_distance_label, synthetic_distance_rank, last_refreshed_at, source_version, projection_version, schema_version, projected_at, created_at, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+  ).run(
+    'calorex-alt-product',
+    'Calorex Alt',
+    null,
+    'Zephyramine',
+    '200 mg',
+    'Capsule',
+    'Pack of 10',
+    'Gardenview Apothecary (synthetic)',
+    'garden',
+    'Synthetic directions: near the garden synthetic checkpoint (fixture data only).',
+    'in_stock',
+    2000,
+    '9.0 km (synthetic)',
+    9,
+    '2026-08-17T00:00:00.000Z',
+    1,
+    1,
+    1,
+    '2026-08-17T00:00:00.000Z',
+    '2026-08-17T00:00:00.000Z',
+    '2026-08-17T00:00:00.000Z',
+  );
+  db.prepare(
+    `INSERT INTO public_search_terms (listing_id, normalized_term, match_kind, schema_version, created_at, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?), (?, ?, ?, ?, ?, ?)`,
+  ).run(
+    'calorex-alt-product',
+    'calorex',
+    'product',
+    1,
+    '2026-08-17T00:00:00.000Z',
+    '2026-08-17T00:00:00.000Z',
+    'calorex-alt-product',
+    'alt',
+    'product',
+    1,
+    '2026-08-17T00:00:00.000Z',
+    '2026-08-17T00:00:00.000Z',
+  );
+
+  return { DB: binding };
+}
+
 const baseInput = { area: null, sort: 'relevance' as const, page: 1, pageSize: 20 };
 
 describe('searchProjection', () => {
@@ -104,6 +174,46 @@ describe('searchProjection', () => {
     expect(nonMatching.status).toBe('ok');
     if (nonMatching.status !== 'ok') return;
     expect(nonMatching.results).toEqual([]);
+  });
+
+  it('ranks a complete product match ahead of an alias match when tokens overlap', async () => {
+    const env = envWithProductAndAliasCollision();
+
+    const outcome = await searchProjection(env, { ...baseInput, queryTokens: ['calorex', 'alt'] });
+
+    expect(outcome.status).toBe('ok');
+    if (outcome.status !== 'ok') return;
+    expect(outcome.results.map((result) => result.id)).toEqual([
+      'calorex-alt-product',
+      'calorex-gardenview',
+    ]);
+  });
+
+  it('does not return a projection after it crosses the seven-day freshness window', async () => {
+    const env = envWithFakeD1();
+
+    const outcome = await searchProjection(env, {
+      ...baseInput,
+      queryTokens: ['nivaprin'],
+      referenceNowIso: '2026-08-25T00:00:00.000Z',
+    });
+
+    expect(outcome).toEqual({ status: 'ok', results: [], total: 0 });
+  });
+
+  it('fails closed when a projection row has an invalid public field type', async () => {
+    const { db, binding } = createFakeD1(migrationPath);
+    db.prepare(`UPDATE public_search_projection SET price_fjd_minor = ? WHERE listing_id = ?`).run(
+      'not-a-price',
+      'nivaprin-solandra',
+    );
+
+    await expect(
+      searchProjection({ DB: binding }, { ...baseInput, queryTokens: ['nivaprin'] }),
+    ).resolves.toEqual({
+      status: 'unavailable',
+      reason: 'quota_or_provider_error',
+    });
   });
 
   it('never returns the stale Excludex listing, even for a query that matches its own name', async () => {
@@ -297,6 +407,27 @@ describe('getListingById', () => {
     await expect(getListingById(env, 'never-existed-xyz')).resolves.toEqual({
       status: 'ok',
       result: null,
+    });
+  });
+
+  it('does not return a listing after it crosses the seven-day freshness window', async () => {
+    const env = envWithFakeD1();
+
+    await expect(
+      getListingById(env, 'nivaprin-solandra', '2026-08-25T00:00:00.000Z'),
+    ).resolves.toEqual({ status: 'ok', result: null });
+  });
+
+  it('fails closed when a listing projection row has an invalid public field type', async () => {
+    const { db, binding } = createFakeD1(migrationPath);
+    db.prepare(`UPDATE public_search_projection SET price_fjd_minor = ? WHERE listing_id = ?`).run(
+      'not-a-price',
+      'nivaprin-solandra',
+    );
+
+    await expect(getListingById({ DB: binding }, 'nivaprin-solandra')).resolves.toEqual({
+      status: 'unavailable',
+      reason: 'quota_or_provider_error',
     });
   });
 });
