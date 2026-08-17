@@ -9,6 +9,13 @@ Copy this template into a task/issue before asking Claude Code to implement anyt
 - **User-facing outcome:**
 - **Owner/approver:**
 
+## Vertical-slice shape
+
+- **Capability outcome:**
+- **Related deliverables that belong in the same PR:** <!-- Group client, Worker, contracts, tests, docs and CI only when they share the outcome and rollback story. -->
+- **Internal work packages:** <!-- Claude may track these separately without opening separate PRs. -->
+- **Required split trigger:** <!-- Name the independent approval/security/deployment/rollback boundary, or write "none". -->
+
 ## Scope
 
 - **In scope:**
@@ -43,7 +50,9 @@ Copy this template into a task/issue before asking Claude Code to implement anyt
 
 ## Delivery rules
 
-- Work from a task-specific branch and open a PR; do not merge/deploy.
+- Work from one task-specific branch and open one PR for the complete vertical slice; do not create one PR per file or implementation layer.
+- Keep related deliverables together, but split when the issue identifies an independent approval/security/deployment/rollback gate or unrelated release.
+- Use internal checklists and incremental commits for work packages; the final PR must present one coherent outcome and one integrated verification matrix.
 - Use synthetic fixtures only.
 - List every documentation change request separately; do not silently change ADRs.
 - PR must include implementation summary, tests/results, security impact and residual risk.

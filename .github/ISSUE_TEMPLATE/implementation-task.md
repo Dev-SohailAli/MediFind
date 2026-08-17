@@ -1,13 +1,20 @@
 ---
 name: Implementation task
-about: A bounded, documentation-governed task for Claude Code
+about: A coherent, documentation-governed vertical-slice task for Claude Code
 title: "task: "
 labels: "type:task, status:needs-approval"
 ---
 
 ## Objective
 
-<!-- State the smallest user or engineering outcome this issue delivers. -->
+<!-- State one coherent user or engineering capability this issue delivers. It may contain several related deliverables, but must have one outcome and rollback story. -->
+
+## Vertical-slice shape
+
+- Capability outcome:
+- Related deliverables in this task/PR: <!-- web, Worker, contracts, tests, docs, CI as applicable -->
+- Internal work packages: <!-- Claude may track these without opening separate PRs. -->
+- Required split trigger: <!-- independent approval/security/deployment/rollback gate, unrelated owner/release, or none -->
 
 ## Authority and release boundary
 
@@ -21,7 +28,7 @@ labels: "type:task, status:needs-approval"
 
 ## In scope
 
-<!-- List concrete files, components, behaviours, or contracts Claude may change. -->
+<!-- List concrete files, components, behaviours, contracts and related work packages Claude may change in the one vertical slice. -->
 
 ## Explicitly out of scope
 
