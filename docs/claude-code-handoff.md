@@ -14,6 +14,14 @@ resource/binding authority, acceptance tests, security/privacy/cost impact,
 rollback path and stop conditions. A missing provider, data field, route,
 credential, cost, region, auth method or release permission stops the task.
 
+Default to one larger, coherent vertical-slice task and one PR per capability
+outcome. Batch related web, Worker, contract, security, accessibility, test,
+documentation and CI work when they share the same scope and rollback story.
+Split only for an independent approval/security/deployment gate, materially
+different rollback, separate owner/release decision or unrelated capability.
+Internal work packages and incremental commits are encouraged; separate PRs
+for each file or layer are not.
+
 ## Evidence
 
 The PR reports exact format, lint, typecheck, test, build, secret/dependency
