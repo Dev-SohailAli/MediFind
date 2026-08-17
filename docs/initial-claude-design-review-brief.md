@@ -8,7 +8,7 @@ This is a documentation/design deliverable only. It authorises no application co
 
 ## Required deliverables
 
-1. **Design-system application:** apply the approved initial semantic tokens, accessible light/dark colour approach, system-font typography scale, spacing/radius/elevation, touch targets, status/error/safety components and icon usage from the [Claude Design agent brief](claude-design-agent-brief.md). Explain the 200% text-scale and English/iTaukei/Fiji Hindi layout treatment; identify only changes that need founder approval.
+1. **Design-system application:** apply the approved organic semantic tokens, accessible light/dark colour approach, Caprasimo/Figtree typography, 4.4px-based spacing, approved radius/elevation, touch targets, status/error/safety components and icon usage from the [Claude Design agent brief](claude-design-agent-brief.md). Explain the 200% text-scale and English/iTaukei/Fiji Hindi layout treatment; identify only changes that need founder approval.
 2. **Navigation/role map:** clear buyer, inventory-manager, reviewer, owner and MediFind admin navigation. Include buyer/staff workspace switching without cross-context data exposure. Owner-only navigation must not imply prescription access without reviewer role.
 3. **Low-fidelity wireframes:** responsive page-by-page wireframes/descriptions for the core flows below, including narrow/mobile and desktop content hierarchy and actions.
 4. **State inventory:** loading, offline, retry, empty, zero-result, stale, permission request/denial, unauthenticated, forbidden, validation/conflict, generic safe error, security alert, success and kill-switch/maintenance states for every affected flow.
@@ -41,7 +41,7 @@ This is a documentation/design deliverable only. It authorises no application co
 ## Hard constraints
 
 - Follow all accepted ADRs and the design, accessibility, dynamic-content, permission, error, notification and security policies.
-- Use clean clinical/friendly visual direction, semantic blue/teal accent roles, system icons and no custom logos/illustrations in MVP.
+- Use the approved warm organic visual direction, semantic neutral/terracotta/sage roles, Lucide icons and no custom logos/illustrations in MVP. The light palette is the unconditional default; dark mode is future manual-selector work only.
 - Use list-first search; directions launches installed maps; no embedded map, in-app chat, payment, delivery, ratings/reviews, advertising or clinical advice.
 - Show pharmacy ownership of price/availability and no stock/reservation/dispensing guarantee in context, without overwhelming every screen.
 - No prescription file, patient detail, medicine name/price/reservation detail or sensitive content in notification/artifact/log proposals unless explicitly authorised by the relevant screen/role.

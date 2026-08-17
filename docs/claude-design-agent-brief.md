@@ -73,7 +73,7 @@ Semantic aliases remain available to existing screen specifications: `primary` m
 - Use `8px` small, `16px` medium and `28px` large radii. Buttons, inputs and tags may use `999px`; cards and dialogs may use approximately `32px` where it improves the organic visual language.
 - Use soft, ink-tinted small/medium/large elevation rather than neutral grey shadows. Keep 16px minimum horizontal padding on narrow viewports and preserve generous spacing around critical actions.
 - Minimum interactive target is 48 × 48 dp/pt. Critical actions have generous spacing and must remain usable at 200% text scaling.
-- Support browser/OS light/dark preference by default with a manual Account override. Never create a separate information hierarchy for dark mode.
+- Default to the light organic palette regardless of browser/OS preference. Keep dark tokens behind an explicit future manual selector only; there is no current theme-toggle UI. Never create a separate information hierarchy for dark mode.
 
 Use Lucide icons with a `2.75` stroke width. Do not add a custom logo or illustration library as part of this visual-system change.
 

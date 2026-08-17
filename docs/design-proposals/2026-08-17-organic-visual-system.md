@@ -6,7 +6,7 @@
 
 ## Decision
 
-MediFind adopts a warm organic visual system for the responsive web/PWA. It replaces the previous teal/blue and system-font baseline while preserving the existing information architecture, safety language, accessibility requirements, responsive behaviour and synthetic-only delivery boundary.
+MediFind adopts a warm organic visual system for the responsive web/PWA. It replaces the previous teal/blue and system-font baseline while preserving the existing information architecture, safety language, accessibility requirements, responsive behaviour and synthetic-only delivery boundary. The light organic palette is the unconditional default regardless of OS/browser preference; dark tokens remain available only for a future explicit manual selector under ADR-273.
 
 ## Base colour tokens
 
