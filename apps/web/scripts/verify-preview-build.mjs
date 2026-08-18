@@ -26,6 +26,8 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { FORBIDDEN_CONTENT_PATTERNS } from './forbidden-artifact-patterns.mjs';
+
 const SCRIPT_DIRECTORY = dirname(fileURLToPath(import.meta.url));
 const DEFAULT_SOURCE_DIRECTORY = join(SCRIPT_DIRECTORY, '..');
 const DEFAULT_DIST_DIRECTORY = join(DEFAULT_SOURCE_DIRECTORY, 'dist');
@@ -63,26 +65,6 @@ const FORBIDDEN_FILENAME_PATTERNS = [
   {
     code: 'forbidden-credential-file',
     pattern: /(^|[\\/])[^\\/]*credentials?[^\\/]*\.(json|txt|pem|key)$/i,
-  },
-];
-
-/**
- * Content patterns scanned across every text-like generated file. Every
- * label here corresponds to a capability that must never be emitted into
- * the default synthetic static Pages artifact.
- */
-const FORBIDDEN_CONTENT_PATTERNS = [
-  { code: 'forbidden-account-id', pattern: /account_id/i },
-  { code: 'forbidden-d1-binding', pattern: /\[\[d1_databases\]\]|d1_databases/i },
-  { code: 'forbidden-kv-binding', pattern: /\[\[kv_namespaces\]\]|kv_namespaces/i },
-  { code: 'forbidden-r2-binding', pattern: /\[\[r2_buckets\]\]|r2_buckets/i },
-  { code: 'forbidden-credential', pattern: /CLOUDFLARE_API_TOKEN|AKIA[0-9A-Z]{16}/ },
-  { code: 'forbidden-pages-function', pattern: /export\s+(async\s+)?function\s+onRequest/i },
-  { code: 'forbidden-analytics', pattern: /google-analytics\.com|gtag\(|googletagmanager\.com/i },
-  { code: 'forbidden-cookie-write', pattern: /document\.cookie\s*=/ },
-  {
-    code: 'forbidden-client-storage',
-    pattern: /\b(localStorage|sessionStorage|indexedDB)\s*\.\s*(setItem|open|put|transaction)\s*\(/,
   },
 ];
 

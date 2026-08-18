@@ -167,6 +167,10 @@ describe('parsePublicSearchResponse', () => {
     ['fractional page size', validResponse({ pageSize: 1.5 })],
     ['negative total', validResponse({ total: -1 })],
     ['non-boolean hasMore', validResponse({ hasMore: 'false' })],
+    [
+      'results array longer than the declared pageSize',
+      validResponse({ results: [validItem(), validItem({ id: 'listing-second' })], pageSize: 1 }),
+    ],
   ])('rejects: %s', (_name, input) => {
     expect(() => parsePublicSearchResponse(input)).toThrow('Invalid public search response');
   });

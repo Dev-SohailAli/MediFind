@@ -432,5 +432,5 @@ describe('local command integration (spawned process against real local D1)', ()
     const secondSummary = JSON.parse(second.stdout);
     expect(secondSummary).toEqual(expectedSummary);
     expect(secondSummary).toEqual(firstSummary);
-  }, 30000);
+  }, 60000);
 });

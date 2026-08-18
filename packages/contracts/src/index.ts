@@ -210,18 +210,31 @@ export function parsePublicSearchResponse(value: unknown): PublicSearchResponse 
   }
 
   const record = value as Record<string, unknown>;
+  const results = (record.results as unknown[]).map((item) => parsePublicSearchResultItem(item));
 
   return {
-    results: (record.results as unknown[]).map((item) => parsePublicSearchResultItem(item)),
+    results,
     page: requirePositiveSafeInteger(record.page),
-    pageSize: requirePageSize(record.pageSize),
+    pageSize: requirePageSize(record.pageSize, results.length),
     total: requireNonNegativeSafeInteger(record.total),
     hasMore: requireBoolean(record.hasMore),
   };
 }
 
-function requirePageSize(value: unknown): number {
+// The page-size upper bound below (20) is a protocol-wide value that is
+// duplicated by hand in two other places: MAX_PAGE_SIZE in
+// apps/worker/src/routes/search.ts and MAX_RESULTS_PER_PAGE in
+// apps/web/src/search/searchListings.ts. The contracts package boundary
+// test intentionally forbids exporting a shared runtime constant from this
+// package, so keep all three literals equal by hand whenever one changes.
+function requirePageSize(value: unknown, resultsLength: number): number {
   if (typeof value !== 'number' || !Number.isSafeInteger(value) || value < 1 || value > 20) {
+    fail();
+  }
+  // An oversized results array (more items than the response's own declared
+  // pageSize) is rejected the same way any other malformed envelope is,
+  // rather than being silently accepted with no upper bound.
+  if (resultsLength > value) {
     fail();
   }
   return value;

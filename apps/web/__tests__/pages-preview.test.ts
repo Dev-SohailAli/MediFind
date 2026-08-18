@@ -7,6 +7,7 @@ import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { inspectPreviewBuild } from '../scripts/verify-preview-build.mjs';
+import { FORBIDDEN_CONTENT_PATTERNS } from '../scripts/forbidden-artifact-patterns.mjs';
 
 const headersPath = fileURLToPath(new URL('../public/_headers', import.meta.url));
 const robotsPath = fileURLToPath(new URL('../public/robots.txt', import.meta.url));
@@ -16,20 +17,14 @@ const webRoot = dirname(fileURLToPath(new URL('../package.json', import.meta.url
 
 // Forbidden patterns that must never appear anywhere in a built, public
 // static artifact: env files, credential-looking secrets, Cloudflare
-// account/binding identifiers or a direct D1/R2/KV/analytics/cookie
-// capability. Presence of the *inert, unused* Worker adapter source (see
-// src/search/searchClient.ts) is explicitly allowed — only an active
-// capability/secret is forbidden.
-const FORBIDDEN_ARTIFACT_PATTERNS: ReadonlyArray<{ label: string; pattern: RegExp }> = [
-  { label: 'account_id', pattern: /account_id/i },
-  { label: 'D1 binding', pattern: /\[\[d1_databases\]\]|d1_databases/i },
-  { label: 'KV binding', pattern: /\[\[kv_namespaces\]\]|kv_namespaces/i },
-  { label: 'R2 binding', pattern: /\[\[r2_buckets\]\]|r2_buckets/i },
-  { label: 'Cloudflare API token', pattern: /CLOUDFLARE_API_TOKEN/i },
-  { label: 'AWS-style access key', pattern: /AKIA[0-9A-Z]{16}/ },
-  { label: 'document.cookie use', pattern: /document\.cookie/ },
-  { label: 'Google Analytics/gtag', pattern: /google-analytics\.com|gtag\(/i },
-];
+// account/binding identifiers, an emitted Pages Function, or a direct
+// D1/R2/KV/analytics/cookie-write/client-storage capability. This is the
+// exact same list the `verify:preview` guard
+// (apps/web/scripts/verify-preview-build.mjs) enforces — imported from the
+// single shared module so the two checks can never drift apart. Presence of
+// the *inert, unused* Worker adapter source (see src/search/searchClient.ts)
+// is explicitly allowed — only an active capability/secret is forbidden.
+const FORBIDDEN_ARTIFACT_PATTERNS = FORBIDDEN_CONTENT_PATTERNS;
 
 function listFilesRecursive(dir: string): string[] {
   const out: string[] = [];
@@ -155,10 +150,8 @@ describe('generated default build is the exact static Pages preview artifact', (
       // Source maps legitimately reference original file paths/comments;
       // they are still scanned like every other build output file.
       const content = readFileSync(file, 'utf8');
-      for (const { label, pattern } of FORBIDDEN_ARTIFACT_PATTERNS) {
-        expect(pattern.test(content), `${label} found in ${relative(defaultDir, file)}`).toBe(
-          false,
-        );
+      for (const { code, pattern } of FORBIDDEN_ARTIFACT_PATTERNS) {
+        expect(pattern.test(content), `${code} found in ${relative(defaultDir, file)}`).toBe(false);
       }
     }
   });
@@ -279,8 +272,8 @@ describe('explicit VITE_MEDIFIND_SEARCH_MODE=worker build is rejected as the def
     const files = listFilesRecursive(workerDir);
     for (const file of files) {
       const content = readFileSync(file, 'utf8');
-      for (const { label, pattern } of FORBIDDEN_ARTIFACT_PATTERNS) {
-        expect(pattern.test(content), `${label} found in ${relative(workerDir, file)}`).toBe(false);
+      for (const { code, pattern } of FORBIDDEN_ARTIFACT_PATTERNS) {
+        expect(pattern.test(content), `${code} found in ${relative(workerDir, file)}`).toBe(false);
       }
     }
   });
