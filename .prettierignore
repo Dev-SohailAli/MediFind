@@ -10,4 +10,7 @@ docs
 .github/ISSUE_TEMPLATE
 .github/pull_request_template.md
 .claude
+.wrangler
+archive
+MediVault
 README.md
