@@ -12,7 +12,8 @@
     "d1:apply": "wrangler d1 execute medifind-synthetic-search-local --local --config wrangler.local.toml --file migrations/0001_task4_synthetic_search.sql",
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "verify:local": "node ./scripts/verify-synthetic-local.mjs"
   },
   "devDependencies": {
     "@medifind/config": "workspace:*",
