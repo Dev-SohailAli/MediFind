@@ -21,13 +21,13 @@ export type SearchExecutionState =
  * Wraps the pure searchListings call in a small local state machine.
  *
  * Only the query text is debounced through SEARCH_LOADING_DELAY_MS, so
- * typing a new search genuinely shows the loading state. Sort and area
+ * typing a new fixture-backed search genuinely shows the loading state. Sort and area
  * changes re-rank the already-committed query synchronously (no delay),
  * so refining an already-open result never interrupts an open
  * result-detail dialog with a spurious loading flash.
  *
- * If the pure search function ever throws, the error is caught here and
- * this returns the safe generic error state instead of crashing the app.
+ * If the pure fixture search function ever throws, the error is caught here
+ * and this returns the safe generic error state instead of crashing the app.
  * `runSearch` defaults to the real searchListings and only exists so
  * tests can inject a throwing implementation to prove that path is real,
  * reachable code, not exercise a production capability.

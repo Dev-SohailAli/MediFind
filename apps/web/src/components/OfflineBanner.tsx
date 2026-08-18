@@ -10,9 +10,9 @@ function getInitialOnlineState(): boolean {
 
 /**
  * Reflects the browser's connectivity signal only (navigator.onLine plus
- * the online/offline events) — no network request is ever made. Explains
- * that this local synthetic prototype does not need a network connection,
- * per docs/web-app-and-pwa-direction.md's offline-shell requirement.
+ * the online/offline events) — it does not probe the network. In the default
+ * fixture mode this local synthetic prototype does not need a connection; the
+ * opt-in Worker mode reports its own safe unavailable state.
  */
 export function OfflineBanner() {
   const [online, setOnline] = React.useState(getInitialOnlineState);

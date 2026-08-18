@@ -4,7 +4,9 @@ import type { SyntheticArea, SyntheticSort } from '@medifind/contracts';
 import { strings } from '../content/strings';
 import { syntheticListings } from '../fixtures/syntheticListings';
 import { MAX_RESULTS_PER_PAGE, paginate } from '../search/searchListings';
+import { isWorkerSearchMode } from '../search/searchClient';
 import { useSearchExecution } from '../search/useSearchExecution';
+import { useWorkerSearchExecution } from '../search/useWorkerSearchExecution';
 import { AreaSelector } from './AreaSelector';
 import { LoadMoreButton } from './LoadMoreButton';
 import { ResultCard } from './ResultCard';
@@ -14,6 +16,7 @@ import { SearchBar } from './SearchBar';
 import { SortSelector } from './SortSelector';
 
 export function SearchScreen() {
+  const workerSearchEnabled = isWorkerSearchMode();
   const [query, setQuery] = React.useState('');
   const [sort, setSort] = React.useState<SyntheticSort>('relevance');
   const [selectedArea, setSelectedArea] = React.useState<SyntheticArea | null>(null);
@@ -35,7 +38,9 @@ export function SearchScreen() {
     setRevealedCount(MAX_RESULTS_PER_PAGE);
   }, []);
 
-  const execution = useSearchExecution(syntheticListings, query, sort, selectedArea);
+  const fixtureExecution = useSearchExecution(syntheticListings, query, sort, selectedArea);
+  const workerExecution = useWorkerSearchExecution(workerSearchEnabled, query, sort, selectedArea);
+  const execution = workerSearchEnabled ? workerExecution : fixtureExecution;
 
   const rows = execution.status === 'ready' ? execution.outcome.rows : [];
 
