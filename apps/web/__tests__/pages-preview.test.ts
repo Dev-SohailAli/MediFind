@@ -6,6 +6,8 @@ import { tmpdir } from 'node:os';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { inspectPreviewBuild } from '../scripts/verify-preview-build.mjs';
+
 const headersPath = fileURLToPath(new URL('../public/_headers', import.meta.url));
 const robotsPath = fileURLToPath(new URL('../public/robots.txt', import.meta.url));
 const indexHtmlPath = fileURLToPath(new URL('../index.html', import.meta.url));
@@ -210,6 +212,36 @@ describe('generated default build is the exact static Pages preview artifact', (
     const files = listFilesRecursive(join(defaultDir, 'assets')).filter((f) => f.endsWith('.js'));
     expect(files.length).toBeGreaterThan(0);
   });
+
+  it('passes the reusable verify-preview-build.mjs guard as buildMode "fixture-default" with every named check', () => {
+    // This is the same shared, pure inspection helper the
+    // `verify:preview` package script runs against the real `apps/web/dist`
+    // output. Running it here against the real default build produced above
+    // proves the guard and this test's own inline assertions agree, without
+    // triggering a second real `vite build` invocation.
+    const result = inspectPreviewBuild({
+      distDirectory: defaultDir,
+      sourceDirectory: webRoot,
+      searchMode: undefined,
+    });
+
+    expect(result.ok, JSON.stringify(result)).toBe(true);
+    if (result.ok) {
+      expect(result.buildMode).toBe('fixture-default');
+      expect(result.checks).toEqual(
+        expect.arrayContaining([
+          'build-mode',
+          'shell-present',
+          'manifest-present',
+          'service-worker-present',
+          'icons-present',
+          'noindex-policy',
+          'synthetic-identity',
+          'capability-boundary',
+        ]),
+      );
+    }
+  });
 });
 
 describe('explicit VITE_MEDIFIND_SEARCH_MODE=worker build is rejected as the default Pages preview artifact', () => {
@@ -250,6 +282,26 @@ describe('explicit VITE_MEDIFIND_SEARCH_MODE=worker build is rejected as the def
       for (const { label, pattern } of FORBIDDEN_ARTIFACT_PATTERNS) {
         expect(pattern.test(content), `${label} found in ${relative(workerDir, file)}`).toBe(false);
       }
+    }
+  });
+
+  it('is rejected by the reusable verify-preview-build.mjs guard with the named explicit-worker-mode-not-pages-preview failure', () => {
+    // Same shared helper as `pnpm --filter @medifind/web verify:preview`,
+    // run here against the real worker-mode build produced above rather
+    // than triggering a second real `vite build` invocation.
+    const result = inspectPreviewBuild({
+      distDirectory: workerDir,
+      sourceDirectory: webRoot,
+      searchMode: 'worker',
+    });
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.failures).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ code: 'explicit-worker-mode-not-pages-preview' }),
+        ]),
+      );
     }
   });
 });
