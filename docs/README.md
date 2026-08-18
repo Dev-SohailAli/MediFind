@@ -75,6 +75,8 @@ prohibitions only and never authorize new work.
 | [Synthetic-code repository readiness record](repository-readiness-record.md) | Verified private-repository controls, limits and first-task merge gate |
 | [Public-source visibility review](public-source-visibility-review.md) | Conditional IP/security review for the GitHub Free public-source alternative |
 | [Web application and PWA direction](web-app-and-pwa-direction.md) | Current web-only product surface, PWA capabilities and Cloudflare distribution boundary |
+| [Local synthetic development](local-synthetic-development.md) | Local Worker, Wrangler D1 and opt-in web integration commands |
+| [Task 4 synthetic Cloudflare environment brief](task-4-synthetic-cloudflare-environment-brief.md) | Founder-approved isolated synthetic Worker/D1 provisioning boundary |
 | [Monorepo and toolchain policy](monorepo-and-toolchain-policy.md) | pnpm workspace layout, web/Worker dependency boundaries and reproducible setup rules |
 | [GitHub work-management policy](github-work-management.md) | Documentation-governed issues, milestones, labels and Claude task workflow |
 | [Decision log](decisions.md) | Decisions that govern future implementation |
