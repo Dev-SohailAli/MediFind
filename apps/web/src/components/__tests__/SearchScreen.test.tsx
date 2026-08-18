@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -6,6 +6,23 @@ import { strings } from '../../content/strings';
 import { SearchScreen } from '../SearchScreen';
 
 describe('SearchScreen', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('never calls fetch in the default fixture-backed mode', async () => {
+    const fetchSpy = vi.spyOn(globalThis, 'fetch');
+    const user = userEvent.setup();
+    render(<SearchScreen />);
+
+    await user.type(screen.getByLabelText(strings.searchInputLabel), 'Nivaprin');
+
+    expect(
+      await screen.findAllByRole('button', { name: /Nivaprin.*Exact product match/i }),
+    ).toHaveLength(2);
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
   it('shows the safe browse/empty-search state for an empty query', () => {
     render(<SearchScreen />);
 

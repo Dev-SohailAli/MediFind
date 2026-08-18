@@ -87,4 +87,118 @@ describe('fetchWorkerSearch', () => {
       fetchWorkerSearch({ query: 'Nivaprin', sort: 'relevance', selectedArea: null }, fetchMock),
     ).rejects.toThrow('Worker search unavailable');
   });
+
+  it('accepts a valid response even when a result item carries an unknown internal field', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          ...apiResponse,
+          results: [{ ...apiResponse.results[0], internalState: 'moderation-pending' }],
+        }),
+        { status: 200, headers: { 'content-type': 'application/json' } },
+      ),
+    );
+
+    const outcome = await fetchWorkerSearch(
+      { query: 'Nivaprin', sort: 'relevance', selectedArea: null },
+      fetchMock,
+    );
+
+    expect(outcome.isEmptyQuery).toBe(false);
+    expect(outcome.rows[0]?.listing.id).toBe('listing-nivaprin-solandra');
+  });
+
+  it('rejects a response missing envelope pagination fields as the generic unavailable error', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ results: apiResponse.results }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      }),
+    );
+
+    await expect(
+      fetchWorkerSearch({ query: 'Nivaprin', sort: 'relevance', selectedArea: null }, fetchMock),
+    ).rejects.toThrow('Worker search unavailable');
+  });
+
+  it('rejects a response with an invalid item enum value as the generic unavailable error', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          ...apiResponse,
+          results: [{ ...apiResponse.results[0], availabilityState: 'maybe' }],
+        }),
+        { status: 200, headers: { 'content-type': 'application/json' } },
+      ),
+    );
+
+    await expect(
+      fetchWorkerSearch({ query: 'Nivaprin', sort: 'relevance', selectedArea: null }, fetchMock),
+    ).rejects.toThrow('Worker search unavailable');
+  });
+
+  it('rejects a response with a negative item price as the generic unavailable error', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          ...apiResponse,
+          results: [{ ...apiResponse.results[0], priceFjdMinor: -1 }],
+        }),
+        { status: 200, headers: { 'content-type': 'application/json' } },
+      ),
+    );
+
+    await expect(
+      fetchWorkerSearch({ query: 'Nivaprin', sort: 'relevance', selectedArea: null }, fetchMock),
+    ).rejects.toThrow('Worker search unavailable');
+  });
+
+  it('rejects a response with an invalid item timestamp as the generic unavailable error', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          ...apiResponse,
+          results: [{ ...apiResponse.results[0], lastRefreshedAt: 'not-a-date' }],
+        }),
+        { status: 200, headers: { 'content-type': 'application/json' } },
+      ),
+    );
+
+    await expect(
+      fetchWorkerSearch({ query: 'Nivaprin', sort: 'relevance', selectedArea: null }, fetchMock),
+    ).rejects.toThrow('Worker search unavailable');
+  });
+
+  it('rejects invalid JSON bodies as the generic unavailable error', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response('not-json{', {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      }),
+    );
+
+    await expect(
+      fetchWorkerSearch({ query: 'Nivaprin', sort: 'relevance', selectedArea: null }, fetchMock),
+    ).rejects.toThrow('Worker search unavailable');
+  });
+
+  it('never leaks the raw body, field value, provider path or JSON in the rejection message', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(new Response('D1_ERROR: internal database path', { status: 503 }));
+
+    try {
+      await fetchWorkerSearch(
+        { query: 'Nivaprin', sort: 'relevance', selectedArea: null },
+        fetchMock,
+      );
+      throw new Error('expected fetchWorkerSearch to reject');
+    } catch (error) {
+      const message = (error as Error).message;
+      expect(message).toBe('Worker search unavailable');
+      expect(message).not.toContain('D1_ERROR');
+      expect(message).not.toContain('internal database path');
+      expect(message).not.toContain('{');
+    }
+  });
 });

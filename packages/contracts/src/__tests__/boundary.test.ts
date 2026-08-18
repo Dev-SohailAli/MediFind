@@ -2,7 +2,11 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-import { PACKAGE_BOUNDARY } from '../index.js';
+import {
+  PACKAGE_BOUNDARY,
+  parsePublicSearchResponse,
+  parsePublicSearchResultItem,
+} from '../index.js';
 
 const packageJsonPath = fileURLToPath(new URL('../../package.json', import.meta.url));
 const indexSourcePath = fileURLToPath(new URL('../index.ts', import.meta.url));
@@ -20,22 +24,30 @@ describe('contracts package boundary', () => {
     expect(pkg.dependencies ?? {}).toEqual({});
   });
 
-  it('exposes only type-level exports (no runtime logic)', () => {
+  it('exposes only type-level exports plus the two allow-listed runtime parsers', () => {
     const source = readFileSync(indexSourcePath, 'utf8');
 
-    // Every export in this package must be `type`/`interface`, plus the
-    // single anonymous PACKAGE_BOUNDARY constant from Task 1. No function,
-    // class or fixture data may be exported from this package.
+    // Every runtime export in this package must be the anonymous
+    // PACKAGE_BOUNDARY constant or one of the two Task 2 public-contract
+    // parser functions. No other function, class or fixture data may be
+    // exported from this package.
     const exportLines = source.split('\n').filter((line) => line.trimStart().startsWith('export '));
 
     for (const line of exportLines) {
       const isAllowed =
         line.includes('export type') ||
         line.includes('export interface') ||
-        line.includes('export const PACKAGE_BOUNDARY');
+        line.includes('export const PACKAGE_BOUNDARY') ||
+        line.includes('export function parsePublicSearchResultItem') ||
+        line.includes('export function parsePublicSearchResponse');
 
       expect(isAllowed).toBe(true);
     }
+  });
+
+  it('exposes exactly the two allow-listed public-contract parser functions', () => {
+    expect(typeof parsePublicSearchResultItem).toBe('function');
+    expect(typeof parsePublicSearchResponse).toBe('function');
   });
 
   it('contains no HTTP schema, persistence schema, role, credential, prescription or reservation content', () => {
