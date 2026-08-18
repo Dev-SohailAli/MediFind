@@ -382,3 +382,55 @@ describe('command-line guard (spawned process)', () => {
     });
   }
 });
+
+describe('local command integration (spawned process against real local D1)', () => {
+  // This exercises the actual command end-to-end against the real local
+  // Wrangler/D1 runtime declared in wrangler.local.toml (--local only, no
+  // Cloudflare account/login/token of any kind): it applies the migration
+  // if the local database is empty, or verifies the existing state if it
+  // is already initialized, then asserts the exact printed evidence
+  // summary. Running it twice proves the already-initialized path is
+  // idempotent -- it must not re-apply the migration or fail the second
+  // time. Each Wrangler invocation takes roughly a second, and this test
+  // makes up to ten of them (two full command runs), hence the extended
+  // timeout.
+  const expectedSummary = {
+    environment: 'local-synthetic',
+    migrationName: '0001_task4_synthetic_search.sql',
+    rowCounts: EXPECTED_ROW_COUNTS,
+    foreignKeyViolations: [],
+    excludedProjectionCount: 0,
+    exportChecksumsValid: true,
+    remote: false,
+  };
+
+  it('prints the exact evidence summary and is idempotent across two consecutive runs', () => {
+    const first = spawnScript([]);
+    expect(first.status).toBe(0);
+    expect(first.stderr).toBe('');
+    const firstSummary = JSON.parse(first.stdout);
+    expect(firstSummary).toEqual(expectedSummary);
+    expect(Object.keys(firstSummary)).toEqual([
+      'environment',
+      'migrationName',
+      'rowCounts',
+      'foreignKeyViolations',
+      'excludedProjectionCount',
+      'exportChecksumsValid',
+      'remote',
+    ]);
+    // No raw SQL, CLI output, credentials or provider text on stdout --
+    // only the approved JSON summary.
+    expect(first.stdout).not.toMatch(/SELECT|INSERT|PRAGMA|token|password|secret/i);
+
+    // Re-run against the now-already-initialized local database: this
+    // must take the idempotent verify-only path (no re-apply) and
+    // produce the exact same result, not an error.
+    const second = spawnScript([]);
+    expect(second.status).toBe(0);
+    expect(second.stderr).toBe('');
+    const secondSummary = JSON.parse(second.stdout);
+    expect(secondSummary).toEqual(expectedSummary);
+    expect(secondSummary).toEqual(firstSummary);
+  }, 30000);
+});
