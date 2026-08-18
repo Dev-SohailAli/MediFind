@@ -51,4 +51,41 @@ describe('SafeStates', () => {
     const text = region.textContent?.toLowerCase() ?? '';
     expect(text).not.toMatch(/stack|trace|exception|typeerror|at \w+\.\w+/);
   });
+
+  it('LoadingState exposes exactly one live/status region, never a duplicate announcement', () => {
+    render(<LoadingState />);
+
+    expect(screen.getAllByRole('status')).toHaveLength(1);
+    expect(screen.queryAllByRole('alert')).toHaveLength(0);
+  });
+
+  it('ZeroResultState exposes exactly one status region, never a duplicate announcement', () => {
+    render(<ZeroResultState />);
+
+    expect(screen.getAllByRole('status')).toHaveLength(1);
+    expect(screen.queryAllByRole('alert')).toHaveLength(0);
+  });
+
+  it('ErrorState exposes exactly one alert region, never a duplicate announcement', () => {
+    render(<ErrorState />);
+
+    expect(screen.getAllByRole('alert')).toHaveLength(1);
+    expect(screen.queryAllByRole('status')).toHaveLength(0);
+  });
+
+  it('BrowseEmptyState is non-diagnostic and carries no live/alert region (it is a passive prompt, not a status change)', () => {
+    render(<BrowseEmptyState />);
+
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    const text = document.body.textContent?.toLowerCase() ?? '';
+    expect(text).not.toMatch(/unavailable|error|failed|offline/);
+  });
+
+  it('ZeroResultState never implies the medicine is unavailable everywhere, only that this prototype has no listing', () => {
+    render(<ZeroResultState />);
+
+    const text = screen.getByRole('status').textContent?.toLowerCase() ?? '';
+    expect(text).not.toMatch(/unavailable everywhere|out of stock everywhere|discontinued/);
+  });
 });

@@ -20,6 +20,12 @@ function readAllAppSource(): string {
     .filter((entry) => {
       if (!entry.isFile()) return false;
       if (!/\.(ts|tsx)$/.test(entry.name)) return false;
+      // Excludes test files wherever they live, not only under a
+      // __tests__/ directory: some suites (e.g. App.test.tsx) are colocated
+      // next to the source they cover, per this repo's plan conventions,
+      // and test assertion strings (e.g. checking body text never contains
+      // "sign in") are not themselves a shipped capability.
+      if (/\.test\.tsx?$/.test(entry.name)) return false;
       const fullPath = `${entry.parentPath}/${entry.name}`;
       if (fullPath.includes('__tests__')) return false;
       if (fullPath.includes('node_modules')) return false;

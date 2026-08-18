@@ -9,7 +9,8 @@
     "dev": "vite",
     "build": "tsc -p tsconfig.json --noEmit && vite build",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "verify:preview": "vitest run __tests__/pages-preview.test.ts"
   },
   "dependencies": {
     "lucide-react": "^1.31.0",
