@@ -17,8 +17,8 @@ export type WorkerEnvironment = 'local' | 'preview' | 'synthetic';
 
 export interface Env {
   readonly ENVIRONMENT?: WorkerEnvironment;
-  // Never populated by this task. D1 stays disabled until a separate task
-  // supplies an exact schema, migration and founder-approved synthetic
-  // database (docs/task-3-protected-platform-foundation-specification.md).
+  // The base/Pages Worker config leaves this optional. The local synthetic
+  // Wrangler config binds the reviewed six-table D1 migration; hosted
+  // bindings still require a founder-owned Cloudflare environment.
   readonly DB?: D1LikeBinding;
 }

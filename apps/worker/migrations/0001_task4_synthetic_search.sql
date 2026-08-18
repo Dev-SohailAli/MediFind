@@ -8,8 +8,8 @@
 -- migration.test.ts executes this file against an in-memory SQLite database
 -- (Node's built-in node:sqlite, not a Cloudflare D1 binding) and asserts its
 -- resulting rows are byte-identical to that TypeScript module, so the two
--- never drift. This migration is not applied to any live D1 database by
--- this task; D1 stays disabled (see apps/worker/wrangler.toml).
+-- never drift. This migration is not applied to a hosted D1 database by this
+-- task. The local Wrangler development config applies it to local-only D1.
 
 PRAGMA foreign_keys = ON;
 

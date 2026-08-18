@@ -4,18 +4,11 @@ import { checkDeclaredBodySize, validateNoBodyPayload } from './http/validate.js
 import { buildHealthConfig } from './routes/health.js';
 import { handleListingRequest } from './routes/listings.js';
 import { handleSearchRequest } from './routes/search.js';
+import { ROUTES } from './routes/definitions.js';
 import { deriveActor } from './security/actor.js';
 import { authorize } from './security/authorize.js';
 import { createRateLimiter } from './security/rateLimit.js';
 import type { Env } from './types/env.js';
-
-export const PACKAGE_BOUNDARY = 'worker' as const;
-
-export const ROUTES = [
-  { method: 'GET', path: '/v1/health', action: 'health:read' },
-  { method: 'GET', path: '/v1/search', action: 'search:read' },
-  { method: 'GET', path: '/v1/listings/:id', action: 'listing:read' },
-] as const;
 
 const EXACT_ROUTES = [ROUTES[0], ROUTES[1]] as const;
 

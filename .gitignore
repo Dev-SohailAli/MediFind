@@ -4,4 +4,6 @@ dist/
 *.tsbuildinfo
 coverage/
 debug.log
+.wrangler/
+.wrangler-config/
 .DS_Store

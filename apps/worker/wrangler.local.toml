@@ -1,0 +1,10 @@
+name = "medifind-synthetic-worker-local"
+main = "src/index.ts"
+compatibility_date = "2026-08-17"
+send_metrics = false
+
+[[d1_databases]]
+binding = "DB"
+database_name = "medifind-synthetic-search-local"
+database_id = "00000000-0000-4000-8000-000000000001"
+migrations_dir = "./migrations"

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-import { PACKAGE_BOUNDARY, ROUTES } from '../index.js';
+import { PACKAGE_BOUNDARY, ROUTES } from '../routes/definitions.js';
 
 const packageJsonPath = fileURLToPath(new URL('../../package.json', import.meta.url));
 const srcDir = fileURLToPath(new URL('..', import.meta.url));
@@ -26,6 +26,16 @@ function readAllSourceFiles(): string {
 }
 
 describe('Cloudflare Worker package boundary (Task 3 foundation)', () => {
+  it('keeps the entry module export-compatible with the Workers runtime', () => {
+    const entrySource = readFileSync(
+      fileURLToPath(new URL('../index.ts', import.meta.url)),
+      'utf8',
+    );
+
+    expect(entrySource).not.toMatch(/export const PACKAGE_BOUNDARY/);
+    expect(entrySource).not.toMatch(/export const ROUTES/);
+  });
+
   it('exposes the anonymous, non-domain package export', () => {
     expect(PACKAGE_BOUNDARY).toBe('worker');
   });
