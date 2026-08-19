@@ -1,8 +1,5 @@
-import type {
-  PublicSearchResponse,
-  PublicSearchResultItem,
-  SyntheticSearchListing,
-} from '@medifind/contracts';
+import { parsePublicSearchResponse } from '@medifind/contracts';
+import type { PublicSearchResultItem, SyntheticSearchListing } from '@medifind/contracts';
 
 import { getDisplayDistance } from './distance';
 import type { RankedRow } from './rank';
@@ -36,18 +33,6 @@ function toSyntheticListing(item: PublicSearchResultItem): SyntheticSearchListin
   };
 }
 
-function parseWorkerResponse(value: unknown): PublicSearchResponse {
-  if (
-    typeof value !== 'object' ||
-    value === null ||
-    !Array.isArray((value as { results?: unknown }).results)
-  ) {
-    throw new Error('Worker search unavailable');
-  }
-
-  return value as PublicSearchResponse;
-}
-
 /**
  * Opt-in local Worker search adapter. It only calls the bounded public search
  * route and maps its public projection into the existing read-only UI shape.
@@ -72,27 +57,22 @@ export async function fetchWorkerSearch(
     params.set('area', input.selectedArea);
   }
 
-  let response: Response;
+  let body: ReturnType<typeof parsePublicSearchResponse>;
   try {
-    response = await fetchImpl(`/v1/search?${params.toString()}`, {
+    const response = await fetchImpl(`/v1/search?${params.toString()}`, {
       headers: { accept: 'application/json' },
     });
+
+    if (!response.ok) {
+      throw new Error('Worker search unavailable');
+    }
+
+    const payload: unknown = await response.json();
+    body = parsePublicSearchResponse(payload);
   } catch {
     throw new Error('Worker search unavailable');
   }
 
-  if (!response.ok) {
-    throw new Error('Worker search unavailable');
-  }
-
-  let payload: unknown;
-  try {
-    payload = await response.json();
-  } catch {
-    throw new Error('Worker search unavailable');
-  }
-
-  const body = parseWorkerResponse(payload);
   const rows: RankedRow[] = body.results.map((item) => {
     const listing = toSyntheticListing(item);
     return {
