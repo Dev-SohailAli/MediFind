@@ -22,8 +22,51 @@ export const strings = {
 
   requestsPlaceholderTitle: 'Requests',
   requestsPlaceholderBody: 'Requests is not part of this synthetic prototype.',
-  accountPlaceholderTitle: 'Account',
-  accountPlaceholderBody: 'Account is not part of this synthetic prototype.',
+
+  signInTitle: 'Sign in',
+  signInIntro:
+    'This is a synthetic prototype sign-in. No real phone number, email or identity is verified — nothing you enter here is sent anywhere.',
+  signInPhoneLabel: 'Phone number',
+  signInOver18Label: 'I am 18 or older',
+  signInNameLabel: 'Legal full name',
+  signInEmailLabel: 'Email',
+  signInSendCodeLabel: 'Send code',
+  signInPhoneRequiredError: 'Enter a phone number in the form +679 followed by 7 digits.',
+  signInOver18RequiredError: 'You must confirm you are 18 or older to continue.',
+  signInNameRequiredError: 'Enter your legal full name.',
+  signInEmailRequiredError: 'Enter a valid email address.',
+
+  signInCodeTitle: 'Enter the code',
+  signInCodeIntro: (phone: string) => `A synthetic demo code was sent to ${phone}.`,
+  signInCodeDemoHint: (code: string) =>
+    `Demo code: ${code} (this prototype never sends a real code).`,
+  signInCodeLabel: 'Verification code',
+  signInVerifyLabel: 'Verify',
+  signInResendLabel: 'Resend code',
+  signInAntiPhishingNotice: 'MediFind will never call, text or email you asking for this code.',
+  signInInvalidCodeError: 'That code was not recognised. Try again.',
+  signInExpiredCodeError: 'That code has expired. Request a new one.',
+  signInRateLimitedError: 'Too many attempts — try again later.',
+
+  accountSignedInTitle: 'Account',
+  accountProfileNameLabel: 'Name',
+  accountProfilePhoneLabel: 'Phone',
+  accountProfileEmailLabel: 'Email',
+  accountSessionLabel: 'Session',
+  accountSessionExpiresPrefix: 'Expires',
+  accountSimulateExpiryLabel: 'Simulate session expiry',
+  accountSignOutLabel: 'Sign out',
+  accountLostPhoneLabel: 'I lost access to my phone',
+  accountLostPhoneIntro:
+    'This simulates MediFind’s buyer recovery flow: it immediately signs you out everywhere and opens a 24-hour security hold before sign-in is available again.',
+  accountLostPhoneConfirmLabel: 'Start recovery',
+  accountLostPhoneCancelLabel: 'Cancel',
+
+  accountRecoveryHoldTitle: 'Recovery hold in effect',
+  accountRecoveryHoldBody:
+    'For your security, sign-in is paused for 24 hours after a lost-phone recovery. Medicine search stays available the whole time.',
+  accountRecoveryHoldUntilPrefix: 'Hold lifts',
+  accountRecoveryHoldSimulateElapsedLabel: 'Simulate 24 hours passing',
 
   searchInputLabel: 'Search for a medicine',
   searchInputPlaceholder: 'Search medicine name or active ingredient',

@@ -74,9 +74,13 @@ describe('web buyer-search prototype boundary', () => {
       /amplitude/i,
       /segment\.io/i,
       /mixpanel/i,
-      // out-of-scope product surfaces
+      // out-of-scope product surfaces: real notification delivery, real
+      // identity credentials/secrets. "sign in" itself is no longer banned
+      // (ADR-277 Milestone B authorizes a local-only synthetic sign-in
+      // simulation — see src/auth/syntheticAuth.ts), but a real credential
+      // or secret concept must never appear, in that simulation or anywhere
+      // else.
       /\bnotification\b/i,
-      /\bsign[- ]?in\b/i,
       /credential/i,
       /\bsecret\b/i,
     ];
@@ -109,6 +113,44 @@ describe('web buyer-search prototype boundary', () => {
     for (const pattern of forbiddenFeaturePatterns) {
       expect(source).not.toMatch(pattern);
     }
+  });
+
+  it('keeps the synthetic sign-in simulation (ADR-277) clearly local-only, never a real identity provider', () => {
+    const source = readAllAppSource();
+
+    // No real identity/auth provider or SDK may be named anywhere in the
+    // shipped app, whether or not it's actually installed as a dependency.
+    const forbiddenProviderPatterns = [
+      /firebase/i,
+      /auth0/i,
+      /cognito/i,
+      /clerk\.(dev|com)/i,
+      /supabase/i,
+      /okta/i,
+      /twilio/i,
+      /\bjwt\b/i,
+      /bearer\s+token/i,
+    ];
+
+    for (const pattern of forbiddenProviderPatterns) {
+      expect(source).not.toMatch(pattern);
+    }
+
+    // The synthetic session must never be written to persistent browser
+    // storage (already covered generically above for the whole app, but
+    // asserted again here scoped to the auth module specifically, since
+    // that is exactly the file a future change is most likely to weaken).
+    const authSource = [
+      readFileSync(`${webRoot}src/auth/syntheticAuth.ts`, 'utf8'),
+      readFileSync(`${webRoot}src/auth/AuthContext.tsx`, 'utf8'),
+    ].join('\n');
+    expect(authSource).not.toMatch(/localStorage|sessionStorage|indexedDB|document\.cookie/);
+    expect(authSource).not.toMatch(/fetch\(|XMLHttpRequest|WebSocket/);
+
+    // The demo one-time code must stay obviously fake: fixed, and clearly
+    // labelled as a demo/prototype value everywhere it is shown to a user.
+    expect(source).toMatch(/SYNTHETIC_AUTH_DEMO_CODE\s*=\s*'123456'/);
+    expect(source).toMatch(/Demo code:/);
   });
 
   it('declares no dependency on the server-only Worker package', () => {

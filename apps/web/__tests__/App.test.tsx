@@ -28,13 +28,14 @@ describe('App', () => {
     expect(bodyText).not.toContain('signed in');
   });
 
-  it('switching to Account shows only the inert prototype notice, never profile/auth content', async () => {
+  it('switching to Account shows the synthetic sign-in form, never a real credential field', async () => {
     const user = userEvent.setup();
     render(<App />);
 
     await user.click(screen.getByRole('button', { name: strings.navAccountLabel }));
 
-    expect(screen.getByText(strings.accountPlaceholderBody)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: strings.signInTitle })).toBeInTheDocument();
+    expect(screen.getByText(strings.signInIntro)).toBeInTheDocument();
     const bodyText = document.body.textContent?.toLowerCase() ?? '';
     expect(bodyText).not.toContain('password');
     expect(bodyText).not.toContain('profile photo');

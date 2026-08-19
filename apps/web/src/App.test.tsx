@@ -66,7 +66,7 @@ describe('App', () => {
     expect(bodyText).not.toContain('password');
   });
 
-  it('switching to Account keeps the same skip target and shows no protected workflow', async () => {
+  it('switching to Account keeps the same skip target and shows only the synthetic sign-in form', async () => {
     const user = userEvent.setup();
     render(<App />);
 
@@ -79,9 +79,10 @@ describe('App', () => {
     const mains = screen.getAllByRole('main');
     expect(mains).toHaveLength(1);
     expect(mains[0]).toHaveAttribute('id', 'main-content');
-    expect(
-      screen.getByRole('heading', { name: strings.accountPlaceholderTitle }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: strings.signInTitle })).toBeInTheDocument();
+
+    const bodyText = document.body.textContent?.toLowerCase() ?? '';
+    expect(bodyText).not.toContain('password');
   });
 
   it('the skip link still works after navigating to Requests/Account', async () => {
