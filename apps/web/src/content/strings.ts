@@ -68,6 +68,31 @@ export const strings = {
   accountRecoveryHoldUntilPrefix: 'Hold lifts',
   accountRecoveryHoldSimulateElapsedLabel: 'Simulate 24 hours passing',
 
+  workspacesTitle: 'Pharmacy access (demo)',
+  workspacesIntro:
+    'This simulates the pharmacy side of one fixed demo identity: which branches it has a role at, and what each role can reach. No real pharmacy, licence or staff data exists here.',
+  workspacesEmpty: 'This demo identity holds no pharmacy role.',
+  workspaceRolesLabel: 'Roles',
+  workspaceRoleOwnerLabel: 'Owner',
+  workspaceRoleInventoryManagerLabel: 'Inventory manager',
+  workspaceRolePrescriptionReviewerLabel: 'Prescription reviewer',
+  workspaceStatusUnderReviewLabel: 'Submitted — under review',
+  workspaceStatusNeedsMoreInformationLabel: 'Needs more information',
+  workspaceStatusLiveLabel: 'Live',
+  workspaceStatusRejectedLabel: 'Rejected',
+  workspaceNotYetLiveNotice:
+    'This branch is not verified yet. Dashboard, Inventory and Requests do not exist until MediFind approves the application — only the application status is visible.',
+  workspaceDashboardAccessLabel: 'Dashboard access',
+  workspaceInventoryAccessLabel: 'Inventory access',
+  workspaceRequestsAccessLabel: 'Requests access',
+  workspaceRequestsAccessGatedNote: '(behind a fresh MFA/biometric gate)',
+  workspaceRequestsAccessDeniedNote:
+    'Ownership alone never grants this — a separate reviewer role is required.',
+  workspaceLookupLabel: 'Open a branch workspace by ID',
+  workspaceLookupPlaceholder: 'e.g. suva-central',
+  workspaceLookupOpenLabel: 'Open',
+  workspaceLookupNotPermitted: 'Not permitted — you have no role at this branch.',
+
   searchInputLabel: 'Search for a medicine',
   searchInputPlaceholder: 'Search medicine name or active ingredient',
   searchInputClearLabel: 'Clear search',
