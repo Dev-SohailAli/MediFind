@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { useSyntheticAuth } from '../auth/AuthContext';
 import { strings } from '../content/strings';
+import { PharmacyWorkspaces } from './PharmacyWorkspaces';
 
 function formatTimestamp(iso: string): string {
   return new Date(iso).toLocaleString();
@@ -100,6 +101,8 @@ export function AccountScreen() {
           </div>
         </div>
       ) : null}
+
+      <PharmacyWorkspaces />
     </div>
   );
 }
