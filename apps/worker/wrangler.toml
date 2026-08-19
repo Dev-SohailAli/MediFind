@@ -1,11 +1,17 @@
-# Synthetic Cloudflare Worker foundation only (Task 3). This configuration
-# has no account ID, route, secret or binding. D1/R2/KV stay disabled until a
-# separate approved task supplies an exact schema/migration and the founder
-# provides the Cloudflare account/project names, deployment owner/recovery
-# contact and synthetic database approval named in
-# docs/task-3-protected-platform-foundation-specification.md. This file is
-# not deployed by this task; no `wrangler deploy`/`wrangler publish` is run.
-name = "medifind-synthetic-worker-foundation"
+# Hosted synthetic environment, authorized by ADR-276 and
+# docs/claude-tasks/task-1-synthetic-cloudflare-environment.md. Binds only
+# the approved read-only synthetic D1 database
+# (medifind-synthetic-search, created 2026-08-17, UUID
+# cb372f8c-ce1d-4443-bc72-dec144bf4dfa) to the named synthetic Worker.
+# No account ID, route, secret, KV or R2 is configured. Deploys are a
+# manual `wrangler deploy` run, never automatic on push.
+name = "medifind-synthetic-worker"
 main = "src/index.ts"
-compatibility_date = "2026-08-16"
+compatibility_date = "2026-08-17"
 send_metrics = false
+
+[[d1_databases]]
+binding = "DB"
+database_name = "medifind-synthetic-search"
+database_id = "cb372f8c-ce1d-4443-bc72-dec144bf4dfa"
+migrations_dir = "./migrations"

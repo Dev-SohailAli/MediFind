@@ -70,7 +70,7 @@ describe('D1 fail-closed data seam', () => {
     expect(JSON.stringify(result)).not.toMatch(/sqlite|\/var\/lib/i);
   });
 
-  it('has a committed Task 4 migration on disk, but still no live binding to apply it against', () => {
+  it('has a committed Task 4 migration on disk', () => {
     const migrationPath = fileURLToPath(
       new URL('../../migrations/0001_task4_synthetic_search.sql', import.meta.url),
     );
@@ -78,10 +78,18 @@ describe('D1 fail-closed data seam', () => {
     expect(existsSync(migrationPath)).toBe(true);
   });
 
-  it('declares no D1 database binding in the Worker Wrangler configuration', () => {
+  it('binds only the approved synthetic D1 database, with no account ID, route or secret', () => {
     const wranglerPath = fileURLToPath(new URL('../../wrangler.toml', import.meta.url));
     const config = readFileSync(wranglerPath, 'utf8');
 
-    expect(config).not.toMatch(/d1_databases/);
+    expect(config).toMatch(/\[\[d1_databases\]\]/);
+    expect(config).toMatch(/binding = "DB"/);
+    expect(config).toMatch(/database_name = "medifind-synthetic-search"/);
+    expect(config).toMatch(/database_id = "cb372f8c-ce1d-4443-bc72-dec144bf4dfa"/);
+    expect(config).not.toMatch(/account_id/i);
+    expect(config).not.toMatch(/routes?\s*=/i);
+    expect(config).not.toMatch(/\[vars\]/i);
+    expect(config).not.toMatch(/\[\[kv_namespaces\]\]/i);
+    expect(config).not.toMatch(/\[\[r2_buckets\]\]/i);
   });
 });
