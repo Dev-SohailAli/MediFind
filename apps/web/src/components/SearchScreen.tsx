@@ -6,6 +6,7 @@ import { syntheticListings } from '../fixtures/syntheticListings';
 import { MAX_RESULTS_PER_PAGE, paginate } from '../search/searchListings';
 import { isWorkerSearchMode } from '../search/searchClient';
 import { useSearchExecution } from '../search/useSearchExecution';
+import { useWorkerListingExecution } from '../search/useWorkerListingExecution';
 import { useWorkerSearchExecution } from '../search/useWorkerSearchExecution';
 import { AreaSelector } from './AreaSelector';
 import { LoadMoreButton } from './LoadMoreButton';
@@ -51,6 +52,31 @@ export function SearchScreen() {
       ? execution.outcome.rows.find((row) => row.listing.id === selectedListingId)
       : undefined;
 
+  const workerListingExecution = useWorkerListingExecution(
+    workerSearchEnabled,
+    selectedRow ? selectedRow.listing.id : null,
+  );
+
+  // A query/sort/area change or a search error can remove the currently
+  // selected row from the active result set. When that happens the sheet
+  // must close and no detail request may be left running for an item that
+  // is no longer present.
+  React.useEffect(() => {
+    if (selectedListingId === null) return;
+    if (execution.status === 'error') {
+      setSelectedListingId(null);
+      return;
+    }
+    if (execution.status === 'ready') {
+      const stillPresent = execution.outcome.rows.some(
+        (row) => row.listing.id === selectedListingId,
+      );
+      if (!stillPresent) {
+        setSelectedListingId(null);
+      }
+    }
+  }, [execution, selectedListingId]);
+
   return (
     <div className="screen">
       <h1 className="sr-only">{strings.navSearchLabel}</h1>
@@ -93,13 +119,32 @@ export function SearchScreen() {
       )}
 
       {selectedRow ? (
-        <ResultDetailSheet
-          listing={selectedRow.listing}
-          matchKind={selectedRow.matchKind}
-          displayDistance={selectedRow.displayDistance}
-          showDistance={selectedArea !== null}
-          onClose={() => setSelectedListingId(null)}
-        />
+        workerSearchEnabled ? (
+          workerListingExecution.status === 'ready' &&
+          workerListingExecution.listing.id === selectedRow.listing.id ? (
+            <ResultDetailSheet
+              status="ready"
+              listing={workerListingExecution.listing}
+              matchKind={selectedRow.matchKind}
+              displayDistance={selectedRow.displayDistance}
+              showDistance={selectedArea !== null}
+              onClose={() => setSelectedListingId(null)}
+            />
+          ) : workerListingExecution.status === 'error' ? (
+            <ResultDetailSheet status="error" onClose={() => setSelectedListingId(null)} />
+          ) : (
+            <ResultDetailSheet status="loading" onClose={() => setSelectedListingId(null)} />
+          )
+        ) : (
+          <ResultDetailSheet
+            status="ready"
+            listing={selectedRow.listing}
+            matchKind={selectedRow.matchKind}
+            displayDistance={selectedRow.displayDistance}
+            showDistance={selectedArea !== null}
+            onClose={() => setSelectedListingId(null)}
+          />
+        )
       ) : null}
     </div>
   );

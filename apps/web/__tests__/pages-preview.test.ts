@@ -200,8 +200,10 @@ describe('generated default build is the exact static Pages preview artifact', (
     // `/v1/search` string may legitimately appear in the default bundle.
     // What must never happen is the *service worker* caching that route
     // (already asserted above) or the app calling it without the explicit
-    // opt-in env var (already asserted in SearchScreen.test.tsx's
-    // "never calls fetch in the default fixture-backed mode").
+    // opt-in env var (already asserted directly against `isWorkerSearchMode`
+    // itself in searchClient.test.ts, and end-to-end in
+    // SearchScreen.test.tsx's "never calls fetch in the default
+    // fixture-backed mode").
     const files = listFilesRecursive(join(defaultDir, 'assets')).filter((f) => f.endsWith('.js'));
     expect(files.length).toBeGreaterThan(0);
   });
