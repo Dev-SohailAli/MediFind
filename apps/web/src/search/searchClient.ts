@@ -1,4 +1,4 @@
-import { parsePublicSearchResponse } from '@medifind/contracts';
+import { parsePublicSearchResponse, parsePublicSearchResultItem } from '@medifind/contracts';
 import type { PublicSearchResultItem, SyntheticSearchListing } from '@medifind/contracts';
 
 import { getDisplayDistance } from './distance';
@@ -83,4 +83,36 @@ export async function fetchWorkerSearch(
   });
 
   return { isEmptyQuery: false, rows };
+}
+
+/**
+ * Opt-in Worker listing detail adapter. Fetches a single listing by ID from the
+ * bounded public listing route and maps it to the existing read-only UI shape.
+ */
+export async function fetchWorkerListing(
+  listingId: string,
+  fetchImpl: FetchLike = globalThis.fetch.bind(globalThis),
+): Promise<SyntheticSearchListing> {
+  let item: PublicSearchResultItem;
+  try {
+    const response = await fetchImpl(`/v1/listings/${encodeURIComponent(listingId)}`, {
+      headers: { accept: 'application/json' },
+    });
+
+    if (!response.ok) {
+      throw new Error('Worker search unavailable');
+    }
+
+    const payload: unknown = await response.json();
+    item = parsePublicSearchResultItem(payload);
+  } catch {
+    throw new Error('Worker search unavailable');
+  }
+
+  // Verify the returned item ID matches the requested ID
+  if (item.id !== listingId) {
+    throw new Error('Worker search unavailable');
+  }
+
+  return toSyntheticListing(item);
 }

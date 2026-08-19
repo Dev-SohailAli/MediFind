@@ -9,13 +9,17 @@ import { iconStrokeWidth } from '../theme/tokens';
 import { StatusBadge } from './StatusBadge';
 import { availabilityPresentation, matchKindLabel } from './statusPresentation';
 
-export interface ResultDetailSheetProps {
-  listing: SyntheticSearchListing;
-  matchKind: SyntheticMatchKind;
-  displayDistance: DisplayDistance;
-  showDistance: boolean;
-  onClose: () => void;
-}
+export type ResultDetailSheetProps =
+  | { status: 'loading'; onClose: () => void }
+  | { status: 'error'; onClose: () => void }
+  | {
+      status: 'ready';
+      listing: SyntheticSearchListing;
+      matchKind: SyntheticMatchKind;
+      displayDistance: DisplayDistance;
+      showDistance: boolean;
+      onClose: () => void;
+    };
 
 function getFocusable(container: HTMLElement): HTMLElement[] {
   return Array.from(
@@ -32,17 +36,17 @@ function getFocusable(container: HTMLElement): HTMLElement[] {
  * modal-dialog keyboard contract: focus moves in on open, Tab is trapped
  * inside the dialog, Escape closes it, and focus returns to the element
  * that opened it.
+ *
+ * The `status` discriminant covers the opt-in Worker detail fetch: the
+ * dialog shell, title, close button and focus/keyboard behaviour are
+ * identical across all three states, but `loading`/`error` render only the
+ * existing safe reviewed strings — never a partial or stale listing — and
+ * `ready` renders the full read-only detail exactly as before.
  */
-export function ResultDetailSheet({
-  listing,
-  matchKind,
-  displayDistance,
-  showDistance,
-  onClose,
-}: ResultDetailSheetProps) {
+export function ResultDetailSheet(props: ResultDetailSheetProps) {
+  const { onClose } = props;
   const dialogRef = React.useRef<HTMLDivElement | null>(null);
   const titleId = React.useId();
-  const availability = availabilityPresentation(listing.availability);
 
   React.useEffect(() => {
     const previouslyFocused = document.activeElement as HTMLElement | null;
@@ -108,41 +112,70 @@ export function ResultDetailSheet({
           </button>
         </div>
 
-        <p className="detail-sheet__match-kind">{matchKindLabel(matchKind)}</p>
-        <p className="detail-sheet__medicine-name">{listing.medicineDisplayName}</p>
-        {listing.brandName ? <p className="detail-sheet__supporting">{listing.brandName}</p> : null}
-        <p className="detail-sheet__supporting">
-          {listing.strength} · {listing.dosageForm} · {listing.packDescription}
-        </p>
-
-        <p className="detail-sheet__pharmacy-line">
-          {strings.detailSheetPharmacyPrefix} {listing.pharmacyDisplayName}
-        </p>
-        {showDistance ? <p className="detail-sheet__supporting">{displayDistance.label}</p> : null}
-
-        <div className="detail-sheet__status-row">
-          <StatusBadge
-            label={availability.label}
-            tone={availability.tone}
-            icon={availability.icon}
+        {props.status === 'loading' ? (
+          <div className="state-block" role="status" aria-live="polite">
+            <p className="state-block__title">{strings.loadingLabel}</p>
+          </div>
+        ) : props.status === 'error' ? (
+          <div className="state-block" role="alert">
+            <p className="state-block__title">{strings.errorTitle}</p>
+            <p className="state-block__body">{strings.errorBody}</p>
+          </div>
+        ) : (
+          <ReadyDetail
+            listing={props.listing}
+            matchKind={props.matchKind}
+            displayDistance={props.displayDistance}
+            showDistance={props.showDistance}
           />
-          {listing.freshness === 'may_be_outdated' ? (
-            <StatusBadge label={strings.freshnessMayBeOutdatedLabel} tone="warning" icon={Clock} />
-          ) : null}
-        </div>
-
-        <p className="detail-sheet__price">{formatFjd(listing.priceFjdMinor)}</p>
-        <p className="detail-sheet__supporting">
-          {strings.lastUpdatedPrefix}: {listing.lastUpdatedDisplay}
-        </p>
-
-        <div className="safety-block">
-          <p className="safety-block__text">{strings.safetyAvailabilityPrice}</p>
-          <p className="safety-block__text">{strings.safetyReservationNoGuarantee}</p>
-          <p className="safety-block__text">{strings.safetyPrescriptionMayBeRequired}</p>
-          <p className="safety-block__text">{strings.safetyNoMedicalAdvice}</p>
-        </div>
+        )}
       </div>
     </div>
+  );
+}
+
+interface ReadyDetailProps {
+  listing: SyntheticSearchListing;
+  matchKind: SyntheticMatchKind;
+  displayDistance: DisplayDistance;
+  showDistance: boolean;
+}
+
+function ReadyDetail({ listing, matchKind, displayDistance, showDistance }: ReadyDetailProps) {
+  const availability = availabilityPresentation(listing.availability);
+
+  return (
+    <>
+      <p className="detail-sheet__match-kind">{matchKindLabel(matchKind)}</p>
+      <p className="detail-sheet__medicine-name">{listing.medicineDisplayName}</p>
+      {listing.brandName ? <p className="detail-sheet__supporting">{listing.brandName}</p> : null}
+      <p className="detail-sheet__supporting">
+        {listing.strength} · {listing.dosageForm} · {listing.packDescription}
+      </p>
+
+      <p className="detail-sheet__pharmacy-line">
+        {strings.detailSheetPharmacyPrefix} {listing.pharmacyDisplayName}
+      </p>
+      {showDistance ? <p className="detail-sheet__supporting">{displayDistance.label}</p> : null}
+
+      <div className="detail-sheet__status-row">
+        <StatusBadge label={availability.label} tone={availability.tone} icon={availability.icon} />
+        {listing.freshness === 'may_be_outdated' ? (
+          <StatusBadge label={strings.freshnessMayBeOutdatedLabel} tone="warning" icon={Clock} />
+        ) : null}
+      </div>
+
+      <p className="detail-sheet__price">{formatFjd(listing.priceFjdMinor)}</p>
+      <p className="detail-sheet__supporting">
+        {strings.lastUpdatedPrefix}: {listing.lastUpdatedDisplay}
+      </p>
+
+      <div className="safety-block">
+        <p className="safety-block__text">{strings.safetyAvailabilityPrice}</p>
+        <p className="safety-block__text">{strings.safetyReservationNoGuarantee}</p>
+        <p className="safety-block__text">{strings.safetyPrescriptionMayBeRequired}</p>
+        <p className="safety-block__text">{strings.safetyNoMedicalAdvice}</p>
+      </div>
+    </>
   );
 }
