@@ -8,11 +8,13 @@
 
 The current worktree is on
 `agent/claude/task-31-d1-search-vertical-slice`, tracking its remote branch at
-the `9aeb55d` baseline. It contains substantial user-owned modifications and
-untracked agent/configuration files across application, test, workflow and
-documentation paths. A coding agent must create or use an isolated task branch
-or worktree and preserve all unrelated changes; do not reset, clean or
-overwrite this worktree.
+the `ef1c9d9` local merge checkpoint, whose historical base was `9aeb55d`.
+Batch A is merged locally; the base worktree has only the excluded untracked
+`.claude/` session tree. A coding agent must preserve unrelated changes and
+must not remove the locked source worktree until its Claude session ends.
+
+The local preservation checkpoint is `4818f55`; the Batch A source head is
+`ae0400b`. No remote push or hosted Cloudflare result is claimed.
 
 Task 2 has a detailed [implementation plan](2026-08-18-task-2-public-contract-validation-implementation.md)
 that maps the parser contract to the current `packages/contracts` and
@@ -32,20 +34,20 @@ Task 6 has a parallel [Pages preview guard implementation plan](2026-08-18-task-
 covering generated shell assets, static policy, capability checks and explicit
 Worker-mode rejection.
 
-Read-only checks run against the current worktree on 2026-08-18:
+Checks recorded for the merged result on 2026-08-19:
 
 | Check | Result |
 | --- | --- |
 | `pnpm run format:check` | Passed |
 | `pnpm lint` | Passed |
 | `pnpm typecheck` | Passed |
-| `pnpm test` | Passed: root 6, contracts 5, Worker 156, web 98 |
+| `pnpm test` | Passed: root 6, contracts 32, Worker 192, web 168 |
 | `pnpm build` | Passed: contracts, Worker and web/PWA build |
 | Hosted Cloudflare evidence | Not claimed; no remote command was run in this audit |
 
-These results prove only the current local worktree quality baseline. They do
-not prove that any task is complete, that the hosted environment is current,
-or that the branch is safe to merge.
+These results prove the merged local Batch A test result only. They do not
+prove that the hosted environment is current, that Task 1 is complete, or that
+the branch is ready for a remote PR.
 
 ## Evidence of remaining synthetic work
 
@@ -58,19 +60,19 @@ search mode are useful prerequisites, not completion evidence for those tasks.
 | Task | Current evidence | Dispatch state | Next proof required |
 | --- | --- | --- | --- |
 | 1 | Brief requires remote D1/Worker verification; current audit ran no remote command | Hold | Human freshly reauthenticates; `wrangler whoami`, dry-run, migration, route evidence and rollback record |
-| 2 | `searchClient.ts` has an opt-in Worker fetch path, but no `parsePublicSearchResponse` or `parsePublicSearchResultItem` symbol | Ready after isolated checkout | Contract tests, malformed-response safety, unchanged fixture mode and full checks |
-| 3 | No `fetchWorkerListing` or listing-detail async hook symbol found | Serialize after Task 2 review | Encoded route, stale-response protection, accessible loading/error/close/focus evidence |
-| 4 | Existing browser/PWA flow and tests exist; manual acceptance is not represented by this audit | Ready in UI lane | Browser/device/viewport/keyboard/screen-reader/offline/install/200% evidence and focused fixes |
-| 5 | No `verify:local` command or `verify-synthetic-local.mjs` symbol found | Ready in tooling lane | Local-only command, exact counts/checksums/foreign-key checks and fail-closed argument tests |
-| 6 | No `verify-preview-build.mjs` symbol found | Ready in release lane | Default build guard, static capability checks, manifest/service-worker/header checks and negative worker-mode test |
+| 2 | Parser and contract tests are present; merged in `93b5b96` with fix wave in `ae0400b` | Verified locally and merged | Retain review evidence; no hosted claim |
+| 3 | Task 2 review is accepted and merged; detail operation remains unimplemented | Ready as separate follow-up | Encoded route, stale-response protection, accessible loading/error/close/focus evidence |
+| 4 | Browser/PWA acceptance implementation and evidence are present; merged in `f73249b` | Verified locally and merged | Retain observed browser evidence; no unsupported hosted/device claim |
+| 5 | Local verifier and idempotency fix are present; merged in `130cc00` and `c78301d` | Verified locally and merged | Keep `--local`/no-auth boundary |
+| 6 | Preview guard and final artifact-boundary fix are present; merged in `b0691c7` and `ae0400b` | Verified locally and merged | Add the parked `verify:preview` documentation in a separate docs follow-up |
 
 ## Recommended dispatch order
 
 ```text
-Batch A (parallel, isolated write scopes): Tasks 2, 4, 5, 6
+Batch A (complete and merged): Tasks 2, 4, 5, 6
                                       |
                                       v
-Task 2 review accepted ----------------+--> Task 3
+Task 2 review accepted ----------------+--> Task 3 (next separate handoff)
 
 Fresh Cloudflare reauthentication -------------------------------> Task 1
                                                                    (separate supervised lane)
