@@ -10,6 +10,8 @@
     "dev": "wrangler dev --config wrangler.local.toml --local",
     "check": "wrangler deploy --dry-run --config wrangler.local.toml",
     "d1:apply": "wrangler d1 execute medifind-synthetic-search-local --local --config wrangler.local.toml --file migrations/0001_task4_synthetic_search.sql",
+    "d1:apply:synthetic": "wrangler d1 execute medifind-synthetic-search --remote --config wrangler.synthetic.toml --file migrations/0001_task4_synthetic_search.sql",
+    "deploy:synthetic": "wrangler deploy --config wrangler.synthetic.toml",
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
