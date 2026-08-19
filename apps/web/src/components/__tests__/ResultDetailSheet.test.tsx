@@ -156,6 +156,29 @@ describe('ResultDetailSheet — stale-content safety', () => {
   });
 });
 
+describe('ResultDetailSheet — loading-to-ready announcement', () => {
+  it('keeps the same live region across the loading -> ready transition instead of unmounting it', () => {
+    const { rerender } = render(<TransitionHarness status="loading" />);
+
+    const dialogBefore = screen.getByRole('dialog', { name: strings.detailSheetTitle });
+    const liveRegion = within(dialogBefore).getByRole('status');
+    expect(liveRegion).toHaveAttribute('aria-live', 'polite');
+    expect(liveRegion).toHaveTextContent(strings.loadingLabel);
+
+    rerender(<TransitionHarness status="ready" />);
+
+    const dialogAfter = screen.getByRole('dialog', { name: strings.detailSheetTitle });
+    const liveRegionAfter = within(dialogAfter).getByRole('status');
+
+    // Same DOM node: the transition is a content change inside a
+    // pre-existing live region, not an unmount/remount of a fresh one, so
+    // assistive tech actually announces the update.
+    expect(liveRegionAfter).toBe(liveRegion);
+    expect(liveRegionAfter).toHaveTextContent('AlphaMed');
+    expect(liveRegionAfter).not.toHaveTextContent(strings.loadingLabel);
+  });
+});
+
 describe.each([
   ['loading', 'loading'],
   ['error', 'error'],

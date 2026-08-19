@@ -112,22 +112,31 @@ export function ResultDetailSheet(props: ResultDetailSheetProps) {
           </button>
         </div>
 
-        {props.status === 'loading' ? (
-          <div className="state-block" role="status" aria-live="polite">
-            <p className="state-block__title">{strings.loadingLabel}</p>
-          </div>
-        ) : props.status === 'error' ? (
+        {props.status === 'error' ? (
           <div className="state-block" role="alert">
             <p className="state-block__title">{strings.errorTitle}</p>
             <p className="state-block__body">{strings.errorBody}</p>
           </div>
         ) : (
-          <ReadyDetail
-            listing={props.listing}
-            matchKind={props.matchKind}
-            displayDistance={props.displayDistance}
-            showDistance={props.showDistance}
-          />
+          // One stable live region spans the loading -> ready transition, so
+          // a screen reader gets a real announcement when the listing
+          // arrives instead of silence: content changes inside a region
+          // that was already present, rather than the region itself being
+          // unmounted and remounted.
+          <div role="status" aria-live="polite">
+            {props.status === 'loading' ? (
+              <div className="state-block">
+                <p className="state-block__title">{strings.loadingLabel}</p>
+              </div>
+            ) : (
+              <ReadyDetail
+                listing={props.listing}
+                matchKind={props.matchKind}
+                displayDistance={props.displayDistance}
+                showDistance={props.showDistance}
+              />
+            )}
+          </div>
         )}
       </div>
     </div>

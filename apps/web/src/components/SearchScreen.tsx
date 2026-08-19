@@ -120,7 +120,8 @@ export function SearchScreen() {
 
       {selectedRow ? (
         workerSearchEnabled ? (
-          workerListingExecution.status === 'ready' ? (
+          workerListingExecution.status === 'ready' &&
+          workerListingExecution.listing.id === selectedRow.listing.id ? (
             <ResultDetailSheet
               status="ready"
               listing={workerListingExecution.listing}

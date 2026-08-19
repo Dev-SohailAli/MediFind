@@ -1,8 +1,32 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { PublicSearchResponse, PublicSearchResultItem } from '@medifind/contracts';
 
-import { fetchWorkerSearch, fetchWorkerListing } from '../searchClient';
+import { fetchWorkerSearch, fetchWorkerListing, isWorkerSearchMode } from '../searchClient';
+
+describe('isWorkerSearchMode', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it('is false when VITE_MEDIFIND_SEARCH_MODE is unset', () => {
+    vi.stubEnv('VITE_MEDIFIND_SEARCH_MODE', undefined);
+
+    expect(isWorkerSearchMode()).toBe(false);
+  });
+
+  it('is true only when VITE_MEDIFIND_SEARCH_MODE is exactly "worker"', () => {
+    vi.stubEnv('VITE_MEDIFIND_SEARCH_MODE', 'worker');
+
+    expect(isWorkerSearchMode()).toBe(true);
+  });
+
+  it('is false for any other value, such as "fixture"', () => {
+    vi.stubEnv('VITE_MEDIFIND_SEARCH_MODE', 'fixture');
+
+    expect(isWorkerSearchMode()).toBe(false);
+  });
+});
 
 const apiResponse: PublicSearchResponse = {
   results: [
