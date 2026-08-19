@@ -2,7 +2,16 @@ const baseConfig = require('./packages/config/eslint/base.cjs');
 
 module.exports = [
   {
-    ignores: ['**/node_modules/**', '**/dist/**', 'pnpm-lock.yaml', '**/coverage/**'],
+    ignores: [
+      '**/node_modules/**',
+      '**/dist/**',
+      'pnpm-lock.yaml',
+      '**/coverage/**',
+      '**/.wrangler/**',
+      'archive/**',
+      '.claude/**',
+      'MediVault/**',
+    ],
   },
   ...baseConfig,
   {

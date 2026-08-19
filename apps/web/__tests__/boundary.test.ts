@@ -7,6 +7,9 @@ const webRoot = fileURLToPath(new URL('..', import.meta.url));
 const packageJsonPath = fileURLToPath(new URL('../package.json', import.meta.url));
 const appSourcePath = fileURLToPath(new URL('../src/App.tsx', import.meta.url));
 const stringsSourcePath = fileURLToPath(new URL('../src/content/strings.ts', import.meta.url));
+const workerClientSourcePath = fileURLToPath(
+  new URL('../src/search/searchClient.ts', import.meta.url),
+);
 
 /**
  * Every .ts/.tsx source file that ships in the app, excluding tests, the
@@ -17,10 +20,18 @@ function readAllAppSource(): string {
     .filter((entry) => {
       if (!entry.isFile()) return false;
       if (!/\.(ts|tsx)$/.test(entry.name)) return false;
+      // Excludes test files wherever they live, not only under a
+      // __tests__/ directory: some suites (e.g. App.test.tsx) are colocated
+      // next to the source they cover, per this repo's plan conventions,
+      // and test assertion strings (e.g. checking body text never contains
+      // "sign in") are not themselves a shipped capability.
+      if (/\.test\.tsx?$/.test(entry.name)) return false;
       const fullPath = `${entry.parentPath}/${entry.name}`;
       if (fullPath.includes('__tests__')) return false;
       if (fullPath.includes('node_modules')) return false;
       if (fullPath.includes(`${webRoot}dist`)) return false;
+      if (fullPath.endsWith('vite.config.ts')) return false;
+      if (fullPath === workerClientSourcePath) return false;
       return true;
     })
     .map((entry) => readFileSync(`${entry.parentPath}/${entry.name}`, 'utf8'))
@@ -36,7 +47,7 @@ describe('web buyer-search prototype boundary', () => {
     expect(appSource).toContain('strings.localDevBuildLabel');
   });
 
-  it('makes no network request, uses no provider SDK, requests no permission and persists nothing', () => {
+  it('keeps the default app offline-safe and isolates network access to the opt-in Worker adapter', () => {
     const source = readAllAppSource();
     const forbiddenPatterns = [
       // network
@@ -73,6 +84,11 @@ describe('web buyer-search prototype boundary', () => {
     for (const pattern of forbiddenPatterns) {
       expect(source).not.toMatch(pattern);
     }
+
+    const workerClient = readFileSync(workerClientSourcePath, 'utf8');
+    expect(workerClient).toMatch(/fetchImpl/);
+    expect(workerClient).not.toMatch(/localStorage|sessionStorage|indexedDB|document\.cookie/);
+    expect(workerClient).not.toMatch(/requestPermission|geolocation|mediaDevices/);
 
     // "prescription"/"reservation" legitimately appear inside the required
     // safety copy (e.g. "A reservation is not a guarantee..."), so they are

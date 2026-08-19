@@ -5,9 +5,10 @@ import { VitePWA } from 'vite-plugin-pwa';
 import { pwaManifest } from './src/pwa-manifest.ts';
 
 /**
- * Local synthetic development build only. No environment variable, base
- * path, proxy or backend target is configured because this app makes no
- * network request and is never deployed by this task.
+ * Local synthetic development build only. The fixture-backed mode is the
+ * default. An explicit VITE_MEDIFIND_SEARCH_MODE=worker opt-in may proxy the
+ * read-only local Worker routes during development; production builds keep
+ * the fixture-safe default unless that variable is deliberately supplied.
  */
 export default defineConfig({
   plugins: [
@@ -18,9 +19,9 @@ export default defineConfig({
       manifest: pwaManifest,
       workbox: {
         // Precache only the built static app shell (HTML/JS/CSS/icons). The
-        // app performs no network request and has nothing else to cache;
-        // there is no runtime-caching entry because there is no API or
-        // remote asset to intercept.
+        // The default fixture-backed app has no runtime data to cache. The
+        // opt-in Worker adapter is deliberately not runtime-cached, so a
+        // stale or unavailable API response cannot become app state.
         globPatterns: ['**/*.{js,css,html,svg,png,webmanifest}'],
         navigateFallback: 'index.html',
         navigateFallbackDenylist: [],
@@ -34,10 +35,15 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
   },
+  server: {
+    proxy: {
+      '/v1': 'http://127.0.0.1:8787',
+    },
+  },
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test-support/setup-tests.ts'],
-    include: ['src/**/*.test.{ts,tsx}', '__tests__/**/*.test.{ts,tsx}'],
+    include: ['src/**/*.test.{ts,tsx}', '__tests__/**/*.test.{ts,tsx}', 'scripts/**/*.test.mjs'],
     css: false,
   },
 });

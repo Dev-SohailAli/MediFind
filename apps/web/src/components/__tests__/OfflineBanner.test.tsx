@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -14,6 +14,7 @@ describe('OfflineBanner', () => {
 
   afterEach(() => {
     setOnline(originalOnLine);
+    vi.restoreAllMocks();
   });
 
   it('is absent while online', () => {
@@ -56,5 +57,21 @@ describe('OfflineBanner', () => {
       window.dispatchEvent(new Event('online'));
     });
     expect(screen.queryByRole('status')).not.toBeInTheDocument();
+  });
+
+  it('reacts only to online/offline events, never to an unrelated event, and never probes the network itself', () => {
+    const fetchSpy = vi.spyOn(globalThis, 'fetch');
+    setOnline(true);
+    render(<OfflineBanner />);
+
+    act(() => {
+      // navigator.onLine is left true; only an unrelated event fires. The
+      // banner must not react to arbitrary window events.
+      window.dispatchEvent(new Event('resize'));
+      window.dispatchEvent(new Event('visibilitychange'));
+    });
+
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    expect(fetchSpy).not.toHaveBeenCalled();
   });
 });

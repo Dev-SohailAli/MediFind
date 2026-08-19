@@ -7,15 +7,20 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
+    "dev": "wrangler dev --config wrangler.local.toml --local",
+    "check": "wrangler deploy --dry-run --config wrangler.local.toml",
+    "d1:apply": "wrangler d1 execute medifind-synthetic-search-local --local --config wrangler.local.toml --file migrations/0001_task4_synthetic_search.sql",
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "verify:local": "node ./scripts/verify-synthetic-local.mjs"
   },
   "devDependencies": {
     "@medifind/config": "workspace:*",
     "@medifind/contracts": "workspace:*",
     "@types/node": "^24.13.3",
     "typescript": "6.0.3",
-    "vitest": "4.1.10"
+    "vitest": "4.1.10",
+    "wrangler": "^4.123.0"
   }
 }

@@ -40,6 +40,9 @@ describe('D1 fail-closed data seam', () => {
                 async first<T>() {
                   return { id: 'synthetic-1' } as T;
                 },
+                async all<T>() {
+                  return { results: [{ id: 'synthetic-1' }] as T[] };
+                },
               };
             },
           };
@@ -67,10 +70,12 @@ describe('D1 fail-closed data seam', () => {
     expect(JSON.stringify(result)).not.toMatch(/sqlite|\/var\/lib/i);
   });
 
-  it('has no committed D1 migration yet, matching the disabled binding', () => {
-    const migrationsDir = fileURLToPath(new URL('../../migrations', import.meta.url));
+  it('has a committed Task 4 migration on disk, but still no live binding to apply it against', () => {
+    const migrationPath = fileURLToPath(
+      new URL('../../migrations/0001_task4_synthetic_search.sql', import.meta.url),
+    );
 
-    expect(existsSync(migrationsDir)).toBe(false);
+    expect(existsSync(migrationPath)).toBe(true);
   });
 
   it('declares no D1 database binding in the Worker Wrangler configuration', () => {

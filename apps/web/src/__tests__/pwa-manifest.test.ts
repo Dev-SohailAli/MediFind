@@ -39,4 +39,16 @@ describe('pwaManifest', () => {
     expect(pwaManifest.theme_color).toBe('#C67139');
     expect(pwaManifest.background_color).toBe('#F5EAD8');
   });
+
+  it('introduces no production brand, external domain or credential-looking field', () => {
+    const serialized = JSON.stringify(pwaManifest);
+
+    // Every icon src, start_url and scope stays same-origin/relative — no
+    // absolute URL to any production or third-party domain.
+    expect(serialized).not.toMatch(/https?:\/\//);
+    expect(serialized).not.toMatch(/account_id/i);
+    expect(serialized).not.toMatch(/CLOUDFLARE_API_TOKEN/i);
+    expect(serialized).not.toMatch(/AKIA[0-9A-Z]{16}/);
+    expect(serialized).not.toMatch(/google-analytics\.com|gtag\(/i);
+  });
 });

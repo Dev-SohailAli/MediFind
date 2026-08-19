@@ -10,6 +10,22 @@ describe('authorize', () => {
     expect(authorize({ actor: anonymous, action: 'health:read' })).toEqual({ allowed: true });
   });
 
+  it('allows the public read-only search and listing actions for an anonymous actor (ADR-275)', () => {
+    expect(authorize({ actor: anonymous, action: 'search:read' })).toEqual({ allowed: true });
+    expect(authorize({ actor: anonymous, action: 'listing:read' })).toEqual({ allowed: true });
+  });
+
+  it('denies a still out-of-scope listing/search action, proving the allow-list is exact, not a prefix match', () => {
+    expect(authorize({ actor: anonymous, action: 'listing:refresh' })).toEqual({
+      allowed: false,
+      reason: 'unauthenticated',
+    });
+    expect(authorize({ actor: anonymous, action: 'search:write' })).toEqual({
+      allowed: false,
+      reason: 'unauthenticated',
+    });
+  });
+
   it('denies an unrecognised or protected action for an anonymous actor', () => {
     expect(authorize({ actor: anonymous, action: 'reservation:approve' })).toEqual({
       allowed: false,
