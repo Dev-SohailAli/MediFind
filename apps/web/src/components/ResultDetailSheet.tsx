@@ -9,7 +9,9 @@ import type {
 } from '../reservations/syntheticReservations';
 import type { DisplayDistance } from '../search/distance';
 import { formatFjd } from '../search/format';
+import type { SupportReportCategory } from '../support/syntheticSupport';
 import { iconStrokeWidth } from '../theme/tokens';
+import { ReportForm } from './ReportForm';
 import { ReservationRequestPanel } from './ReservationRequestPanel';
 import { StatusBadge } from './StatusBadge';
 import { availabilityPresentation, matchKindLabel } from './statusPresentation';
@@ -27,6 +29,12 @@ export type ResultDetailSheetProps =
       buyerKey?: string | null;
       reservations?: readonly SyntheticReservation[];
       onRequestReservation?: (input: SyntheticReservationRequestInput) => void;
+      onSubmitReport?: (input: {
+        category: SupportReportCategory;
+        reportedBy: string;
+        note: string;
+        targetListingId: string | null;
+      }) => void;
     };
 
 function getFocusable(container: HTMLElement): HTMLElement[] {
@@ -145,6 +153,7 @@ export function ResultDetailSheet(props: ResultDetailSheetProps) {
                 buyerKey={props.buyerKey ?? null}
                 reservations={props.reservations ?? []}
                 onRequestReservation={props.onRequestReservation ?? (() => {})}
+                onSubmitReport={props.onSubmitReport ?? (() => {})}
               />
             )}
           </div>
@@ -162,6 +171,12 @@ interface ReadyDetailProps {
   buyerKey: string | null;
   reservations: readonly SyntheticReservation[];
   onRequestReservation: (input: SyntheticReservationRequestInput) => void;
+  onSubmitReport: (input: {
+    category: SupportReportCategory;
+    reportedBy: string;
+    note: string;
+    targetListingId: string | null;
+  }) => void;
 }
 
 function ReadyDetail({
@@ -172,6 +187,7 @@ function ReadyDetail({
   buyerKey,
   reservations,
   onRequestReservation,
+  onSubmitReport,
 }: ReadyDetailProps) {
   const availability = availabilityPresentation(listing.availability);
 
@@ -214,6 +230,16 @@ function ReadyDetail({
         reservations={reservations}
         onRequestReservation={onRequestReservation}
       />
+
+      {buyerKey ? (
+        <ReportForm
+          triggerLabel={strings.supportReportListingLabel}
+          category="listing_quality"
+          targetListingId={listing.id}
+          buyerKey={buyerKey}
+          onSubmitReport={onSubmitReport}
+        />
+      ) : null}
     </>
   );
 }

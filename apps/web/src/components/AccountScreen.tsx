@@ -4,7 +4,10 @@ import { useSyntheticAuth } from '../auth/AuthContext';
 import { strings } from '../content/strings';
 import { useSyntheticPrescriptions } from '../prescriptions/PrescriptionsContext';
 import { useSyntheticReservations } from '../reservations/ReservationsContext';
+import { useSyntheticSupport } from '../support/SupportContext';
 import { PharmacyWorkspaces } from './PharmacyWorkspaces';
+import { ReportForm } from './ReportForm';
+import { SupportPanel } from './SupportPanel';
 
 function formatTimestamp(iso: string): string {
   return new Date(iso).toLocaleString();
@@ -20,6 +23,7 @@ export function AccountScreen() {
   const { state: reservationsState, dispatch: reservationsDispatch } = useSyntheticReservations();
   const { state: prescriptionsState, dispatch: prescriptionsDispatch } =
     useSyntheticPrescriptions();
+  const { state: supportState, dispatch: supportDispatch } = useSyntheticSupport();
   const [confirmingRecovery, setConfirmingRecovery] = React.useState(false);
 
   if (state.status !== 'signed_in' || !state.session) {
@@ -107,11 +111,26 @@ export function AccountScreen() {
         </div>
       ) : null}
 
+      <ReportForm
+        triggerLabel={strings.supportReportSuspiciousActivityLabel}
+        category="suspicious_activity"
+        targetListingId={null}
+        buyerKey={session.profile.phone}
+        onSubmitReport={(input) => supportDispatch({ type: 'submit_report', input })}
+      />
+
       <PharmacyWorkspaces
         reservations={reservationsState.reservations}
         reservationsDispatch={reservationsDispatch}
         prescriptions={prescriptionsState.prescriptions}
         prescriptionsDispatch={prescriptionsDispatch}
+      />
+
+      <SupportPanel
+        reports={supportState.reports}
+        dispatch={supportDispatch}
+        reservations={reservationsState.reservations}
+        prescriptions={prescriptionsState.prescriptions}
       />
     </div>
   );

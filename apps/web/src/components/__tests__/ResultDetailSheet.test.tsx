@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -115,6 +115,39 @@ describe('ResultDetailSheet — ready variant', () => {
     expect(
       screen.getByRole('button', { name: strings.reservationSubmitLabel }),
     ).toBeInTheDocument();
+  });
+
+  it('offers "Report this listing" only when signed in, and submits with the listing id attached', async () => {
+    const user = userEvent.setup();
+    const onSubmitReport = vi.fn();
+    const { rerender } = render(<ResultDetailSheet {...readyProps(() => {})} />);
+    expect(
+      screen.queryByRole('button', { name: strings.supportReportListingLabel }),
+    ).not.toBeInTheDocument();
+
+    rerender(
+      <ResultDetailSheet
+        status="ready"
+        listing={readyListing}
+        matchKind="exact_product"
+        displayDistance={{ label: '1 synthetic km', rank: 1 }}
+        showDistance={true}
+        onClose={() => {}}
+        buyerKey="+679 000 0000"
+        onSubmitReport={onSubmitReport}
+      />,
+    );
+
+    await user.click(screen.getByRole('button', { name: strings.supportReportListingLabel }));
+    await user.type(screen.getByLabelText(strings.supportReportNoteLabel), 'Price is wrong.');
+    await user.click(screen.getByRole('button', { name: strings.supportReportSubmitLabel }));
+
+    expect(onSubmitReport).toHaveBeenCalledWith({
+      category: 'listing_quality',
+      reportedBy: '+679 000 0000',
+      note: 'Price is wrong.',
+      targetListingId: readyListing.id,
+    });
   });
 
   it('omits the distance line when showDistance is false', () => {

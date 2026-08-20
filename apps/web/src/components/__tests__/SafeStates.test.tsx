@@ -27,6 +27,18 @@ describe('SafeStates', () => {
     expect(region).toHaveTextContent(strings.zeroResultSubstituteNotice);
   });
 
+  it('ZeroResultState offers the "couldn\'t find this medicine" report only when signed in', () => {
+    const { rerender } = render(<ZeroResultState />);
+    expect(
+      screen.queryByRole('button', { name: strings.supportReportCantFindMedicineLabel }),
+    ).not.toBeInTheDocument();
+
+    rerender(<ZeroResultState buyerKey="+679 000 0000" />);
+    expect(
+      screen.getByRole('button', { name: strings.supportReportCantFindMedicineLabel }),
+    ).toBeInTheDocument();
+  });
+
   it('LoadingState is an accessible, polite live region with the loading label', () => {
     render(<LoadingState />);
 

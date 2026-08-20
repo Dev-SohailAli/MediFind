@@ -1,4 +1,6 @@
 import { strings } from '../content/strings';
+import type { SupportReportCategory } from '../support/syntheticSupport';
+import { ReportForm } from './ReportForm';
 
 function StateBlock({ title, body }: { title: string; body?: string }) {
   return (
@@ -13,12 +15,34 @@ export function BrowseEmptyState() {
   return <StateBlock title={strings.browseEmptyTitle} body={strings.browseEmptyBody} />;
 }
 
-export function ZeroResultState() {
+export interface ZeroResultStateProps {
+  readonly buyerKey?: string | null;
+  readonly onSubmitReport?: (input: {
+    category: SupportReportCategory;
+    reportedBy: string;
+    note: string;
+    targetListingId: string | null;
+  }) => void;
+}
+
+export function ZeroResultState({
+  buyerKey = null,
+  onSubmitReport = () => {},
+}: ZeroResultStateProps = {}) {
   return (
     <div className="state-block" role="status">
       <p className="state-block__title">{strings.zeroResultTitle}</p>
       <p className="state-block__body">{strings.zeroResultBody}</p>
       <p className="state-block__body">{strings.zeroResultSubstituteNotice}</p>
+      {buyerKey ? (
+        <ReportForm
+          triggerLabel={strings.supportReportCantFindMedicineLabel}
+          category="cant_find_medicine"
+          targetListingId={null}
+          buyerKey={buyerKey}
+          onSubmitReport={onSubmitReport}
+        />
+      ) : null}
     </div>
   );
 }
