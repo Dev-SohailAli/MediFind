@@ -74,13 +74,17 @@ describe('web buyer-search prototype boundary', () => {
       /amplitude/i,
       /segment\.io/i,
       /mixpanel/i,
-      // out-of-scope product surfaces: real notification delivery, real
-      // identity credentials/secrets. "sign in" itself is no longer banned
-      // (ADR-277 Milestone B authorizes a local-only synthetic sign-in
-      // simulation — see src/auth/syntheticAuth.ts), but a real credential
-      // or secret concept must never appear, in that simulation or anywhere
-      // else.
-      /\bnotification\b/i,
+      // out-of-scope product surfaces: real identity credentials/secrets.
+      // "sign in" itself is no longer banned (ADR-277 Milestone B
+      // authorizes a local-only synthetic sign-in simulation — see
+      // src/auth/syntheticAuth.ts), and the generic word "notification" is
+      // no longer banned either (ADR-277 Milestone C authorizes a
+      // local-only generic-notification/status-refresh simulation — see
+      // src/notifications/syntheticNotifications.ts; the real browser
+      // Notification API and requestPermission() stay explicitly forbidden
+      // just above, and no push-provider SDK is introduced). A real
+      // credential or secret concept must never appear, in either
+      // simulation or anywhere else.
       /credential/i,
       /\bsecret\b/i,
     ];

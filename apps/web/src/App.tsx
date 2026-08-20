@@ -9,6 +9,10 @@ import { SearchScreen } from './components/SearchScreen';
 import { SignInScreen } from './components/SignInScreen';
 import { SyntheticAuthProvider, useSyntheticAuth } from './auth/AuthContext';
 import {
+  SyntheticNotificationsProvider,
+  useSyntheticNotifications,
+} from './notifications/NotificationsContext';
+import {
   SyntheticReservationsProvider,
   useSyntheticReservations,
 } from './reservations/ReservationsContext';
@@ -54,6 +58,12 @@ interface AppShellProps {
 function AppShell({ activeTab, onSelectTab }: AppShellProps) {
   const buyerKey = useBuyerKey();
   const { state: reservationsState, dispatch: reservationsDispatch } = useSyntheticReservations();
+  const {
+    readState: notificationReadState,
+    readDispatch: notificationReadDispatch,
+    optInStatus: notificationOptInStatus,
+    optInDispatch: notificationOptInDispatch,
+  } = useSyntheticNotifications();
 
   return (
     <div className="app-root">
@@ -86,6 +96,10 @@ function AppShell({ activeTab, onSelectTab }: AppShellProps) {
             reservations={reservationsState.reservations}
             dispatch={reservationsDispatch}
             onNavigateToAccount={() => onSelectTab('account')}
+            notificationReadState={notificationReadState}
+            notificationReadDispatch={notificationReadDispatch}
+            notificationOptInStatus={notificationOptInStatus}
+            notificationOptInDispatch={notificationOptInDispatch}
           />
         ) : null}
         {activeTab === 'account' ? <AccountTabContent /> : null}
@@ -104,7 +118,9 @@ export default function App() {
   return (
     <SyntheticAuthProvider>
       <SyntheticReservationsProvider>
-        <AppShell activeTab={activeTab} onSelectTab={setActiveTab} />
+        <SyntheticNotificationsProvider>
+          <AppShell activeTab={activeTab} onSelectTab={setActiveTab} />
+        </SyntheticNotificationsProvider>
       </SyntheticReservationsProvider>
     </SyntheticAuthProvider>
   );

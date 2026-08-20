@@ -3,8 +3,9 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { strings } from '../../content/strings';
+import { createInitialNotificationReadState } from '../../notifications/syntheticNotifications';
 import type { SyntheticReservation } from '../../reservations/syntheticReservations';
-import { RequestsScreen } from '../RequestsScreen';
+import { RequestsScreen, type RequestsScreenProps } from '../RequestsScreen';
 
 const BUYER = '+679 000 0000';
 
@@ -33,15 +34,26 @@ function reservation(overrides: Partial<SyntheticReservation> = {}): SyntheticRe
   };
 }
 
+function baseProps(overrides: Partial<RequestsScreenProps> = {}): RequestsScreenProps {
+  return {
+    buyerKey: BUYER,
+    reservations: [],
+    dispatch: () => {},
+    onNavigateToAccount: () => {},
+    notificationReadState: createInitialNotificationReadState(),
+    notificationReadDispatch: () => {},
+    notificationOptInStatus: 'not_asked',
+    notificationOptInDispatch: () => {},
+    ...overrides,
+  };
+}
+
 describe('RequestsScreen — signed out', () => {
   it('offers sign-in and no request content', () => {
     const onNavigateToAccount = vi.fn();
     render(
       <RequestsScreen
-        buyerKey={null}
-        reservations={[reservation()]}
-        dispatch={() => {}}
-        onNavigateToAccount={onNavigateToAccount}
+        {...baseProps({ buyerKey: null, reservations: [reservation()], onNavigateToAccount })}
       />,
     );
 
@@ -52,14 +64,7 @@ describe('RequestsScreen — signed out', () => {
   it('the sign-in prompt action calls onNavigateToAccount', async () => {
     const user = userEvent.setup();
     const onNavigateToAccount = vi.fn();
-    render(
-      <RequestsScreen
-        buyerKey={null}
-        reservations={[]}
-        dispatch={() => {}}
-        onNavigateToAccount={onNavigateToAccount}
-      />,
-    );
+    render(<RequestsScreen {...baseProps({ buyerKey: null, onNavigateToAccount })} />);
 
     await user.click(screen.getByRole('button', { name: strings.requestsSignInRequiredAction }));
     expect(onNavigateToAccount).toHaveBeenCalledTimes(1);
@@ -68,14 +73,7 @@ describe('RequestsScreen — signed out', () => {
 
 describe('RequestsScreen — signed in', () => {
   it('shows the empty state when the buyer has no reservations', () => {
-    render(
-      <RequestsScreen
-        buyerKey={BUYER}
-        reservations={[]}
-        dispatch={() => {}}
-        onNavigateToAccount={() => {}}
-      />,
-    );
+    render(<RequestsScreen {...baseProps()} />);
 
     expect(screen.getByText(strings.requestsEmptyTitle)).toBeInTheDocument();
   });
@@ -83,13 +81,12 @@ describe('RequestsScreen — signed in', () => {
   it("only shows this buyer's own reservations", () => {
     render(
       <RequestsScreen
-        buyerKey={BUYER}
-        reservations={[
-          reservation(),
-          reservation({ id: 'r2', buyerKey: '+679 111 1111', medicineDisplayName: 'OtherMed' }),
-        ]}
-        dispatch={() => {}}
-        onNavigateToAccount={() => {}}
+        {...baseProps({
+          reservations: [
+            reservation(),
+            reservation({ id: 'r2', buyerKey: '+679 111 1111', medicineDisplayName: 'OtherMed' }),
+          ],
+        })}
       />,
     );
 
@@ -100,14 +97,7 @@ describe('RequestsScreen — signed in', () => {
   it('a pending reservation offers Cancel, which dispatches a buyer cancel', async () => {
     const user = userEvent.setup();
     const dispatch = vi.fn();
-    render(
-      <RequestsScreen
-        buyerKey={BUYER}
-        reservations={[reservation()]}
-        dispatch={dispatch}
-        onNavigateToAccount={() => {}}
-      />,
-    );
+    render(<RequestsScreen {...baseProps({ reservations: [reservation()], dispatch })} />);
 
     await user.click(screen.getByRole('button', { name: strings.requestsCancelLabel }));
     expect(dispatch).toHaveBeenCalledWith({
@@ -123,17 +113,17 @@ describe('RequestsScreen — signed in', () => {
     const dispatch = vi.fn();
     render(
       <RequestsScreen
-        buyerKey={BUYER}
-        reservations={[
-          reservation({
-            status: 'approved',
-            confirmedPriceFjdMinor: 700,
-            pickupInstructions: 'Front counter',
-            expiresAt: new Date(Date.now() + 60 * 60_000).toISOString(),
-          }),
-        ]}
-        dispatch={dispatch}
-        onNavigateToAccount={() => {}}
+        {...baseProps({
+          reservations: [
+            reservation({
+              status: 'approved',
+              confirmedPriceFjdMinor: 700,
+              pickupInstructions: 'Front counter',
+              expiresAt: new Date(Date.now() + 60 * 60_000).toISOString(),
+            }),
+          ],
+          dispatch,
+        })}
       />,
     );
 
@@ -155,10 +145,9 @@ describe('RequestsScreen — signed in', () => {
   it('a declined reservation shows the reason and no actions', () => {
     render(
       <RequestsScreen
-        buyerKey={BUYER}
-        reservations={[reservation({ status: 'declined', declineReason: 'Out of stock' })]}
-        dispatch={() => {}}
-        onNavigateToAccount={() => {}}
+        {...baseProps({
+          reservations: [reservation({ status: 'declined', declineReason: 'Out of stock' })],
+        })}
       />,
     );
 
@@ -168,45 +157,48 @@ describe('RequestsScreen — signed in', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('shows a "Check for updates" refresh action only when an approved reservation is overdue, and dispatches expire', async () => {
+  it('the "Check for updates" action is always available and only expires reservations that are actually overdue', async () => {
     const user = userEvent.setup();
     const dispatch = vi.fn();
-    const { rerender } = render(
+    const notificationReadDispatch = vi.fn();
+    render(
       <RequestsScreen
-        buyerKey={BUYER}
-        reservations={[
-          reservation({
-            status: 'approved',
-            confirmedPriceFjdMinor: 700,
-            pickupInstructions: 'Front counter',
-            expiresAt: new Date(Date.now() + 60 * 60_000).toISOString(),
-          }),
-        ]}
-        dispatch={dispatch}
-        onNavigateToAccount={() => {}}
-      />,
-    );
-    expect(
-      screen.queryByRole('button', { name: strings.requestsRefreshLabel }),
-    ).not.toBeInTheDocument();
-
-    rerender(
-      <RequestsScreen
-        buyerKey={BUYER}
-        reservations={[
-          reservation({
-            status: 'approved',
-            confirmedPriceFjdMinor: 700,
-            pickupInstructions: 'Front counter',
-            expiresAt: new Date(Date.now() - 60_000).toISOString(),
-          }),
-        ]}
-        dispatch={dispatch}
-        onNavigateToAccount={() => {}}
+        {...baseProps({
+          reservations: [
+            reservation({
+              id: 'not-overdue',
+              status: 'approved',
+              confirmedPriceFjdMinor: 700,
+              pickupInstructions: 'Front counter',
+              expiresAt: new Date(Date.now() + 60 * 60_000).toISOString(),
+            }),
+            reservation({
+              id: 'overdue',
+              status: 'approved',
+              confirmedPriceFjdMinor: 700,
+              pickupInstructions: 'Front counter',
+              expiresAt: new Date(Date.now() - 60_000).toISOString(),
+            }),
+          ],
+          dispatch,
+          notificationReadDispatch,
+        })}
       />,
     );
 
     await user.click(screen.getByRole('button', { name: strings.requestsRefreshLabel }));
-    expect(dispatch).toHaveBeenCalledWith({ type: 'expire', reservationId: 'r1' });
+
+    expect(dispatch).toHaveBeenCalledWith({ type: 'expire', reservationId: 'overdue' });
+    expect(dispatch).not.toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'expire', reservationId: 'not-overdue' }),
+    );
+  });
+
+  it("renders the NotificationCenter with notifications derived from this buyer's reservations", () => {
+    render(
+      <RequestsScreen {...baseProps({ reservations: [reservation({ status: 'approved' })] })} />,
+    );
+
+    expect(screen.getByText(strings.notificationsGenericEntryTitle)).toBeInTheDocument();
   });
 });

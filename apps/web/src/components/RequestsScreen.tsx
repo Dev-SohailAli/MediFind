@@ -3,12 +3,20 @@ import { CircleCheck, CircleCheckBig, CircleAlert, Clock, Info } from 'lucide-re
 
 import { strings } from '../content/strings';
 import {
+  deriveNotifications,
+  type NotificationOptInAction,
+  type NotificationOptInStatus,
+  type NotificationReadAction,
+  type NotificationReadState,
+} from '../notifications/syntheticNotifications';
+import {
   isReservationOverdue,
   type ReservationStatus,
   type SyntheticReservation,
   type SyntheticReservationsAction,
 } from '../reservations/syntheticReservations';
 import { formatFjd } from '../search/format';
+import { NotificationCenter } from './NotificationCenter';
 import { StatusBadge, type BadgeTone } from './StatusBadge';
 
 const STATUS_LABEL: Record<ReservationStatus, string> = {
@@ -141,12 +149,17 @@ export interface RequestsScreenProps {
   readonly reservations: readonly SyntheticReservation[];
   readonly dispatch: React.Dispatch<SyntheticReservationsAction>;
   readonly onNavigateToAccount: () => void;
+  readonly notificationReadState: NotificationReadState;
+  readonly notificationReadDispatch: React.Dispatch<NotificationReadAction>;
+  readonly notificationOptInStatus: NotificationOptInStatus;
+  readonly notificationOptInDispatch: React.Dispatch<NotificationOptInAction>;
 }
 
 /**
  * Buyer-facing single timeline for reservation status (design proposal
  * §5.1 Requests, narrowed to reservations only — prescription entries join
- * this same screen in a later Milestone C slice). Replaces the Requests
+ * this same screen in a later Milestone C slice), plus the generic
+ * notification feed derived from that same status. Replaces the Requests
  * tab's `PrototypePlaceholder` for a signed-in buyer.
  */
 export function RequestsScreen({
@@ -154,6 +167,10 @@ export function RequestsScreen({
   reservations,
   dispatch,
   onNavigateToAccount,
+  notificationReadState,
+  notificationReadDispatch,
+  notificationOptInStatus,
+  notificationOptInDispatch,
 }: RequestsScreenProps) {
   if (buyerKey === null) {
     return (
@@ -180,6 +197,18 @@ export function RequestsScreen({
     .filter((reservation) => isReservationOverdue(reservation))
     .map((reservation) => reservation.id);
 
+  const notifications = deriveNotifications(reservations, buyerKey);
+
+  function handleRefresh() {
+    for (const id of overdueIds) {
+      dispatch({ type: 'expire', reservationId: id });
+    }
+    notificationReadDispatch({
+      type: 'mark_all_read',
+      ids: notifications.map((notification) => notification.id),
+    });
+  }
+
   return (
     <section className="screen" aria-labelledby="requests-title">
       <h1 id="requests-title" className="sr-only">
@@ -187,19 +216,17 @@ export function RequestsScreen({
       </h1>
       <p className="requests__intro">{strings.requestsIntro}</p>
 
-      {overdueIds.length > 0 ? (
-        <button
-          type="button"
-          className="auth-button auth-button--secondary"
-          onClick={() => {
-            for (const id of overdueIds) {
-              dispatch({ type: 'expire', reservationId: id });
-            }
-          }}
-        >
-          {strings.requestsRefreshLabel}
-        </button>
-      ) : null}
+      <NotificationCenter
+        notifications={notifications}
+        readState={notificationReadState}
+        readDispatch={notificationReadDispatch}
+        optInStatus={notificationOptInStatus}
+        optInDispatch={notificationOptInDispatch}
+      />
+
+      <button type="button" className="auth-button auth-button--secondary" onClick={handleRefresh}>
+        {strings.requestsRefreshLabel}
+      </button>
 
       {own.length === 0 ? (
         <div className="state-block">
