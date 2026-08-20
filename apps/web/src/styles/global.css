@@ -991,3 +991,88 @@ input {
   margin: 0;
   padding: 0;
 }
+
+/*
+ * Synthetic branch-listing lifecycle simulation (ADR-277 Milestone B,
+ * final bullet).
+ */
+
+.inventory-panel {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.listing-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.listing-row {
+  background: var(--color-surface-muted);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.listing-row__header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.listing-row__name {
+  font-weight: 700;
+  margin: 0;
+}
+
+.listing-row__details {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+}
+
+.listing-quick-form {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.listing-quick-form select,
+.listing-quick-form input {
+  min-height: var(--min-target);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0 var(--space-2);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+}
+
+.listing-add-form {
+  max-width: none;
+  margin: 0;
+  padding: var(--space-3);
+  background: var(--color-surface-muted);
+  border-radius: var(--radius-md);
+}
+
+.listing-add-form select {
+  min-height: var(--min-target);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0 var(--space-3);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+}
