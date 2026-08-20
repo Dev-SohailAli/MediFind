@@ -74,19 +74,25 @@ describe('web buyer-search prototype boundary', () => {
       /amplitude/i,
       /segment\.io/i,
       /mixpanel/i,
-      // out-of-scope product surfaces: real identity credentials/secrets.
-      // "sign in" itself is no longer banned (ADR-277 Milestone B
-      // authorizes a local-only synthetic sign-in simulation — see
-      // src/auth/syntheticAuth.ts), and the generic word "notification" is
-      // no longer banned either (ADR-277 Milestone C authorizes a
-      // local-only generic-notification/status-refresh simulation — see
-      // src/notifications/syntheticNotifications.ts; the real browser
-      // Notification API and requestPermission() stay explicitly forbidden
-      // just above, and no push-provider SDK is introduced). A real
-      // credential or secret concept must never appear, in either
-      // simulation or anywhere else.
+      // out-of-scope product surfaces: real identity credentials/secrets,
+      // and real malware/virus-scan detail disclosure (requirements.md:
+      // uploads give "safe, generic feedback... without disclosing
+      // malware, tamper or abuse-detection signals" — the synthetic
+      // scanner in src/prescriptions/syntheticPrescriptions.ts must never
+      // leak a real-sounding detection detail into buyer-facing copy).
+      // "sign in" (ADR-277 Milestone B), and the generic words
+      // "notification"/"reservation"/"prescription" (ADR-277 Milestone C —
+      // see src/notifications/, src/reservations/ and
+      // src/prescriptions/syntheticPrescriptions.ts) are no longer banned
+      // outright now that each has an authorized local-only simulation;
+      // the real browser Notification API and requestPermission() stay
+      // explicitly forbidden just above, and no push/scan-provider SDK is
+      // introduced. A real credential, secret or malware/virus detail must
+      // never appear, in any simulation or anywhere else.
       /credential/i,
       /\bsecret\b/i,
+      /malware/i,
+      /\bvirus\b/i,
     ];
 
     for (const pattern of forbiddenPatterns) {
@@ -97,28 +103,6 @@ describe('web buyer-search prototype boundary', () => {
     expect(workerClient).toMatch(/fetchImpl/);
     expect(workerClient).not.toMatch(/localStorage|sessionStorage|indexedDB|document\.cookie/);
     expect(workerClient).not.toMatch(/requestPermission|geolocation|mediaDevices/);
-
-    // "prescription"/"reservation" legitimately appear inside the required
-    // safety copy (e.g. "A reservation is not a guarantee..."), so they are
-    // not blanket-banned words. Instead, forbid the actual out-of-scope
-    // capability: no code may create, submit or track a prescription
-    // request. A local-only OTC *reservation* request/approval/expiry/
-    // cancellation simulation is no longer banned (ADR-277 Milestone C
-    // authorizes it — see src/reservations/syntheticReservations.ts); it
-    // still may never touch a network request, real provider or real
-    // pharmacy/buyer data, which the generic checks above continue to
-    // enforce. Prescription upload/quarantine remains out of scope until
-    // its own later Milestone C slice.
-    const forbiddenFeaturePatterns = [
-      /uploadPrescription/i,
-      /submitPrescription/i,
-      /prescriptionStatus/i,
-      /prescriptionRequest/i,
-    ];
-
-    for (const pattern of forbiddenFeaturePatterns) {
-      expect(source).not.toMatch(pattern);
-    }
   });
 
   it('keeps the synthetic sign-in simulation (ADR-277) clearly local-only, never a real identity provider', () => {

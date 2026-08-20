@@ -13,6 +13,10 @@ import {
   useSyntheticNotifications,
 } from './notifications/NotificationsContext';
 import {
+  SyntheticPrescriptionsProvider,
+  useSyntheticPrescriptions,
+} from './prescriptions/PrescriptionsContext';
+import {
   SyntheticReservationsProvider,
   useSyntheticReservations,
 } from './reservations/ReservationsContext';
@@ -58,6 +62,8 @@ interface AppShellProps {
 function AppShell({ activeTab, onSelectTab }: AppShellProps) {
   const buyerKey = useBuyerKey();
   const { state: reservationsState, dispatch: reservationsDispatch } = useSyntheticReservations();
+  const { state: prescriptionsState, dispatch: prescriptionsDispatch } =
+    useSyntheticPrescriptions();
   const {
     readState: notificationReadState,
     readDispatch: notificationReadDispatch,
@@ -95,6 +101,8 @@ function AppShell({ activeTab, onSelectTab }: AppShellProps) {
             buyerKey={buyerKey}
             reservations={reservationsState.reservations}
             dispatch={reservationsDispatch}
+            prescriptions={prescriptionsState.prescriptions}
+            prescriptionsDispatch={prescriptionsDispatch}
             onNavigateToAccount={() => onSelectTab('account')}
             notificationReadState={notificationReadState}
             notificationReadDispatch={notificationReadDispatch}
@@ -118,9 +126,11 @@ export default function App() {
   return (
     <SyntheticAuthProvider>
       <SyntheticReservationsProvider>
-        <SyntheticNotificationsProvider>
-          <AppShell activeTab={activeTab} onSelectTab={setActiveTab} />
-        </SyntheticNotificationsProvider>
+        <SyntheticPrescriptionsProvider>
+          <SyntheticNotificationsProvider>
+            <AppShell activeTab={activeTab} onSelectTab={setActiveTab} />
+          </SyntheticNotificationsProvider>
+        </SyntheticPrescriptionsProvider>
       </SyntheticReservationsProvider>
     </SyntheticAuthProvider>
   );

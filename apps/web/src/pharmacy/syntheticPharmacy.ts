@@ -127,3 +127,15 @@ export function resolveBranchIdByDisplayName(pharmacyDisplayName: string): strin
   );
   return branch ? branch.branchId : null;
 }
+
+/**
+ * Milestone C: the buyer-facing pharmacy directory for prescription
+ * upload — every `live` branch, regardless of whether the fixed demo
+ * identity happens to hold a staff role there (unlike
+ * `listSyntheticWorkspaces`, which is deliberately scoped to only the
+ * demo identity's own roles). A real buyer selecting a pharmacy has no
+ * notion of "my workspaces"; they choose from every verified branch.
+ */
+export function listLivePharmacyBranches(): readonly SyntheticPharmacyBranch[] {
+  return SYNTHETIC_BRANCHES.filter((branch) => branch.verificationStatus === 'live');
+}

@@ -273,6 +273,59 @@ export const strings = {
   notificationsOptInAllowLabel: 'Allow',
   notificationsOptInNotNowLabel: 'Not now',
   notificationsOptInGrantedNote: 'Notifications are on for this device (simulated).',
+
+  prescriptionUploadTitle: 'Upload a prescription',
+  prescriptionUploadIntro:
+    'A synthetic prescription upload. No real file is stored, scanned or sent anywhere — this prototype only simulates the review workflow.',
+  prescriptionUploadPharmacyLabel: 'Select a verified pharmacy',
+  prescriptionUploadPatientNameLabel: 'Patient full name',
+  prescriptionUploadFileLabel: 'Prescription file',
+  prescriptionUploadFileHint: 'PDF, JPG, PNG or HEIC — up to 10 MB.',
+  prescriptionUploadLegibilityLabel: 'This is legible and correct',
+  prescriptionUploadExpiryDisclosure:
+    'If the pharmacy has not opened this within about two days, it expires automatically and the update appears in Requests.',
+  prescriptionUploadRetentionNotice:
+    'After the pharmacy opens this, it is retained under the privacy policy and can no longer be removed immediately.',
+  prescriptionUploadConsentLabel: (pharmacyName: string) => `Share only with ${pharmacyName}`,
+  prescriptionUploadSubmitLabel: 'Submit prescription',
+  prescriptionUploadPatientNameError: "Enter the patient's full legal name.",
+  prescriptionUploadFileTypeError: 'Choose a supported file: PDF, JPG, PNG or HEIC.',
+  prescriptionUploadFileSizeError: 'This file is larger than the 10 MB limit.',
+  prescriptionUploadLegibilityError: 'Confirm the file is legible and correct.',
+  prescriptionUploadConsentError: 'Confirm you understand this is shared only with this pharmacy.',
+  prescriptionUploadUnsafeFileError:
+    "We couldn't accept this file. Try a different file or take a new photo.",
+  prescriptionUploadSuccessNotice: 'Prescription submitted — see Requests for status updates.',
+
+  prescriptionStatusUnderReviewLabel: 'Under review',
+  prescriptionStatusApprovedLabel: 'Approved',
+  prescriptionStatusRejectedLabel: 'Rejected',
+  prescriptionStatusExpiredLabel: 'Expired',
+  prescriptionStatusCancelledLabel: 'Cancelled',
+  prescriptionApprovedNote:
+    'The pharmacy has approved this prescription. Contact them directly to arrange collection.',
+  prescriptionRejectedReasonPrefix: 'Reason',
+  prescriptionRejectReasonIllegibleLabel: 'Illegible',
+  prescriptionRejectReasonIncompleteLabel: 'Incomplete information',
+  prescriptionRejectReasonDuplicateLabel: 'Suspected duplicate',
+  prescriptionRejectReasonInvalidLabel: 'Invalid prescription',
+  prescriptionRejectReasonOtherLabel: 'Other',
+  prescriptionCancelLabel: 'Cancel',
+
+  pharmacyPrescriptionsMfaGateTitle: 'Confirm your identity',
+  pharmacyPrescriptionsMfaGateBody:
+    'This restricted content requires a fresh identity check before it can be viewed (simulated — no real authentication happens here).',
+  pharmacyPrescriptionsMfaGateConfirmLabel: 'Confirm identity (simulated)',
+  pharmacyPrescriptionsQuarantineBanner:
+    'Restricted — flagged for legibility/duplicate check, review before deciding.',
+  pharmacyPrescriptionsFileNotice: 'Prescription file preview — synthetic placeholder only.',
+  pharmacyPrescriptionsApproveLabel: 'Approve',
+  pharmacyPrescriptionsRejectLabel: 'Reject',
+  pharmacyPrescriptionsRejectReasonLabel: 'Reason category (required)',
+  pharmacyPrescriptionsApprovalNote:
+    'Approving allows the buyer to request a reservation. It does not create or hold a reservation for them.',
+  pharmacyPrescriptionsDecisionSafetyNote:
+    'This is a professional/legal decision — MediFind does not determine validity or dispensing.',
 } as const;
 
 export type StringKey = keyof typeof strings;

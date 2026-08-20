@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
+import type { SyntheticPrescription } from '../../prescriptions/syntheticPrescriptions';
 import type { SyntheticReservation } from '../../reservations/syntheticReservations';
 import {
   createInitialNotificationOptInStatus,
   createInitialNotificationReadState,
   deriveNotifications,
+  derivePrescriptionNotifications,
   notificationOptInReducer,
   notificationReadReducer,
   simulateDeliveryOutcome,
@@ -80,7 +82,47 @@ describe('deriveNotifications', () => {
       ],
       BUYER,
     );
-    expect(notifications.map((n) => n.reservationId)).toEqual(['new', 'old']);
+    expect(notifications.map((n) => n.sourceId)).toEqual(['new', 'old']);
+  });
+});
+
+function prescription(overrides: Partial<SyntheticPrescription> = {}): SyntheticPrescription {
+  return {
+    id: 'p1',
+    buyerKey: BUYER,
+    branchId: 'suva-central',
+    pharmacyDisplayName: 'Suva Central Pharmacy (synthetic)',
+    patientName: 'Litia Waqa',
+    relationship: 'self',
+    status: 'under_review',
+    quarantined: false,
+    submittedAt: '2026-08-20T00:00:00.000Z',
+    lastUpdatedAt: '2026-08-20T00:00:00.000Z',
+    expiresAt: '2026-08-22T00:00:00.000Z',
+    rejectReason: null,
+    ...overrides,
+  };
+}
+
+describe('derivePrescriptionNotifications', () => {
+  it('creates no notification while still under_review', () => {
+    expect(derivePrescriptionNotifications([prescription()], BUYER)).toHaveLength(0);
+  });
+
+  it('creates exactly one notification per notifiable status transition', () => {
+    const statuses = ['approved', 'rejected', 'expired', 'cancelled'] as const;
+    for (const status of statuses) {
+      expect(derivePrescriptionNotifications([prescription({ status })], BUYER)).toHaveLength(1);
+    }
+  });
+
+  it('only derives notifications for the given buyer', () => {
+    expect(
+      derivePrescriptionNotifications(
+        [prescription({ status: 'approved', buyerKey: '+679 111 1111' })],
+        BUYER,
+      ),
+    ).toHaveLength(0);
   });
 });
 
