@@ -2,6 +2,7 @@ import * as React from 'react';
 import type { SyntheticSearchListing } from '@medifind/contracts';
 
 import { strings } from '../content/strings';
+import { resolveBranchIdByDisplayName } from '../pharmacy/syntheticPharmacy';
 import {
   findActiveReservationConflict,
   isReservationsSuspended,
@@ -76,7 +77,7 @@ export function ReservationRequestPanel({
 
     const input: SyntheticReservationRequestInput = {
       listingId: listing.id,
-      branchId: null,
+      branchId: resolveBranchIdByDisplayName(listing.pharmacyDisplayName),
       medicineDisplayName: listing.medicineDisplayName,
       pharmacyDisplayName: listing.pharmacyDisplayName,
       requestedPriceFjdMinor: listing.priceFjdMinor,

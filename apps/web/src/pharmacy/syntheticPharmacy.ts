@@ -109,3 +109,21 @@ export function resolveSyntheticWorkspace(branchId: string): WorkspaceLookupResu
 
   return { status: 'ok', workspace: { branch, roles } };
 }
+
+/**
+ * Milestone C: correlates a buyer-search fixture's `pharmacyDisplayName`
+ * (a separate, unconnected domain — see apps/web/src/fixtures/
+ * syntheticListings.ts) with this registry's branch ID, purely so a
+ * reservation created from a matching buyer-search listing can reach the
+ * right pharmacy's Requests queue. `pharmacyDisplayName` is already
+ * ordinary public buyer-facing text, so this is a plain lookup, not an
+ * anti-enumeration-sensitive one like `resolveSyntheticWorkspace` above.
+ * Returns `null` for the (expected, majority) case where a buyer-search
+ * pharmacy has no corresponding branch here at all.
+ */
+export function resolveBranchIdByDisplayName(pharmacyDisplayName: string): string | null {
+  const branch = SYNTHETIC_BRANCHES.find(
+    (candidate) => candidate.pharmacyDisplayName === pharmacyDisplayName,
+  );
+  return branch ? branch.branchId : null;
+}

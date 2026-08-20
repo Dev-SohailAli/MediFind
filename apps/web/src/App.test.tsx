@@ -137,4 +137,39 @@ describe('App', () => {
     expect(screen.getByText('Farovex')).toBeInTheDocument();
     expect(screen.getByText(strings.reservationStatusPendingLabel)).toBeInTheDocument();
   });
+
+  it('a pharmacy approval is visible to the buyer as both an updated status and a generic notification (Milestone C end-to-end)', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(screen.getByRole('button', { name: strings.navAccountLabel }));
+    await user.clear(screen.getByLabelText(strings.signInPhoneLabel));
+    await user.type(screen.getByLabelText(strings.signInPhoneLabel), '+6797654321');
+    await user.click(screen.getByLabelText(strings.signInOver18Label));
+    await user.type(screen.getByLabelText(strings.signInNameLabel), 'Demo Buyer');
+    await user.type(screen.getByLabelText(strings.signInEmailLabel), 'demo.buyer@example.test');
+    await user.click(screen.getByRole('button', { name: strings.signInSendCodeLabel }));
+    await user.type(screen.getByLabelText(strings.signInCodeLabel), SYNTHETIC_AUTH_DEMO_CODE);
+    await user.click(screen.getByRole('button', { name: strings.signInVerifyLabel }));
+
+    await user.click(screen.getByRole('button', { name: strings.navSearchLabel }));
+    await user.type(screen.getByLabelText(strings.searchInputLabel), 'Farovex');
+    await user.click(await screen.findByRole('button', { name: /Farovex.*Exact product match/i }));
+    const dialog = screen.getByRole('dialog', { name: strings.detailSheetTitle });
+    await user.type(
+      within(dialog).getByLabelText(strings.reservationPatientNameLabel),
+      'Litia Waqa',
+    );
+    await user.click(within(dialog).getByRole('button', { name: strings.reservationSubmitLabel }));
+    await user.click(within(dialog).getByRole('button', { name: strings.detailSheetCloseLabel }));
+
+    // Same fixed demo identity, switching to its pharmacy-staff side.
+    await user.click(screen.getByRole('button', { name: strings.navAccountLabel }));
+    await user.click(screen.getByRole('button', { name: strings.pharmacyRequestsOpenLabel }));
+    await user.click(screen.getByRole('button', { name: strings.pharmacyRequestsApproveLabel }));
+
+    await user.click(screen.getByRole('button', { name: strings.navRequestsLabel }));
+    expect(screen.getByText(strings.reservationStatusApprovedLabel)).toBeInTheDocument();
+    expect(screen.getByText(strings.notificationsGenericEntryTitle)).toBeInTheDocument();
+  });
 });

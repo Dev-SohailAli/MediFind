@@ -96,7 +96,7 @@ describe('ReservationRequestPanel', () => {
 
     expect(onRequestReservation).toHaveBeenCalledWith({
       listingId: LISTING.id,
-      branchId: null,
+      branchId: 'suva-central',
       medicineDisplayName: LISTING.medicineDisplayName,
       pharmacyDisplayName: LISTING.pharmacyDisplayName,
       requestedPriceFjdMinor: LISTING.priceFjdMinor,
@@ -104,6 +104,24 @@ describe('ReservationRequestPanel', () => {
       relationship: 'self',
     });
     expect(screen.getByText(strings.reservationSuccessNotice)).toBeInTheDocument();
+  });
+
+  it('resolves branchId to null for a buyer-search pharmacy with no matching pharmacy-side branch', async () => {
+    const user = userEvent.setup();
+    const onRequestReservation = vi.fn();
+    render(
+      <ReservationRequestPanel
+        listing={{ ...LISTING, pharmacyDisplayName: 'Solandra Pharmacy (synthetic)' }}
+        buyerKey="+679 000 0000"
+        reservations={[]}
+        onRequestReservation={onRequestReservation}
+      />,
+    );
+
+    await user.type(screen.getByLabelText(strings.reservationPatientNameLabel), 'Litia Waqa');
+    await user.click(screen.getByRole('button', { name: strings.reservationSubmitLabel }));
+
+    expect(onRequestReservation).toHaveBeenCalledWith(expect.objectContaining({ branchId: null }));
   });
 
   it('blocks submission and shows a conflict notice for an existing active reservation, same medicine/person', async () => {

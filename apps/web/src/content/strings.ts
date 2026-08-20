@@ -257,6 +257,22 @@ export const strings = {
   pharmacyRequestsCancelLabel: 'Cancel reservation',
   pharmacyRequestsCancelReasonLabel: 'Operational reason (required)',
   pharmacyRequestsCancelReasonError: 'Enter the operational reason for this cancellation.',
+
+  notificationsTitle: 'Notifications',
+  notificationsGenericEntryTitle: 'You have a request update.',
+  notificationsUnreadSuffix: 'unread',
+  notificationsEmpty: 'No notifications yet.',
+  notificationsMarkAllReadLabel: 'Mark all as read',
+  notificationsOpenEntryLabel: 'Open',
+  notificationsDeliveryFailedNote:
+    'Push delivery failed for this update — your in-app status above is still up to date.',
+  notificationsOptInPromptLabel: 'Enable notifications',
+  notificationsOptInExplainerTitle: 'Turn on notifications?',
+  notificationsOptInExplainerBody:
+    "We'll send a generic alert when one of your requests changes — never a medicine, pharmacy or prescription detail. You'll still need to open the app and sign in to see what changed.",
+  notificationsOptInAllowLabel: 'Allow',
+  notificationsOptInNotNowLabel: 'Not now',
+  notificationsOptInGrantedNote: 'Notifications are on for this device (simulated).',
 } as const;
 
 export type StringKey = keyof typeof strings;
