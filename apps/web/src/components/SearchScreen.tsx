@@ -3,6 +3,10 @@ import type { SyntheticArea, SyntheticSort } from '@medifind/contracts';
 
 import { strings } from '../content/strings';
 import { syntheticListings } from '../fixtures/syntheticListings';
+import type {
+  SyntheticReservation,
+  SyntheticReservationRequestInput,
+} from '../reservations/syntheticReservations';
 import { MAX_RESULTS_PER_PAGE, paginate } from '../search/searchListings';
 import { isWorkerSearchMode } from '../search/searchClient';
 import { useSearchExecution } from '../search/useSearchExecution';
@@ -16,7 +20,17 @@ import { BrowseEmptyState, ErrorState, LoadingState, ZeroResultState } from './S
 import { SearchBar } from './SearchBar';
 import { SortSelector } from './SortSelector';
 
-export function SearchScreen() {
+export interface SearchScreenProps {
+  readonly buyerKey?: string | null;
+  readonly reservations?: readonly SyntheticReservation[];
+  readonly onRequestReservation?: (input: SyntheticReservationRequestInput) => void;
+}
+
+export function SearchScreen({
+  buyerKey = null,
+  reservations = [],
+  onRequestReservation = () => {},
+}: SearchScreenProps = {}) {
   const workerSearchEnabled = isWorkerSearchMode();
   const [query, setQuery] = React.useState('');
   const [sort, setSort] = React.useState<SyntheticSort>('relevance');
@@ -129,6 +143,9 @@ export function SearchScreen() {
               displayDistance={selectedRow.displayDistance}
               showDistance={selectedArea !== null}
               onClose={() => setSelectedListingId(null)}
+              buyerKey={buyerKey}
+              reservations={reservations}
+              onRequestReservation={onRequestReservation}
             />
           ) : workerListingExecution.status === 'error' ? (
             <ResultDetailSheet status="error" onClose={() => setSelectedListingId(null)} />
@@ -143,6 +160,9 @@ export function SearchScreen() {
             displayDistance={selectedRow.displayDistance}
             showDistance={selectedArea !== null}
             onClose={() => setSelectedListingId(null)}
+            buyerKey={buyerKey}
+            reservations={reservations}
+            onRequestReservation={onRequestReservation}
           />
         )
       ) : null}

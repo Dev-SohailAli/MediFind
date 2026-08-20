@@ -139,6 +139,31 @@ export const syntheticListings: readonly SyntheticSearchListing[] = [
     searchEligible: true,
   },
   {
+    id: 'farovex-suva-central',
+    medicineDisplayName: 'Farovex',
+    brandName: 'Farovex Comfort',
+    activeIngredientDisplayName: 'Delunorphine',
+    strength: '250 mg',
+    dosageForm: 'Tablet',
+    packDescription: 'Pack of 12',
+    aliases: ['delunorphine mild'],
+    // Deliberately shares its display name with the `suva-central` branch
+    // in apps/web/src/pharmacy/syntheticPharmacy.ts (Milestone B) — the
+    // only fixture pharmacy this buyer-search set and the pharmacy-side
+    // fixtures agree on by name, so a reviewer can walk through a
+    // reservation end to end: request it here, then see it in that
+    // branch's Requests queue under the pharmacy demo identity.
+    pharmacyDisplayName: 'Suva Central Pharmacy (synthetic)',
+    syntheticArea: 'harbour',
+    syntheticDistanceLabel: '0.6 km (synthetic)',
+    syntheticDistanceRank: 1,
+    availability: 'in_stock',
+    priceFjdMinor: 675,
+    freshness: 'current',
+    lastUpdatedDisplay: 'Today',
+    searchEligible: true,
+  },
+  {
     id: 'excludex-solandra-ineligible',
     medicineDisplayName: 'Excludex',
     activeIngredientDisplayName: 'Voidamine',

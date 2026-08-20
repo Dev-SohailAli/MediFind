@@ -88,6 +88,35 @@ describe('ResultDetailSheet — ready variant', () => {
     expect(within(dialog).getByText(strings.safetyNoMedicalAdvice)).toBeInTheDocument();
   });
 
+  it('shows the reservation sign-in prompt (not the request form) when buyerKey is omitted', () => {
+    render(<ResultDetailSheet {...readyProps(() => {})} />);
+
+    expect(screen.getByText(strings.reservationSignInPrompt)).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: strings.reservationSubmitLabel }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('shows the reservation request form when a buyerKey is supplied for an in-stock listing', () => {
+    render(
+      <ResultDetailSheet
+        status="ready"
+        listing={readyListing}
+        matchKind="exact_product"
+        displayDistance={{ label: '1 synthetic km', rank: 1 }}
+        showDistance={true}
+        onClose={() => {}}
+        buyerKey="+679 000 0000"
+        reservations={[]}
+        onRequestReservation={() => {}}
+      />,
+    );
+
+    expect(
+      screen.getByRole('button', { name: strings.reservationSubmitLabel }),
+    ).toBeInTheDocument();
+  });
+
   it('omits the distance line when showDistance is false', () => {
     render(
       <ResultDetailSheet

@@ -3,9 +3,14 @@ import { Clock, X } from 'lucide-react';
 import type { SyntheticMatchKind, SyntheticSearchListing } from '@medifind/contracts';
 
 import { strings } from '../content/strings';
+import type {
+  SyntheticReservation,
+  SyntheticReservationRequestInput,
+} from '../reservations/syntheticReservations';
 import type { DisplayDistance } from '../search/distance';
 import { formatFjd } from '../search/format';
 import { iconStrokeWidth } from '../theme/tokens';
+import { ReservationRequestPanel } from './ReservationRequestPanel';
 import { StatusBadge } from './StatusBadge';
 import { availabilityPresentation, matchKindLabel } from './statusPresentation';
 
@@ -19,6 +24,9 @@ export type ResultDetailSheetProps =
       displayDistance: DisplayDistance;
       showDistance: boolean;
       onClose: () => void;
+      buyerKey?: string | null;
+      reservations?: readonly SyntheticReservation[];
+      onRequestReservation?: (input: SyntheticReservationRequestInput) => void;
     };
 
 function getFocusable(container: HTMLElement): HTMLElement[] {
@@ -30,12 +38,12 @@ function getFocusable(container: HTMLElement): HTMLElement[] {
 }
 
 /**
- * A local, read-only detail dialog. It has no call, map, reservation,
- * upload or request action — only identity, pack, pharmacy attribution,
- * price/freshness and the required safety copy. Implements the standard
- * modal-dialog keyboard contract: focus moves in on open, Tab is trapped
- * inside the dialog, Escape closes it, and focus returns to the element
- * that opened it.
+ * A local, read-only detail dialog, plus (Milestone C) the buyer OTC
+ * reservation-request action for an eligible listing — see
+ * `ReservationRequestPanel`. It still has no call, map or prescription
+ * upload action. Implements the standard modal-dialog keyboard contract:
+ * focus moves in on open, Tab is trapped inside the dialog, Escape closes
+ * it, and focus returns to the element that opened it.
  *
  * The `status` discriminant covers the opt-in Worker detail fetch: the
  * dialog shell, title, close button and focus/keyboard behaviour are
@@ -134,6 +142,9 @@ export function ResultDetailSheet(props: ResultDetailSheetProps) {
                 matchKind={props.matchKind}
                 displayDistance={props.displayDistance}
                 showDistance={props.showDistance}
+                buyerKey={props.buyerKey ?? null}
+                reservations={props.reservations ?? []}
+                onRequestReservation={props.onRequestReservation ?? (() => {})}
               />
             )}
           </div>
@@ -148,9 +159,20 @@ interface ReadyDetailProps {
   matchKind: SyntheticMatchKind;
   displayDistance: DisplayDistance;
   showDistance: boolean;
+  buyerKey: string | null;
+  reservations: readonly SyntheticReservation[];
+  onRequestReservation: (input: SyntheticReservationRequestInput) => void;
 }
 
-function ReadyDetail({ listing, matchKind, displayDistance, showDistance }: ReadyDetailProps) {
+function ReadyDetail({
+  listing,
+  matchKind,
+  displayDistance,
+  showDistance,
+  buyerKey,
+  reservations,
+  onRequestReservation,
+}: ReadyDetailProps) {
   const availability = availabilityPresentation(listing.availability);
 
   return (
@@ -185,6 +207,13 @@ function ReadyDetail({ listing, matchKind, displayDistance, showDistance }: Read
         <p className="safety-block__text">{strings.safetyPrescriptionMayBeRequired}</p>
         <p className="safety-block__text">{strings.safetyNoMedicalAdvice}</p>
       </div>
+
+      <ReservationRequestPanel
+        listing={listing}
+        buyerKey={buyerKey}
+        reservations={reservations}
+        onRequestReservation={onRequestReservation}
+      />
     </>
   );
 }

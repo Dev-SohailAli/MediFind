@@ -1,9 +1,35 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { strings } from '../../content/strings';
+import type { SyntheticReservation } from '../../reservations/syntheticReservations';
 import { PharmacyWorkspaces } from '../PharmacyWorkspaces';
+
+function reservation(overrides: Partial<SyntheticReservation> = {}): SyntheticReservation {
+  return {
+    id: 'r1',
+    listingId: 'listing-1',
+    branchId: 'suva-central',
+    medicineDisplayName: 'Farovex',
+    pharmacyDisplayName: 'Suva Central Pharmacy (synthetic)',
+    requestedPriceFjdMinor: 675,
+    patientName: 'Litia Waqa',
+    relationship: 'self',
+    buyerKey: '+679 000 0000',
+    status: 'pending',
+    requestedAt: '2026-08-20T00:00:00.000Z',
+    lastUpdatedAt: '2026-08-20T00:00:00.000Z',
+    confirmedPriceFjdMinor: null,
+    pickupInstructions: null,
+    expiresAt: null,
+    declineReason: null,
+    cancelReason: null,
+    cancelledBy: null,
+    buyerConfirmedCollectedAt: null,
+    ...overrides,
+  };
+}
 
 describe('PharmacyWorkspaces', () => {
   it('lists every branch the demo identity holds a role at, with a verification-status badge', () => {
@@ -82,5 +108,37 @@ describe('PharmacyWorkspaces', () => {
     await user.click(screen.getByRole('button', { name: strings.workspaceLookupOpenLabel }));
 
     expect(screen.getByRole('alert')).toHaveTextContent(strings.workspaceLookupNotPermitted);
+  });
+
+  it('a live branch with a reviewer role can open its reservation queue and approve a pending request', async () => {
+    const user = userEvent.setup();
+    render(<PharmacyWorkspaces reservations={[reservation()]} reservationsDispatch={() => {}} />);
+
+    const suvaCentralHeading = screen.getByText('Suva Central Pharmacy (synthetic)');
+    const card = suvaCentralHeading.closest('li');
+    expect(card).not.toBeNull();
+
+    await user.click(screen.getByRole('button', { name: strings.pharmacyRequestsOpenLabel }));
+    expect(card).toHaveTextContent('Farovex');
+    expect(
+      screen.getByRole('button', { name: strings.pharmacyRequestsApproveLabel }),
+    ).toBeInTheDocument();
+  });
+
+  it('a live branch without a reviewer role never offers the reservation queue at all (ADR-202)', () => {
+    render(
+      <PharmacyWorkspaces
+        reservations={[reservation({ branchId: 'harbourview' })]}
+        reservationsDispatch={() => {}}
+      />,
+    );
+
+    const harbourviewHeading = screen.getByText('Harbourview Pharmacy (synthetic)');
+    const card = harbourviewHeading.closest('li');
+    expect(card).not.toBeNull();
+
+    expect(
+      within(card!).queryByRole('button', { name: strings.pharmacyRequestsOpenLabel }),
+    ).not.toBeInTheDocument();
   });
 });

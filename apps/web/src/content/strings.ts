@@ -195,6 +195,68 @@ export const strings = {
     'On Android Chrome: tap the browser menu, then "Install app" or "Add to Home Screen".',
   installBannerInstallLabel: 'Install',
   installBannerDismissLabel: 'Dismiss install guidance',
+
+  reservationRequestTitle: 'Request a reservation',
+  reservationPatientNameLabel: 'Patient full name',
+  reservationRelationshipLabel: 'Who is this for?',
+  reservationRelationshipSelfLabel: 'Myself',
+  reservationRelationshipChildLabel: 'My child',
+  reservationRelationshipDependentLabel: 'A dependent',
+  reservationSubmitLabel: 'Request reservation',
+  reservationPatientNameError: "Enter the patient's full legal name.",
+  reservationSignInPrompt: 'Sign in from the Account tab to request a reservation.',
+  reservationUnavailableNotice:
+    'This item is unavailable to reserve right now — ask the pharmacy directly.',
+  reservationConflictNotice:
+    'You already have an active reservation for this item and person — see Requests.',
+  reservationSuspendedNotice:
+    'New reservations are temporarily paused after 3 unclaimed pickups in the last 30 days. Contact support to have this reviewed.',
+  reservationSuccessNotice:
+    'Reservation requested. Pharmacies aim to respond within one business day — see Requests for updates.',
+
+  requestsTitle: 'Requests',
+  requestsIntro: 'Your reservation requests and their current status.',
+  requestsSignInRequiredTitle: 'Sign in to view your requests',
+  requestsSignInRequiredBody:
+    'Your reservation and prescription requests will appear here once you sign in.',
+  requestsSignInRequiredAction: 'Go to Account',
+  requestsEmptyTitle: 'No requests yet',
+  requestsEmptyBody: 'Reservation requests you make from a listing will appear here.',
+  requestsRefreshLabel: 'Check for updates',
+  requestsCancelLabel: 'Cancel',
+  requestsNoLongerNeededLabel: 'No longer needed',
+  requestsConfirmCollectedLabel: 'Confirm collected',
+  requestsConfirmedCollectedNote:
+    'You confirmed you collected this. The pharmacy record remains the official source.',
+
+  reservationStatusPendingLabel: 'Submitted — awaiting pharmacy',
+  reservationStatusApprovedLabel: 'Approved',
+  reservationStatusDeclinedLabel: 'Declined',
+  reservationStatusExpiredLabel: 'Expired',
+  reservationStatusCancelledLabel: 'Cancelled',
+  reservationStatusCollectedLabel: 'Collected',
+
+  reservationConfirmedPricePrefix: 'Confirmed price',
+  reservationPickupInstructionsPrefix: 'Pickup instructions',
+  reservationExpiresPrefix: 'Expires',
+  reservationDeclineReasonPrefix: 'Reason',
+  reservationCancelReasonPrefix: 'Reason',
+  reservationCancelledByPharmacyPrefix: 'Cancelled by the pharmacy',
+  reservationCancelledByBuyerPrefix: 'Cancelled by you',
+
+  pharmacyRequestsOpenLabel: 'View requests',
+  pharmacyRequestsCloseLabel: 'Hide requests',
+  pharmacyRequestsEmpty: 'No reservation requests yet at this branch.',
+  pharmacyRequestsApproveLabel: 'Approve',
+  pharmacyRequestsDeclineLabel: 'Decline',
+  pharmacyRequestsDeclineReasonLabel: 'Reason (optional)',
+  pharmacyRequestsPickupInstructionsLabel: 'Pickup instructions',
+  pharmacyRequestsExpiryHoursLabel: 'Expiry (hours from now)',
+  pharmacyRequestsConfirmedPriceLabel: 'Confirmed price (FJD)',
+  pharmacyRequestsMarkCollectedLabel: 'Mark collected',
+  pharmacyRequestsCancelLabel: 'Cancel reservation',
+  pharmacyRequestsCancelReasonLabel: 'Operational reason (required)',
+  pharmacyRequestsCancelReasonError: 'Enter the operational reason for this cancellation.',
 } as const;
 
 export type StringKey = keyof typeof strings;

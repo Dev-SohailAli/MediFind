@@ -97,13 +97,15 @@ describe('web buyer-search prototype boundary', () => {
     // "prescription"/"reservation" legitimately appear inside the required
     // safety copy (e.g. "A reservation is not a guarantee..."), so they are
     // not blanket-banned words. Instead, forbid the actual out-of-scope
-    // capability: no code may create, submit or track a
-    // reservation/prescription request.
+    // capability: no code may create, submit or track a prescription
+    // request. A local-only OTC *reservation* request/approval/expiry/
+    // cancellation simulation is no longer banned (ADR-277 Milestone C
+    // authorizes it — see src/reservations/syntheticReservations.ts); it
+    // still may never touch a network request, real provider or real
+    // pharmacy/buyer data, which the generic checks above continue to
+    // enforce. Prescription upload/quarantine remains out of scope until
+    // its own later Milestone C slice.
     const forbiddenFeaturePatterns = [
-      /createReservation/i,
-      /submitReservation/i,
-      /confirmReservation/i,
-      /reservationStatus/i,
       /uploadPrescription/i,
       /submitPrescription/i,
       /prescriptionStatus/i,
