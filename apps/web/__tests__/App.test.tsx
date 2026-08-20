@@ -15,17 +15,17 @@ describe('App', () => {
     expect(await screen.findByText(strings.browseEmptyTitle)).toBeInTheDocument();
   });
 
-  it('switching to Requests shows only the inert prototype notice, never account/history content', async () => {
+  it('switching to Requests when signed out offers sign-in only, never account/history content (ADR-277 Milestone C)', async () => {
     const user = userEvent.setup();
     render(<App />);
 
     await user.click(screen.getByRole('button', { name: strings.navRequestsLabel }));
 
-    expect(screen.getByText(strings.requestsPlaceholderBody)).toBeInTheDocument();
+    expect(screen.getByText(strings.requestsSignInRequiredTitle)).toBeInTheDocument();
     expect(screen.queryByText(strings.browseEmptyTitle)).not.toBeInTheDocument();
     const bodyText = document.body.textContent?.toLowerCase() ?? '';
-    expect(bodyText).not.toContain('sign in');
     expect(bodyText).not.toContain('signed in');
+    expect(bodyText).not.toContain('password');
   });
 
   it('switching to Account shows the synthetic sign-in form, never a real credential field', async () => {

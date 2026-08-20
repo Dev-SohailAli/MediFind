@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { useSyntheticAuth } from '../auth/AuthContext';
 import { strings } from '../content/strings';
+import { useSyntheticReservations } from '../reservations/ReservationsContext';
 import { PharmacyWorkspaces } from './PharmacyWorkspaces';
 
 function formatTimestamp(iso: string): string {
@@ -15,6 +16,7 @@ function formatTimestamp(iso: string): string {
  */
 export function AccountScreen() {
   const { state, dispatch } = useSyntheticAuth();
+  const { state: reservationsState, dispatch: reservationsDispatch } = useSyntheticReservations();
   const [confirmingRecovery, setConfirmingRecovery] = React.useState(false);
 
   if (state.status !== 'signed_in' || !state.session) {
@@ -102,7 +104,10 @@ export function AccountScreen() {
         </div>
       ) : null}
 
-      <PharmacyWorkspaces />
+      <PharmacyWorkspaces
+        reservations={reservationsState.reservations}
+        reservationsDispatch={reservationsDispatch}
+      />
     </div>
   );
 }

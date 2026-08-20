@@ -16,7 +16,12 @@ import {
   type SyntheticListingsState,
 } from '../pharmacy/syntheticListings';
 import { strings } from '../content/strings';
+import type {
+  SyntheticReservation,
+  SyntheticReservationsAction,
+} from '../reservations/syntheticReservations';
 import { InventoryPanel } from './InventoryPanel';
+import { PharmacyRequestsPanel } from './PharmacyRequestsPanel';
 import { StatusBadge, type BadgeTone } from './StatusBadge';
 
 // React's useReducer overload resolution can't cope with the reducer's
@@ -60,14 +65,24 @@ interface WorkspaceCardProps {
   readonly workspace: SyntheticWorkspace;
   readonly listings: readonly SyntheticListing[];
   readonly dispatch: React.Dispatch<SyntheticListingsAction>;
+  readonly reservations: readonly SyntheticReservation[];
+  readonly reservationsDispatch: React.Dispatch<SyntheticReservationsAction>;
 }
 
-function WorkspaceCard({ workspace, listings, dispatch }: WorkspaceCardProps) {
+function WorkspaceCard({
+  workspace,
+  listings,
+  dispatch,
+  reservations,
+  reservationsDispatch,
+}: WorkspaceCardProps) {
   const { branch, roles } = workspace;
   const hasDashboardAccess = roles.length > 0;
   const hasReviewerRole = roles.includes('prescription_reviewer');
   const canOpenInventory = branch.verificationStatus === 'live' && hasDashboardAccess;
+  const canOpenRequests = branch.verificationStatus === 'live' && hasReviewerRole;
   const [inventoryOpen, setInventoryOpen] = React.useState(false);
+  const [requestsOpen, setRequestsOpen] = React.useState(false);
 
   return (
     <li className="workspace-card">
@@ -121,6 +136,25 @@ function WorkspaceCard({ workspace, listings, dispatch }: WorkspaceCardProps) {
           ) : null}
         </>
       ) : null}
+
+      {canOpenRequests ? (
+        <>
+          <button
+            type="button"
+            className="auth-button auth-button--secondary"
+            onClick={() => setRequestsOpen((open) => !open)}
+          >
+            {requestsOpen ? strings.pharmacyRequestsCloseLabel : strings.pharmacyRequestsOpenLabel}
+          </button>
+          {requestsOpen ? (
+            <PharmacyRequestsPanel
+              branchId={branch.branchId}
+              reservations={reservations}
+              dispatch={reservationsDispatch}
+            />
+          ) : null}
+        </>
+      ) : null}
     </li>
   );
 }
@@ -128,9 +162,16 @@ function WorkspaceCard({ workspace, listings, dispatch }: WorkspaceCardProps) {
 interface WorkspaceLookupFormProps {
   readonly listings: readonly SyntheticListing[];
   readonly dispatch: React.Dispatch<SyntheticListingsAction>;
+  readonly reservations: readonly SyntheticReservation[];
+  readonly reservationsDispatch: React.Dispatch<SyntheticReservationsAction>;
 }
 
-function WorkspaceLookupForm({ listings, dispatch }: WorkspaceLookupFormProps) {
+function WorkspaceLookupForm({
+  listings,
+  dispatch,
+  reservations,
+  reservationsDispatch,
+}: WorkspaceLookupFormProps) {
   const [branchId, setBranchId] = React.useState('');
   const [result, setResult] = React.useState<SyntheticWorkspace | 'not_permitted' | null>(null);
 
@@ -166,7 +207,13 @@ function WorkspaceLookupForm({ listings, dispatch }: WorkspaceLookupFormProps) {
       ) : null}
       {result && result !== 'not_permitted' ? (
         <ul className="workspace-list">
-          <WorkspaceCard workspace={result} listings={listings} dispatch={dispatch} />
+          <WorkspaceCard
+            workspace={result}
+            listings={listings}
+            dispatch={dispatch}
+            reservations={reservations}
+            reservationsDispatch={reservationsDispatch}
+          />
         </ul>
       ) : null}
     </form>
@@ -182,7 +229,15 @@ function WorkspaceLookupForm({ listings, dispatch }: WorkspaceLookupFormProps) {
  * held here and shared across every workspace card and the lookup form so
  * it survives collapsing/expanding an inventory panel.
  */
-export function PharmacyWorkspaces() {
+export interface PharmacyWorkspacesProps {
+  readonly reservations?: readonly SyntheticReservation[];
+  readonly reservationsDispatch?: React.Dispatch<SyntheticReservationsAction>;
+}
+
+export function PharmacyWorkspaces({
+  reservations = [],
+  reservationsDispatch = () => {},
+}: PharmacyWorkspacesProps = {}) {
   const workspaces = listSyntheticWorkspaces();
   const [listingsState, dispatch] = React.useReducer(
     reduceListingsWithRealClock,
@@ -207,12 +262,19 @@ export function PharmacyWorkspaces() {
               workspace={workspace}
               listings={listingsState.listings}
               dispatch={dispatch}
+              reservations={reservations}
+              reservationsDispatch={reservationsDispatch}
             />
           ))}
         </ul>
       )}
 
-      <WorkspaceLookupForm listings={listingsState.listings} dispatch={dispatch} />
+      <WorkspaceLookupForm
+        listings={listingsState.listings}
+        dispatch={dispatch}
+        reservations={reservations}
+        reservationsDispatch={reservationsDispatch}
+      />
     </section>
   );
 }
