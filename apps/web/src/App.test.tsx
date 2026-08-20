@@ -172,4 +172,54 @@ describe('App', () => {
     expect(screen.getByText(strings.reservationStatusApprovedLabel)).toBeInTheDocument();
     expect(screen.getByText(strings.notificationsGenericEntryTitle)).toBeInTheDocument();
   });
+
+  it('a buyer can upload a prescription, and pharmacy staff can approve it through the identity-confirm gate (Milestone C end-to-end)', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(screen.getByRole('button', { name: strings.navAccountLabel }));
+    await user.clear(screen.getByLabelText(strings.signInPhoneLabel));
+    await user.type(screen.getByLabelText(strings.signInPhoneLabel), '+6797654321');
+    await user.click(screen.getByLabelText(strings.signInOver18Label));
+    await user.type(screen.getByLabelText(strings.signInNameLabel), 'Demo Buyer');
+    await user.type(screen.getByLabelText(strings.signInEmailLabel), 'demo.buyer@example.test');
+    await user.click(screen.getByRole('button', { name: strings.signInSendCodeLabel }));
+    await user.type(screen.getByLabelText(strings.signInCodeLabel), SYNTHETIC_AUTH_DEMO_CODE);
+    await user.click(screen.getByRole('button', { name: strings.signInVerifyLabel }));
+
+    await user.click(screen.getByRole('button', { name: strings.navRequestsLabel }));
+    await user.selectOptions(
+      screen.getByLabelText(strings.prescriptionUploadPharmacyLabel),
+      'Suva Central Pharmacy (synthetic)',
+    );
+    await user.type(
+      screen.getByLabelText(strings.prescriptionUploadPatientNameLabel),
+      'Litia Waqa',
+    );
+    // Verified deterministic scanner seed: name+size hash to 'clean'.
+    const cleanFile = new File(['x'.repeat(1024)], 'clean-upload-0.pdf', {
+      type: 'application/pdf',
+    });
+    await user.upload(screen.getByLabelText(strings.prescriptionUploadFileLabel), cleanFile);
+    await user.click(screen.getByLabelText(strings.prescriptionUploadLegibilityLabel));
+    await user.click(
+      screen.getByLabelText(
+        strings.prescriptionUploadConsentLabel('Suva Central Pharmacy (synthetic)'),
+      ),
+    );
+    await user.click(screen.getByRole('button', { name: strings.prescriptionUploadSubmitLabel }));
+    expect(screen.getByText(strings.prescriptionStatusUnderReviewLabel)).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: strings.navAccountLabel }));
+    await user.click(screen.getByRole('button', { name: strings.pharmacyRequestsOpenLabel }));
+    await user.click(
+      screen.getByRole('button', { name: strings.pharmacyPrescriptionsMfaGateConfirmLabel }),
+    );
+    await user.click(
+      screen.getByRole('button', { name: strings.pharmacyPrescriptionsApproveLabel }),
+    );
+
+    await user.click(screen.getByRole('button', { name: strings.navRequestsLabel }));
+    expect(screen.getByText(strings.prescriptionStatusApprovedLabel)).toBeInTheDocument();
+  });
 });

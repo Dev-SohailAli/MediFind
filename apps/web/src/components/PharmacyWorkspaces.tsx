@@ -17,6 +17,10 @@ import {
 } from '../pharmacy/syntheticListings';
 import { strings } from '../content/strings';
 import type {
+  SyntheticPrescription,
+  SyntheticPrescriptionsAction,
+} from '../prescriptions/syntheticPrescriptions';
+import type {
   SyntheticReservation,
   SyntheticReservationsAction,
 } from '../reservations/syntheticReservations';
@@ -67,6 +71,8 @@ interface WorkspaceCardProps {
   readonly dispatch: React.Dispatch<SyntheticListingsAction>;
   readonly reservations: readonly SyntheticReservation[];
   readonly reservationsDispatch: React.Dispatch<SyntheticReservationsAction>;
+  readonly prescriptions: readonly SyntheticPrescription[];
+  readonly prescriptionsDispatch: React.Dispatch<SyntheticPrescriptionsAction>;
 }
 
 function WorkspaceCard({
@@ -75,6 +81,8 @@ function WorkspaceCard({
   dispatch,
   reservations,
   reservationsDispatch,
+  prescriptions,
+  prescriptionsDispatch,
 }: WorkspaceCardProps) {
   const { branch, roles } = workspace;
   const hasDashboardAccess = roles.length > 0;
@@ -151,6 +159,8 @@ function WorkspaceCard({
               branchId={branch.branchId}
               reservations={reservations}
               dispatch={reservationsDispatch}
+              prescriptions={prescriptions}
+              prescriptionsDispatch={prescriptionsDispatch}
             />
           ) : null}
         </>
@@ -164,6 +174,8 @@ interface WorkspaceLookupFormProps {
   readonly dispatch: React.Dispatch<SyntheticListingsAction>;
   readonly reservations: readonly SyntheticReservation[];
   readonly reservationsDispatch: React.Dispatch<SyntheticReservationsAction>;
+  readonly prescriptions: readonly SyntheticPrescription[];
+  readonly prescriptionsDispatch: React.Dispatch<SyntheticPrescriptionsAction>;
 }
 
 function WorkspaceLookupForm({
@@ -171,6 +183,8 @@ function WorkspaceLookupForm({
   dispatch,
   reservations,
   reservationsDispatch,
+  prescriptions,
+  prescriptionsDispatch,
 }: WorkspaceLookupFormProps) {
   const [branchId, setBranchId] = React.useState('');
   const [result, setResult] = React.useState<SyntheticWorkspace | 'not_permitted' | null>(null);
@@ -213,6 +227,8 @@ function WorkspaceLookupForm({
             dispatch={dispatch}
             reservations={reservations}
             reservationsDispatch={reservationsDispatch}
+            prescriptions={prescriptions}
+            prescriptionsDispatch={prescriptionsDispatch}
           />
         </ul>
       ) : null}
@@ -232,11 +248,15 @@ function WorkspaceLookupForm({
 export interface PharmacyWorkspacesProps {
   readonly reservations?: readonly SyntheticReservation[];
   readonly reservationsDispatch?: React.Dispatch<SyntheticReservationsAction>;
+  readonly prescriptions?: readonly SyntheticPrescription[];
+  readonly prescriptionsDispatch?: React.Dispatch<SyntheticPrescriptionsAction>;
 }
 
 export function PharmacyWorkspaces({
   reservations = [],
   reservationsDispatch = () => {},
+  prescriptions = [],
+  prescriptionsDispatch = () => {},
 }: PharmacyWorkspacesProps = {}) {
   const workspaces = listSyntheticWorkspaces();
   const [listingsState, dispatch] = React.useReducer(
@@ -264,6 +284,8 @@ export function PharmacyWorkspaces({
               dispatch={dispatch}
               reservations={reservations}
               reservationsDispatch={reservationsDispatch}
+              prescriptions={prescriptions}
+              prescriptionsDispatch={prescriptionsDispatch}
             />
           ))}
         </ul>
@@ -274,6 +296,8 @@ export function PharmacyWorkspaces({
         dispatch={dispatch}
         reservations={reservations}
         reservationsDispatch={reservationsDispatch}
+        prescriptions={prescriptions}
+        prescriptionsDispatch={prescriptionsDispatch}
       />
     </section>
   );

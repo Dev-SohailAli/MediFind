@@ -2,11 +2,24 @@ import * as React from 'react';
 
 import { strings } from '../content/strings';
 import {
+  type PrescriptionRejectReason,
+  type SyntheticPrescription,
+  type SyntheticPrescriptionsAction,
+} from '../prescriptions/syntheticPrescriptions';
+import {
   RESERVATION_DEFAULT_EXPIRY_HOURS,
   type SyntheticReservation,
   type SyntheticReservationsAction,
 } from '../reservations/syntheticReservations';
 import { formatFjd } from '../search/format';
+
+const REJECT_REASON_LABEL: Record<PrescriptionRejectReason, string> = {
+  illegible: strings.prescriptionRejectReasonIllegibleLabel,
+  incomplete_information: strings.prescriptionRejectReasonIncompleteLabel,
+  suspected_duplicate: strings.prescriptionRejectReasonDuplicateLabel,
+  invalid_prescription: strings.prescriptionRejectReasonInvalidLabel,
+  other: strings.prescriptionRejectReasonOtherLabel,
+};
 
 interface ApproveFormProps {
   readonly reservation: SyntheticReservation;
@@ -178,31 +191,134 @@ function PharmacyReservationRow({ reservation, dispatch }: PharmacyReservationRo
   );
 }
 
+interface PrescriptionDecisionFormProps {
+  readonly prescription: SyntheticPrescription;
+  readonly dispatch: React.Dispatch<SyntheticPrescriptionsAction>;
+}
+
+function PrescriptionDecisionForm({ prescription, dispatch }: PrescriptionDecisionFormProps) {
+  const [reason, setReason] = React.useState<PrescriptionRejectReason>('illegible');
+
+  return (
+    <div className="reservation-approve-form">
+      <p className="reservation-row__details">{strings.pharmacyPrescriptionsDecisionSafetyNote}</p>
+      <button
+        type="button"
+        className="auth-button auth-button--primary"
+        onClick={() => dispatch({ type: 'approve', prescriptionId: prescription.id })}
+      >
+        {strings.pharmacyPrescriptionsApproveLabel}
+      </button>
+
+      <label className="sr-only" htmlFor={`reject-reason-${prescription.id}`}>
+        {strings.pharmacyPrescriptionsRejectReasonLabel}
+      </label>
+      <select
+        id={`reject-reason-${prescription.id}`}
+        value={reason}
+        onChange={(event) => setReason(event.target.value as PrescriptionRejectReason)}
+      >
+        {(Object.keys(REJECT_REASON_LABEL) as PrescriptionRejectReason[]).map((value) => (
+          <option key={value} value={value}>
+            {REJECT_REASON_LABEL[value]}
+          </option>
+        ))}
+      </select>
+      <button
+        type="button"
+        className="auth-button auth-button--secondary"
+        onClick={() => dispatch({ type: 'reject', prescriptionId: prescription.id, reason })}
+      >
+        {strings.pharmacyPrescriptionsRejectLabel}
+      </button>
+    </div>
+  );
+}
+
+interface PharmacyPrescriptionRowProps {
+  readonly prescription: SyntheticPrescription;
+  readonly dispatch: React.Dispatch<SyntheticPrescriptionsAction>;
+}
+
+/**
+ * Every prescription row starts behind a fresh per-row confirmation gate
+ * (design proposal §5.2 Prescription review: "fresh biometric/MFA
+ * interstitial — always, even mid-session"). This is a synthetic stand-in
+ * only — no real authentication happens, and it always resets when the
+ * row remounts, never persisting an "already confirmed" state across a
+ * page reload or panel close/reopen.
+ */
+function PharmacyPrescriptionRow({ prescription, dispatch }: PharmacyPrescriptionRowProps) {
+  const [unlocked, setUnlocked] = React.useState(false);
+
+  return (
+    <li className="reservation-row">
+      <div className="reservation-row__header">
+        <p className="reservation-row__name">{prescription.patientName}</p>
+        <span className="status-badge status-badge--neutral">{prescription.status}</span>
+      </div>
+      <p className="reservation-row__details">
+        {prescription.pharmacyDisplayName} · {prescription.relationship}
+      </p>
+
+      {prescription.status !== 'under_review' ? null : !unlocked ? (
+        <div className="reservation-approve-form">
+          <p className="reservation-row__details">{strings.pharmacyPrescriptionsMfaGateBody}</p>
+          <button
+            type="button"
+            className="auth-button auth-button--secondary"
+            onClick={() => setUnlocked(true)}
+          >
+            {strings.pharmacyPrescriptionsMfaGateConfirmLabel}
+          </button>
+        </div>
+      ) : (
+        <>
+          {prescription.quarantined ? (
+            <p className="reservation-row__details">
+              {strings.pharmacyPrescriptionsQuarantineBanner}
+            </p>
+          ) : null}
+          <p className="reservation-row__details">{strings.pharmacyPrescriptionsFileNotice}</p>
+          <PrescriptionDecisionForm prescription={prescription} dispatch={dispatch} />
+        </>
+      )}
+    </li>
+  );
+}
+
 export interface PharmacyRequestsPanelProps {
   readonly branchId: string;
   readonly reservations: readonly SyntheticReservation[];
   readonly dispatch: React.Dispatch<SyntheticReservationsAction>;
+  readonly prescriptions: readonly SyntheticPrescription[];
+  readonly prescriptionsDispatch: React.Dispatch<SyntheticPrescriptionsAction>;
 }
 
 /**
- * Branch-scoped OTC reservation queue (design proposal §5.2 Requests
- * (pharmacy), reservation handling only — the prescription half of this
- * queue is a later Milestone C slice). Deliberately a single flat list
- * rather than the design's New/In progress/All filter tabs, and skips the
- * SLA-breach highlight state: both are additive UI polish this slice
- * leaves out to keep the reservation state-machine work itself the focus.
+ * Branch-scoped OTC + prescription queue (design proposal §5.2 Requests
+ * (pharmacy)). Deliberately a single flat list rather than the design's
+ * New/In progress/All filter tabs, and skips the SLA-breach highlight
+ * state: both are additive UI polish this slice leaves out to keep the
+ * reservation/prescription state machines themselves the focus.
  */
 export function PharmacyRequestsPanel({
   branchId,
   reservations,
   dispatch,
+  prescriptions,
+  prescriptionsDispatch,
 }: PharmacyRequestsPanelProps) {
   const branchReservations = reservations
     .filter((reservation) => reservation.branchId === branchId)
     .slice()
     .sort((a, b) => a.requestedAt.localeCompare(b.requestedAt));
+  const branchPrescriptions = prescriptions
+    .filter((prescription) => prescription.branchId === branchId)
+    .slice()
+    .sort((a, b) => a.submittedAt.localeCompare(b.submittedAt));
 
-  if (branchReservations.length === 0) {
+  if (branchReservations.length === 0 && branchPrescriptions.length === 0) {
     return <p className="state-block__title">{strings.pharmacyRequestsEmpty}</p>;
   }
 
@@ -213,6 +329,13 @@ export function PharmacyRequestsPanel({
           key={reservation.id}
           reservation={reservation}
           dispatch={dispatch}
+        />
+      ))}
+      {branchPrescriptions.map((prescription) => (
+        <PharmacyPrescriptionRow
+          key={prescription.id}
+          prescription={prescription}
+          dispatch={prescriptionsDispatch}
         />
       ))}
     </ul>

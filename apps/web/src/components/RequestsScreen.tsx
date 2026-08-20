@@ -4,11 +4,18 @@ import { CircleCheck, CircleCheckBig, CircleAlert, Clock, Info } from 'lucide-re
 import { strings } from '../content/strings';
 import {
   deriveNotifications,
+  derivePrescriptionNotifications,
   type NotificationOptInAction,
   type NotificationOptInStatus,
   type NotificationReadAction,
   type NotificationReadState,
 } from '../notifications/syntheticNotifications';
+import {
+  isPrescriptionOverdue,
+  type PrescriptionStatus,
+  type SyntheticPrescription,
+  type SyntheticPrescriptionsAction,
+} from '../prescriptions/syntheticPrescriptions';
 import {
   isReservationOverdue,
   type ReservationStatus,
@@ -17,7 +24,32 @@ import {
 } from '../reservations/syntheticReservations';
 import { formatFjd } from '../search/format';
 import { NotificationCenter } from './NotificationCenter';
+import { PrescriptionUploadPanel } from './PrescriptionUploadPanel';
 import { StatusBadge, type BadgeTone } from './StatusBadge';
+
+const PRESCRIPTION_STATUS_LABEL: Record<PrescriptionStatus, string> = {
+  under_review: strings.prescriptionStatusUnderReviewLabel,
+  approved: strings.prescriptionStatusApprovedLabel,
+  rejected: strings.prescriptionStatusRejectedLabel,
+  expired: strings.prescriptionStatusExpiredLabel,
+  cancelled: strings.prescriptionStatusCancelledLabel,
+};
+
+const PRESCRIPTION_STATUS_TONE: Record<PrescriptionStatus, BadgeTone> = {
+  under_review: 'info',
+  approved: 'success',
+  rejected: 'danger',
+  expired: 'neutral',
+  cancelled: 'neutral',
+};
+
+const PRESCRIPTION_REJECT_REASON_LABEL: Record<string, string> = {
+  illegible: strings.prescriptionRejectReasonIllegibleLabel,
+  incomplete_information: strings.prescriptionRejectReasonIncompleteLabel,
+  suspected_duplicate: strings.prescriptionRejectReasonDuplicateLabel,
+  invalid_prescription: strings.prescriptionRejectReasonInvalidLabel,
+  other: strings.prescriptionRejectReasonOtherLabel,
+};
 
 const STATUS_LABEL: Record<ReservationStatus, string> = {
   pending: strings.reservationStatusPendingLabel,
@@ -46,6 +78,14 @@ const STATUS_ICON: Record<ReservationStatus, typeof Info> = {
   expired: Clock,
   cancelled: Clock,
   collected: CircleCheckBig,
+};
+
+const PRESCRIPTION_STATUS_ICON: Record<PrescriptionStatus, typeof Info> = {
+  under_review: Info,
+  approved: CircleCheck,
+  rejected: CircleAlert,
+  expired: Clock,
+  cancelled: Clock,
 };
 
 interface ReservationRowProps {
@@ -144,10 +184,56 @@ function ReservationRow({ reservation, dispatch }: ReservationRowProps) {
   );
 }
 
+interface PrescriptionRowProps {
+  readonly prescription: SyntheticPrescription;
+  readonly dispatch: React.Dispatch<SyntheticPrescriptionsAction>;
+}
+
+function PrescriptionRow({ prescription, dispatch }: PrescriptionRowProps) {
+  return (
+    <li className="reservation-row">
+      <div className="reservation-row__header">
+        <p className="reservation-row__name">{prescription.pharmacyDisplayName}</p>
+        <StatusBadge
+          label={PRESCRIPTION_STATUS_LABEL[prescription.status]}
+          tone={PRESCRIPTION_STATUS_TONE[prescription.status]}
+          icon={PRESCRIPTION_STATUS_ICON[prescription.status]}
+        />
+      </div>
+      <p className="reservation-row__details">{prescription.patientName}</p>
+
+      {prescription.status === 'approved' ? (
+        <p className="reservation-row__details">{strings.prescriptionApprovedNote}</p>
+      ) : null}
+
+      {prescription.status === 'rejected' && prescription.rejectReason ? (
+        <p className="reservation-row__details">
+          {strings.prescriptionRejectedReasonPrefix}:{' '}
+          {PRESCRIPTION_REJECT_REASON_LABEL[prescription.rejectReason]}
+        </p>
+      ) : null}
+
+      {prescription.status === 'under_review' ? (
+        <div className="auth-actions">
+          <button
+            type="button"
+            className="auth-button auth-button--secondary"
+            onClick={() => dispatch({ type: 'cancel', prescriptionId: prescription.id })}
+          >
+            {strings.prescriptionCancelLabel}
+          </button>
+        </div>
+      ) : null}
+    </li>
+  );
+}
+
 export interface RequestsScreenProps {
   readonly buyerKey: string | null;
   readonly reservations: readonly SyntheticReservation[];
   readonly dispatch: React.Dispatch<SyntheticReservationsAction>;
+  readonly prescriptions: readonly SyntheticPrescription[];
+  readonly prescriptionsDispatch: React.Dispatch<SyntheticPrescriptionsAction>;
   readonly onNavigateToAccount: () => void;
   readonly notificationReadState: NotificationReadState;
   readonly notificationReadDispatch: React.Dispatch<NotificationReadAction>;
@@ -156,16 +242,22 @@ export interface RequestsScreenProps {
 }
 
 /**
- * Buyer-facing single timeline for reservation status (design proposal
- * §5.1 Requests, narrowed to reservations only — prescription entries join
- * this same screen in a later Milestone C slice), plus the generic
- * notification feed derived from that same status. Replaces the Requests
- * tab's `PrototypePlaceholder` for a signed-in buyer.
+ * Buyer-facing single timeline for reservation and prescription status
+ * (design proposal §5.1 Requests), plus the generic notification feed
+ * derived from that same status and the prescription upload entry point.
+ * Replaces the Requests tab's `PrototypePlaceholder` for a signed-in
+ * buyer. Reservations and prescriptions are shown as two separate lists
+ * rather than one merged/segmented timeline (design's All/Prescriptions/
+ * Reservations tabs) — a documented simplification, since the two remain
+ * genuinely distinct entities with no shared identity to sort together
+ * meaningfully in this prototype.
  */
 export function RequestsScreen({
   buyerKey,
   reservations,
   dispatch,
+  prescriptions,
+  prescriptionsDispatch,
   onNavigateToAccount,
   notificationReadState,
   notificationReadDispatch,
@@ -193,15 +285,29 @@ export function RequestsScreen({
     .slice()
     .sort((a, b) => b.requestedAt.localeCompare(a.requestedAt));
 
-  const overdueIds = own
+  const ownPrescriptions = prescriptions
+    .filter((prescription) => prescription.buyerKey === buyerKey)
+    .slice()
+    .sort((a, b) => b.submittedAt.localeCompare(a.submittedAt));
+
+  const overdueReservationIds = own
     .filter((reservation) => isReservationOverdue(reservation))
     .map((reservation) => reservation.id);
+  const overduePrescriptionIds = ownPrescriptions
+    .filter((prescription) => isPrescriptionOverdue(prescription))
+    .map((prescription) => prescription.id);
 
-  const notifications = deriveNotifications(reservations, buyerKey);
+  const notifications = [
+    ...deriveNotifications(reservations, buyerKey),
+    ...derivePrescriptionNotifications(prescriptions, buyerKey),
+  ].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 
   function handleRefresh() {
-    for (const id of overdueIds) {
+    for (const id of overdueReservationIds) {
       dispatch({ type: 'expire', reservationId: id });
+    }
+    for (const id of overduePrescriptionIds) {
+      prescriptionsDispatch({ type: 'expire', prescriptionId: id });
     }
     notificationReadDispatch({
       type: 'mark_all_read',
@@ -228,7 +334,7 @@ export function RequestsScreen({
         {strings.requestsRefreshLabel}
       </button>
 
-      {own.length === 0 ? (
+      {own.length === 0 && ownPrescriptions.length === 0 ? (
         <div className="state-block">
           <p className="state-block__title">{strings.requestsEmptyTitle}</p>
           <p className="state-block__body">{strings.requestsEmptyBody}</p>
@@ -238,8 +344,22 @@ export function RequestsScreen({
           {own.map((reservation) => (
             <ReservationRow key={reservation.id} reservation={reservation} dispatch={dispatch} />
           ))}
+          {ownPrescriptions.map((prescription) => (
+            <PrescriptionRow
+              key={prescription.id}
+              prescription={prescription}
+              dispatch={prescriptionsDispatch}
+            />
+          ))}
         </ul>
       )}
+
+      <PrescriptionUploadPanel
+        buyerKey={buyerKey}
+        onUploadPrescription={(prescription) =>
+          prescriptionsDispatch({ type: 'create', prescription })
+        }
+      />
     </section>
   );
 }

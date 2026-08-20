@@ -39,6 +39,8 @@ function baseProps(overrides: Partial<RequestsScreenProps> = {}): RequestsScreen
     buyerKey: BUYER,
     reservations: [],
     dispatch: () => {},
+    prescriptions: [],
+    prescriptionsDispatch: () => {},
     onNavigateToAccount: () => {},
     notificationReadState: createInitialNotificationReadState(),
     notificationReadDispatch: () => {},
@@ -200,5 +202,69 @@ describe('RequestsScreen — signed in', () => {
     );
 
     expect(screen.getByText(strings.notificationsGenericEntryTitle)).toBeInTheDocument();
+  });
+
+  it("renders this buyer's own prescriptions with status and offers Cancel while under_review", async () => {
+    const user = userEvent.setup();
+    const prescriptionsDispatch = vi.fn();
+    render(
+      <RequestsScreen
+        {...baseProps({
+          prescriptions: [
+            {
+              id: 'p1',
+              buyerKey: BUYER,
+              branchId: 'suva-central',
+              pharmacyDisplayName: 'Suva Central Pharmacy (synthetic)',
+              patientName: 'Litia Waqa',
+              relationship: 'self',
+              status: 'under_review',
+              quarantined: false,
+              submittedAt: '2026-08-20T00:00:00.000Z',
+              lastUpdatedAt: '2026-08-20T00:00:00.000Z',
+              expiresAt: '2026-08-22T00:00:00.000Z',
+              rejectReason: null,
+            },
+          ],
+          prescriptionsDispatch,
+        })}
+      />,
+    );
+
+    expect(screen.getByText(strings.prescriptionStatusUnderReviewLabel)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: strings.prescriptionCancelLabel }));
+    expect(prescriptionsDispatch).toHaveBeenCalledWith({ type: 'cancel', prescriptionId: 'p1' });
+  });
+
+  it('derives a generic notification from a prescription status change, alongside reservation notifications', () => {
+    render(
+      <RequestsScreen
+        {...baseProps({
+          prescriptions: [
+            {
+              id: 'p1',
+              buyerKey: BUYER,
+              branchId: 'suva-central',
+              pharmacyDisplayName: 'Suva Central Pharmacy (synthetic)',
+              patientName: 'Litia Waqa',
+              relationship: 'self',
+              status: 'approved',
+              quarantined: false,
+              submittedAt: '2026-08-20T00:00:00.000Z',
+              lastUpdatedAt: '2026-08-20T00:00:00.000Z',
+              expiresAt: '2026-08-22T00:00:00.000Z',
+              rejectReason: null,
+            },
+          ],
+        })}
+      />,
+    );
+
+    expect(screen.getByText(strings.notificationsGenericEntryTitle)).toBeInTheDocument();
+  });
+
+  it('always shows the prescription upload entry point for a signed-in buyer', () => {
+    render(<RequestsScreen {...baseProps()} />);
+    expect(screen.getByText(strings.prescriptionUploadTitle)).toBeInTheDocument();
   });
 });

@@ -18,6 +18,10 @@
  */
 
 import type {
+  PrescriptionStatus,
+  SyntheticPrescription,
+} from '../prescriptions/syntheticPrescriptions';
+import type {
   ReservationStatus,
   SyntheticReservation,
 } from '../reservations/syntheticReservations';
@@ -28,17 +32,24 @@ export type NotificationDeliveryOutcome = 'delivered' | 'failed';
 
 export interface SyntheticNotification {
   readonly id: string;
-  readonly reservationId: string;
+  readonly sourceId: string;
   readonly createdAt: string;
   readonly deliveryOutcome: NotificationDeliveryOutcome;
 }
 
-const NOTIFIABLE_STATUSES: readonly ReservationStatus[] = [
+const NOTIFIABLE_RESERVATION_STATUSES: readonly ReservationStatus[] = [
   'approved',
   'declined',
   'expired',
   'cancelled',
   'collected',
+];
+
+const NOTIFIABLE_PRESCRIPTION_STATUSES: readonly PrescriptionStatus[] = [
+  'approved',
+  'rejected',
+  'expired',
+  'cancelled',
 ];
 
 /**
@@ -61,14 +72,37 @@ export function deriveNotifications(
   return reservations
     .filter(
       (reservation) =>
-        reservation.buyerKey === buyerKey && NOTIFIABLE_STATUSES.includes(reservation.status),
+        reservation.buyerKey === buyerKey &&
+        NOTIFIABLE_RESERVATION_STATUSES.includes(reservation.status),
     )
     .map((reservation) => {
       const id = `${reservation.id}-${reservation.status}`;
       return {
         id,
-        reservationId: reservation.id,
+        sourceId: reservation.id,
         createdAt: reservation.lastUpdatedAt,
+        deliveryOutcome: simulateDeliveryOutcome(id),
+      };
+    })
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}
+
+export function derivePrescriptionNotifications(
+  prescriptions: readonly SyntheticPrescription[],
+  buyerKey: string,
+): readonly SyntheticNotification[] {
+  return prescriptions
+    .filter(
+      (prescription) =>
+        prescription.buyerKey === buyerKey &&
+        NOTIFIABLE_PRESCRIPTION_STATUSES.includes(prescription.status),
+    )
+    .map((prescription) => {
+      const id = `${prescription.id}-${prescription.status}`;
+      return {
+        id,
+        sourceId: prescription.id,
+        createdAt: prescription.lastUpdatedAt,
         deliveryOutcome: simulateDeliveryOutcome(id),
       };
     })

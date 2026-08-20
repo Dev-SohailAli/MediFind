@@ -23,7 +23,7 @@ function baseProps(overrides: Partial<NotificationCenterProps> = {}): Notificati
 
 const NOTIFICATION: SyntheticNotification = {
   id: 'r1-approved',
-  reservationId: 'r1',
+  sourceId: 'r1',
   createdAt: '2026-08-20T00:00:00.000Z',
   deliveryOutcome: 'delivered',
 };
@@ -112,7 +112,7 @@ describe('NotificationCenter — entries', () => {
     const second: SyntheticNotification = {
       ...NOTIFICATION,
       id: 'r2-declined',
-      reservationId: 'r2',
+      sourceId: 'r2',
     };
     render(
       <NotificationCenter
