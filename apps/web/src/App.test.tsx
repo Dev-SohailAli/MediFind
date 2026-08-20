@@ -222,4 +222,40 @@ describe('App', () => {
     await user.click(screen.getByRole('button', { name: strings.navRequestsLabel }));
     expect(screen.getByText(strings.prescriptionStatusApprovedLabel)).toBeInTheDocument();
   });
+
+  it('a buyer can report suspicious activity, and the same demo identity can resolve it from MediFind support (Milestone C end-to-end)', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(screen.getByRole('button', { name: strings.navAccountLabel }));
+    await user.clear(screen.getByLabelText(strings.signInPhoneLabel));
+    await user.type(screen.getByLabelText(strings.signInPhoneLabel), '+6797654321');
+    await user.click(screen.getByLabelText(strings.signInOver18Label));
+    await user.type(screen.getByLabelText(strings.signInNameLabel), 'Demo Buyer');
+    await user.type(screen.getByLabelText(strings.signInEmailLabel), 'demo.buyer@example.test');
+    await user.click(screen.getByRole('button', { name: strings.signInSendCodeLabel }));
+    await user.type(screen.getByLabelText(strings.signInCodeLabel), SYNTHETIC_AUTH_DEMO_CODE);
+    await user.click(screen.getByRole('button', { name: strings.signInVerifyLabel }));
+
+    await user.click(
+      screen.getByRole('button', { name: strings.supportReportSuspiciousActivityLabel }),
+    );
+    await user.type(
+      screen.getByLabelText(strings.supportReportNoteLabel),
+      'Sign-in from an unfamiliar device.',
+    );
+    await user.click(screen.getByRole('button', { name: strings.supportReportSubmitLabel }));
+    expect(screen.getByText(strings.supportReportSuccessNotice)).toBeInTheDocument();
+
+    expect(
+      screen.getByText(strings.supportReportCategorySuspiciousActivityLabel),
+    ).toBeInTheDocument();
+    await user.type(
+      screen.getByPlaceholderText(strings.supportResolveNoteLabel),
+      'Confirmed with the buyer — expected device.',
+    );
+    await user.click(screen.getByRole('button', { name: strings.supportResolveLabel }));
+
+    expect(screen.getByText(strings.supportReportStatusResolvedLabel)).toBeInTheDocument();
+  });
 });

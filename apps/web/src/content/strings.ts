@@ -326,6 +326,42 @@ export const strings = {
     'Approving allows the buyer to request a reservation. It does not create or hold a reservation for them.',
   pharmacyPrescriptionsDecisionSafetyNote:
     'This is a professional/legal decision — MediFind does not determine validity or dispensing.',
+
+  supportReportSuspiciousActivityLabel: 'Report suspicious activity',
+  supportReportListingLabel: 'Report this listing',
+  supportReportCantFindMedicineLabel: "I couldn't find this medicine",
+  supportReportNoteLabel: 'What happened?',
+  supportReportSubmitLabel: 'Submit report',
+  supportReportNoteError: 'Enter a short description.',
+  supportReportSuccessNotice: 'Report submitted. MediFind will review this privately.',
+  supportReportCancelLabel: 'Cancel',
+
+  supportPanelTitle: 'MediFind support (demo)',
+  supportPanelIntro:
+    'This simulates the MediFind-support side of the same fixed demo identity: reports submitted by the demo buyer, and a redacted audit trail of what has happened so far. No real report, buyer or pharmacy data exists here.',
+  supportReportsTitle: 'Reports',
+  supportReportsEmpty: 'No reports yet.',
+  supportReportCategoryListingQualityLabel: 'Listing quality',
+  supportReportCategorySuspiciousActivityLabel: 'Suspicious activity',
+  supportReportCategorySupportCaseLabel: 'Support case',
+  supportReportCategoryCantFindMedicineLabel: "Can't find medicine",
+  supportReportStatusOpenLabel: 'Open',
+  supportReportStatusResolvedLabel: 'Resolved',
+  supportReportStatusEscalatedLabel: 'Escalated',
+  supportReportStatusDeferredLabel: 'Deferred',
+  supportResolveLabel: 'Resolve',
+  supportResolveNoteLabel: 'Outcome note (required)',
+  supportResolveNoteError: 'Enter an outcome note.',
+  supportEscalateLabel: 'Escalate',
+  supportDeferLabel: 'Mark as deferred',
+  supportInternalRecordNote:
+    'This creates an internal record only. It does not contact the pharmacy.',
+  supportResolutionNotePrefix: 'Outcome',
+
+  auditViewTitle: 'Audit view (redacted)',
+  auditViewEmpty: 'No audit events yet.',
+  auditViewHeaderNote:
+    'This view never shows prescription file content, access tokens, OTPs or full contact values.',
 } as const;
 
 export type StringKey = keyof typeof strings;

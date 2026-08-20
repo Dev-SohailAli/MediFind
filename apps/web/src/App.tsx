@@ -20,6 +20,7 @@ import {
   SyntheticReservationsProvider,
   useSyntheticReservations,
 } from './reservations/ReservationsContext';
+import { SyntheticSupportProvider, useSyntheticSupport } from './support/SupportContext';
 import { strings } from './content/strings';
 
 function handleSkipLinkClick(event: React.MouseEvent<HTMLAnchorElement>) {
@@ -64,6 +65,7 @@ function AppShell({ activeTab, onSelectTab }: AppShellProps) {
   const { state: reservationsState, dispatch: reservationsDispatch } = useSyntheticReservations();
   const { state: prescriptionsState, dispatch: prescriptionsDispatch } =
     useSyntheticPrescriptions();
+  const { dispatch: supportDispatch } = useSyntheticSupport();
   const {
     readState: notificationReadState,
     readDispatch: notificationReadDispatch,
@@ -94,6 +96,7 @@ function AppShell({ activeTab, onSelectTab }: AppShellProps) {
             onRequestReservation={(input) =>
               buyerKey && reservationsDispatch({ type: 'request', buyerKey, input })
             }
+            onSubmitReport={(input) => supportDispatch({ type: 'submit_report', input })}
           />
         ) : null}
         {activeTab === 'requests' ? (
@@ -127,9 +130,11 @@ export default function App() {
     <SyntheticAuthProvider>
       <SyntheticReservationsProvider>
         <SyntheticPrescriptionsProvider>
-          <SyntheticNotificationsProvider>
-            <AppShell activeTab={activeTab} onSelectTab={setActiveTab} />
-          </SyntheticNotificationsProvider>
+          <SyntheticSupportProvider>
+            <SyntheticNotificationsProvider>
+              <AppShell activeTab={activeTab} onSelectTab={setActiveTab} />
+            </SyntheticNotificationsProvider>
+          </SyntheticSupportProvider>
         </SyntheticPrescriptionsProvider>
       </SyntheticReservationsProvider>
     </SyntheticAuthProvider>

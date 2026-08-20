@@ -12,6 +12,7 @@ import { isWorkerSearchMode } from '../search/searchClient';
 import { useSearchExecution } from '../search/useSearchExecution';
 import { useWorkerListingExecution } from '../search/useWorkerListingExecution';
 import { useWorkerSearchExecution } from '../search/useWorkerSearchExecution';
+import type { SupportReportCategory } from '../support/syntheticSupport';
 import { AreaSelector } from './AreaSelector';
 import { LoadMoreButton } from './LoadMoreButton';
 import { ResultCard } from './ResultCard';
@@ -24,12 +25,19 @@ export interface SearchScreenProps {
   readonly buyerKey?: string | null;
   readonly reservations?: readonly SyntheticReservation[];
   readonly onRequestReservation?: (input: SyntheticReservationRequestInput) => void;
+  readonly onSubmitReport?: (input: {
+    category: SupportReportCategory;
+    reportedBy: string;
+    note: string;
+    targetListingId: string | null;
+  }) => void;
 }
 
 export function SearchScreen({
   buyerKey = null,
   reservations = [],
   onRequestReservation = () => {},
+  onSubmitReport = () => {},
 }: SearchScreenProps = {}) {
   const workerSearchEnabled = isWorkerSearchMode();
   const [query, setQuery] = React.useState('');
@@ -108,7 +116,7 @@ export function SearchScreen({
       ) : execution.outcome.isEmptyQuery ? (
         <BrowseEmptyState />
       ) : execution.outcome.rows.length === 0 ? (
-        <ZeroResultState />
+        <ZeroResultState buyerKey={buyerKey} onSubmitReport={onSubmitReport} />
       ) : (
         <div className="results-block">
           <p className="results-count" role="status">
@@ -146,6 +154,7 @@ export function SearchScreen({
               buyerKey={buyerKey}
               reservations={reservations}
               onRequestReservation={onRequestReservation}
+              onSubmitReport={onSubmitReport}
             />
           ) : workerListingExecution.status === 'error' ? (
             <ResultDetailSheet status="error" onClose={() => setSelectedListingId(null)} />
@@ -163,6 +172,7 @@ export function SearchScreen({
             buyerKey={buyerKey}
             reservations={reservations}
             onRequestReservation={onRequestReservation}
+            onSubmitReport={onSubmitReport}
           />
         )
       ) : null}
